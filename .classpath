@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="**/.svn/*" kind="src" path="src"/>
+	<classpathentry excluding="*.svn*" kind="src" path="junit"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.hibernate"/>
+	<classpathentry kind="var" path="SOS_LIB/swt.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.spooler.jar" sourcepath="/SOS_JavaSource/com.sos.spooler-look-at-scheduler.engine/src"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.dailyschedule"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/hibernate3.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/antlr-2.7.6.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/commons-collections-3.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/dom4j-1.6.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/javassist-3.12.0.GA.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/jta-1.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/slf4j-api-1.6.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/required/slf4j-simple-1.6.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/jpa/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.schedulerhistory"/>
+	<classpathentry kind="var" path="SOS_LIB/nebula/org.eclipse.nebula.widgets.calendarcombo-1.0-NIGHTLY.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.schedulerhistory.dialog"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.VirtualFileSystem.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.settings.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/ojdbc14.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/log4j-1.2.16.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.ftp.profiles.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.net.jar" sourcepath="/SOS_JavaSource/com.sos.net"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.dialog"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.util.jar"/>
+	<classpathentry kind="src" path="/com.sos.jobnet.dataprovider"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/JobSchedulerHelper"/>
+	<classpathentry kind="var" path="SOS_LIB/xerces-2_11_0-xml-schema-1.1-beta/org.eclipse.wst.xml.xpath2.processor_1.1.0.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/jaxen-1.1.1.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.eventing.frontend"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.scheduler"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.dashboard.globals"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.util"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SOSJobSchedulerModel"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.jobnet.frontend"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.jobnet"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.scheduler.editor"/>
+	<classpathentry kind="var" path="SOS_LIB/joda-time-2.1.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/binutils/commons-beanutils-core-1.8.3.jar"/>
+	<classpathentry kind="var" path="SOS_LIB/com.sos.jobnet.jobnet-dao.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.security"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
