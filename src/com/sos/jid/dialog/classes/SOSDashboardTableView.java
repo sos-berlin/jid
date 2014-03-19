@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.prefs.Preferences;
 
-import com.sos.dailyschedule.classes.SosDailyScheduleTableItem;
-import com.sos.dailyschedule.db.DailyScheduleDBItem;
-import com.sos.dashboard.globals.DashBoardConstants;
+ 
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.SOSTable;
 import com.sos.dialog.comparators.DateComperator;
@@ -17,9 +15,7 @@ import com.sos.dialog.interfaces.ITableView;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SosSortTableItem;
 import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
-import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.hibernate.interfaces.ISOSTableItem;
-import com.sos.jobnet.db.JobNetPlanFilter;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;

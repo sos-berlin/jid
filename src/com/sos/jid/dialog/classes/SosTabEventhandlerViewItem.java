@@ -62,16 +62,17 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.sos.dialog.components.SOSTableColumn;
+import com.sos.eventing.eventhandler.SOSActions;
+import com.sos.eventing.eventhandler.SOSEvaluateEvents;
+import com.sos.eventing.eventhandler.SOSEventCommand;
+import com.sos.eventing.eventhandler.SOSEventCommandElement;
+import com.sos.eventing.eventhandler.SOSEventGroups;
+import com.sos.eventing.eventhandler.SchedulerEvent;
 import com.swtdesigner.SWTResourceManager;
 
 import sos.ftp.profiles.FTPProfile;
 import sos.ftp.profiles.FTPProfilePicker;
-import sos.scheduler.consoleviews.events.SOSActions;
-import sos.scheduler.consoleviews.events.SOSEvaluateEvents;
-import sos.scheduler.consoleviews.events.SOSEventCommand;
-import sos.scheduler.consoleviews.events.SOSEventCommandElement;
-import sos.scheduler.consoleviews.events.SOSEventGroups;
-import sos.scheduler.consoleviews.events.SchedulerEvent;
+ 
 import sos.util.SOSFile;
 import sos.util.SOSLogger;
 
@@ -291,7 +292,7 @@ public class SosTabEventhandlerViewItem extends CTabItem {
 				TableItem t = tableEvents.getItem(tableEvents.getItemCount() - 1);
 				t.dispose();
 			}
-			logic.setText(a.getLogic());
+			logic.setText(a.getCondition());
 			Iterator i = a.getListOfEventGroups().iterator();
 			while (i.hasNext()) {
 				SOSEventGroups evg = (SOSEventGroups) i.next();
@@ -299,16 +300,16 @@ public class SosTabEventhandlerViewItem extends CTabItem {
 				Iterator iEvents = evg.getListOfEvents().iterator();
 				while (iEvents.hasNext()) {
 					final TableItem newItemTableItem = new TableItem(tableEvents, SWT.BORDER);
-					if (evg.getLogic().equals("and")) {
+					if (evg.getCondition().equals("and")) {
 						newItemTableItem.setBackground(SWTResourceManager.getColor(255, 255, 128));
 					}
-					if (evg.getLogic().equals("or")) {
+					if (evg.getCondition().equals("or")) {
 						newItemTableItem.setBackground(SWTResourceManager.getColor(206, 231, 255));
 					}
 					newItemTableItem.setText(group);
 					newItemTableItem.setFont(0, SWTResourceManager.getFont("", 8, SWT.BOLD));
 					SchedulerEvent event = (SchedulerEvent) iEvents.next();
-					event.setLogic(evg.getLogic());
+					event.setCondition(evg.getCondition());
 					newItemTableItem.setData(event);
 					newItemTableItem.setText(1, event.getEvent_title());
 					newItemTableItem.setText(2, event.getEvent_name());
@@ -499,7 +500,7 @@ public class SosTabEventhandlerViewItem extends CTabItem {
 			public void widgetSelected(final SelectionEvent e) {
 				if (actionTree.getSelectionCount() > 0) {
 					SOSActions a = (SOSActions) actionTree.getSelection()[0].getData();
-					logic.setText(a.getLogic());
+					logic.setText(a.getCondition());
 					fillEventTables(a);
 				}
 			}
@@ -512,7 +513,7 @@ public class SosTabEventhandlerViewItem extends CTabItem {
 		tableEvents.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
 				SchedulerEvent event = (SchedulerEvent) e.item.getData();
-				logic.setText(event.getLogic());
+				logic.setText(event.getCondition());
 				lbJob.setText(event.getJob_name());
 				lbJobChain.setText(event.getJob_chain());
 				lbExitCode.setText(event.getExit_code());

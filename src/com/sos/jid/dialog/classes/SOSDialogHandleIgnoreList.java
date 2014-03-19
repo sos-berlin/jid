@@ -1,5 +1,4 @@
 package com.sos.jid.dialog.classes;
-import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
@@ -32,13 +31,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 
-import com.sos.dailyschedule.classes.SosDailyScheduleTableItem;
-import com.sos.dailyschedule.db.DailyScheduleDBItem;
-import com.sos.dashboard.globals.DashBoardConstants;
-import com.sos.dialog.components.SOSTableColumn;
-import com.sos.hibernate.classes.DbItem;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
+ 
+ 
  
 
 public class SOSDialogHandleIgnoreList {

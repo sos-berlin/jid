@@ -27,11 +27,12 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
+import sos.scheduler.editor.conf.forms.SchedulerEditorFontDialog;
+
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSPrinter;
 import com.sos.localization.Messages;
-import sos.scheduler.editor.conf.forms.SchedulerEditorFontDialog;
-
+ 
 /**
  * \class LogArea
  * 
