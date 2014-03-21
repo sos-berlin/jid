@@ -1,7 +1,6 @@
 package com.sos.jid.dialog.classes;
 
 import java.io.File;
-import java.util.Date;
 import java.util.prefs.Preferences;
 
  
