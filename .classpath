@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry excluding="**/.svn/*" kind="src" path="src"/>
 	<classpathentry excluding="*.svn*" kind="src" path="junit"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="var" path="SOS_LIB/swt.jar"/>
 	<classpathentry kind="var" path="SOS_LIB/log4j-1.2.16.jar"/>
@@ -14,8 +13,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.util"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.dashboard.globals"/>
 	<classpathentry kind="var" path="SOS_LIB/com.sos.ftp.profiles.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.hibernate"/>
 	<classpathentry kind="var" path="SOS_LIB/com.sos.net.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/SOSJobSchedulerModel"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.6.0_31"/>
+	<classpathentry kind="var" path="SOS_LIB/hibernate-distribution-3.6.4.Final/lib/jpa/hibernate-jpa-2.0-api-1.0.0.Final.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/com.sos.hibernate"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

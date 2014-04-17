@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.prefs.Preferences;
 
  
+import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.SOSTable;
 import com.sos.dialog.comparators.DateComperator;
@@ -51,20 +52,19 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Listener;
 
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
-	private static final String conSettingREFRESHDefault = "60";
-	private static final String SOS_DASHBOARD_HEADER = "sosDashboardHeader";
-	private static final String conSettingREFRESH = "refresh";
+     
 	private static Logger logger = Logger.getLogger(SOSDashboardTableView.class);
 	protected SOSTable tableList = null;
 	protected ISOSDashboardDataProvider tableDataProvider = null;
 	private SortBaseComparator[][] comparables = null;
-	private ISOSTableItem lastItem = null;
 	private            String answer = "";
+	private Integer historyLimit=0;
 
 
 	protected SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
 	protected SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer = null;
 	protected SchedulerInstancesDBLayer schedulerInstancesDBLayer;
+    
 
 	public SOSDashboardTableView(Composite composite_) {
 		super(composite_);
@@ -76,7 +76,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         this.showWaitCursor();
 		if (tableList != null) {
 
-			tableDataProvider.getData();
+			tableDataProvider.getData(getLimit());
 			buildTable();
 		}
         this.resetCursor();
@@ -118,29 +118,30 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
-				getList();
+				sosDashboardHeader.resetInputTimer();
 			}
 		});
 		sosDashboardHeader.getToDate().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				tableDataProvider.setTo(sosDashboardHeader.getTo());
-				getList();
+				sosDashboardHeader.resetInputTimer();
 			}
 		});
 		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				tableDataProvider.setFrom(sosDashboardHeader.getFrom());
-				getList();
+				sosDashboardHeader.resetInputTimer();
 			}
 		});
 		sosDashboardHeader.getRefreshInterval().addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent arg0) {
 				sosDashboardHeader.setRefresh(getIntValue(sosDashboardHeader.getRefreshInterval().getText(), 10));
 				sosDashboardHeader.resetRefreshTimer();
-				prefs.node(SOS_DASHBOARD_HEADER).put(conSettingREFRESH, sosDashboardHeader.getRefreshInterval().getText());
+				prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingREFRESH, sosDashboardHeader.getRefreshInterval().getText());
+
 			}
 		});
-		sosDashboardHeader.getRefreshInterval().setText(prefs.node(SOS_DASHBOARD_HEADER).get(conSettingREFRESH, conSettingREFRESHDefault));
+        sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
 		sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent e) {
 				if (sosDashboardHeader.getSearchField() != null) {
@@ -187,7 +188,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         					detailHistoryDataProvider.setJobname(d.getJob());
         					detailHistoryDataProvider.setJobchain(d.getJobChain());
         					detailHistoryDataProvider.setOrderid(d.getOrderId());
-        					detailHistoryDataProvider.getData();
+        					detailHistoryDataProvider.getData(getHistoryLimit());
         					clearTable(tableHistoryDetail);
         					detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
     					}
@@ -199,6 +200,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		this.setColumnsListener();
 		this.tableResize();
 	}
+	
+
 
 	private void tableResize() {
 		mainViewComposite.addControlListener(new ControlAdapter() {
@@ -322,7 +325,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		logger.debug("...getList");
 		if (tableList != null && tableDataProvider != null) {
 	        int i = tableList.getTopIndex();
- 			tableDataProvider.getData();
+	        
+	        tableDataProvider.getData(getLimit());
  			buildTable();
 			tableList.setTopIndex(i);		
 			}
@@ -347,6 +351,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
 	public void setPrefs(Preferences prefs) {
 		this.prefs = prefs;
+
 	}
 
 	public void setDetailHistoryDataProvider(SchedulerHistoryDataProvider detailHistoryDataProvider) {
@@ -415,4 +420,20 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         this.answer = answer;
     }
 	    
+    private int getLimit() {
+        if (sosDashboardHeader != null){
+           return sosDashboardHeader.getLimit();
+        }else {
+            return  0;
+        }
+        
+    }
+
+    public Integer getHistoryLimit() {
+        return historyLimit;
+    }
+
+    public void setHistoryLimit(Integer historyLimit) {
+        this.historyLimit = historyLimit;
+    }
 }

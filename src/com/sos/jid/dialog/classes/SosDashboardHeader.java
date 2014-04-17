@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.prefs.Preferences;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -15,9 +16,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DateTime;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.sos.dashboard.globals.DashBoardConstants;
+import com.sos.dialog.classes.SOSIntegerInputDialog;
 import com.sos.dialog.interfaces.ITableView;
 
 /**
@@ -49,6 +53,8 @@ import com.sos.dialog.interfaces.ITableView;
  */
 public class SosDashboardHeader extends JSToolBox {
 	@SuppressWarnings("unused")
+    protected Preferences                   prefs;
+	private String prefNode="SosDashboardHeader";
 	private final String		conClassName	= "SosDashboardHeader";
 	private static final String	EMPTY_STRING	= "";
 	private Display				display;
@@ -60,10 +66,14 @@ public class SosDashboardHeader extends JSToolBox {
 	private ITableView			main			= null;
 	private Text				searchField		= null;
 	private int					refresh			= 0;
-	private Composite			parent;
+ 	private Composite			parent;
 	private Text				refreshInterval;
 	private Button				refreshButton;
-
+	private Label lblBis;
+	private Label lbSchedulerID;
+	private Label lblVon;
+	private Integer limit=-1;
+	
 	public Text getRefreshInterval() {
 		return refreshInterval;
 	}
@@ -98,6 +108,7 @@ public class SosDashboardHeader extends JSToolBox {
 
 	public SosDashboardHeader(Composite parent_, ITableView main_) {
 		super(DashBoardConstants.conPropertiesFileName);
+		
 		refreshTimer = new Timer();
 		inputTimer = new Timer();
 		refreshTimer.schedule(new RefreshTask(), 1000, 60000);
@@ -136,7 +147,7 @@ public class SosDashboardHeader extends JSToolBox {
 	public void resetInputTimer() {
 		inputTimer.cancel();
 		inputTimer = new Timer();
-		inputTimer.schedule(new InputTask(), 1 * 1000, 1 * 1000);
+		inputTimer.schedule(new InputTask(), 2 * 1000, 2 * 1000);
 	}
 
 
@@ -149,19 +160,19 @@ public class SosDashboardHeader extends JSToolBox {
 		final GridData gd_refreshInterval = new GridData(35, SWT.DEFAULT);
 		gd_refreshInterval.minimumWidth = 50;
 		refreshInterval.setLayoutData(gd_refreshInterval);
-		Label lblNewLabel = new Label(parent, SWT.NONE);
-		lblNewLabel.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID));
+		lbSchedulerID = new Label(parent, SWT.NONE);
+		lbSchedulerID.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID));
 		
 		cbSchedulerId = new CCombo(parent, SWT.BORDER);
 		GridData gd_combo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
 		gd_combo.widthHint = 120;
 		gd_combo.minimumWidth = 120;
 		cbSchedulerId.setLayoutData(gd_combo);
-		Label lblVon = new Label(parent, SWT.NONE);
+		lblVon = new Label(parent, SWT.NONE);
 		lblVon.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblVon.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM));
 		fromDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
-		Label lblBis = new Label(parent, SWT.NONE);
+		lblBis = new Label(parent, SWT.NONE);
 		lblBis.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblBis.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TO));
 		toDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
@@ -169,6 +180,34 @@ public class SosDashboardHeader extends JSToolBox {
 		searchField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 	}
 
+	public void createMenue() {
+        Menu contentMenu = new Menu(refreshButton);
+        refreshButton.setMenu(contentMenu);
+        parent.setMenu(contentMenu);
+        lblBis.setMenu(contentMenu);
+        lbSchedulerID.setMenu(contentMenu);
+        lblVon.setMenu(contentMenu);
+        // =============================================================================================
+
+        SOSMenuLimitItem setLimitItem = new SOSMenuLimitItem(contentMenu, SWT.PUSH,prefs,prefNode);
+        setLimitItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
+            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
+                limit = -1;
+                main.actualizeList();
+            }
+
+            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
+            }
+        });
+	}
+	
+	 public void initLimit(String prefNode_) {
+	        prefNode = prefNode_;
+	        createMenue();
+
+	    }
+
+	
 	public DateTime getFromDate() {
 		return fromDate;
 	}
@@ -226,5 +265,28 @@ public class SosDashboardHeader extends JSToolBox {
 
     public Timer getRefreshTimer() {
         return refreshTimer;
+    }
+    
+   
+     
+    public int getLimit() {
+        if (limit != -1) {
+            return limit;
+        }else {
+            int defaultLimit = DashBoardConstants.conSettingLIMITDefault;
+            try {
+            limit = Integer.parseInt(prefs.node(prefNode).get(DashBoardConstants.conSettingLIMIT, String.valueOf(defaultLimit)));
+            }catch (NumberFormatException e) { 
+                limit = defaultLimit;}
+            }
+            return limit;
+    }
+
+    public void setPrefs(Preferences prefs) {
+        this.prefs = prefs;
+    }
+
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 }
