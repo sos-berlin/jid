@@ -188,29 +188,29 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.sos-berlin.products</groupId>
+            <artifactId>net</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sos-berlin.products.joe</groupId>
+            <artifactId>joe-cockpit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sos-berlin.products</groupId>
+            <artifactId>hibernate-tools</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- these are the dependencies for projects not yet moved to maven, 
              groupId, artifactId and version will be changed as soon as the projects are moved  -->
         <dependency>
             <groupId>com.sos</groupId>
-            <artifactId>hibernate</artifactId>
-            <version>${sos.jar.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sos.scheduler</groupId>
-            <artifactId>editor</artifactId>
-            <version>${sos.jar.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sos</groupId>
             <artifactId>SOSJobSchedulerModel</artifactId>
-            <version>${sos.jar.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sos</groupId>
-            <artifactId>net</artifactId>
             <version>${sos.jar.version}</version>
         </dependency>
 
