@@ -166,7 +166,7 @@
 
         <dependency>
             <groupId>com.sos-berlin.products</groupId>
-            <artifactId>dialog</artifactId>
+            <artifactId>sos-dialog</artifactId>
             <version>${project.version}</version>
         </dependency>
 
