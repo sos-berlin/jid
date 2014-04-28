@@ -45,41 +45,7 @@
                                     <directory>src</directory>
                                     <targetPath>.</targetPath>
                                     <includes>
-                                        <include>**/*.xml</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-resource2</id>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>config</directory>
-                                    <targetPath>.</targetPath>
-                                    <includes>
-                                        <include>**/*.ini</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-resource3</id>
-                        <goals>
-                            <goal>add-resource</goal>
-                        </goals>
-                        <configuration>
-                            <resources>
-                                <resource>
-                                    <directory>.</directory>
-                                    <targetPath>.</targetPath>
-                                    <includes>
-                                        <include>*.properties</include>
+                                        <include>**/*.properties</include>
                                     </includes>
                                 </resource>
                             </resources>
