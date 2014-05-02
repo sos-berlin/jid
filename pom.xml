@@ -155,9 +155,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sos</groupId>
-            <artifactId>net</artifactId>
-            <version>${sos.jar.version}</version>
+            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <artifactId>sos-net</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
