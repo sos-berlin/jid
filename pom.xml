@@ -125,8 +125,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
-            <artifactId>util</artifactId>
+            <groupId>com.sos-berlin.products.commons</groupId>
+            <artifactId>sos-util</artifactId>
             <version>${project.version}</version>
         </dependency>
 
