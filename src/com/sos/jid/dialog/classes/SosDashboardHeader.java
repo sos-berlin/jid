@@ -97,7 +97,7 @@ public class SosDashboardHeader extends JSToolBox {
 			}
 			display.syncExec(new Runnable() {
 				public void run() {
-					if (!getSearchField().equals(EMPTY_STRING)) {
+					if (!getSearchField().getText().equals(EMPTY_STRING)) {
 						main.actualizeList();
 						inputTimer.cancel();
 					}

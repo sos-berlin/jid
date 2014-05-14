@@ -330,7 +330,7 @@ public class SOSDialogHandleIgnoreList {
               display.syncExec(new Runnable() {
                   @Override
                   public void run() {
-                      if (!edSearchField.equals(EMPTYSTRING)) {
+                      if (!edSearchField.getText().equals(EMPTYSTRING)) {
                           try {
                                 selectWithRegularExpression();
                           }

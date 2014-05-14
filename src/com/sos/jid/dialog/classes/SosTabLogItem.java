@@ -113,7 +113,7 @@ public class SosTabLogItem extends CTabItem {
 				if (d.getLogId() != null) {
 					s = d.getIdentifier();
 				}
-				if (sourceItemId == s) {
+				if (sourceItemId.equals(s)) {
 					sourceTable.setSelection(i);
 					return;
 				}
@@ -151,7 +151,7 @@ public class SosTabLogItem extends CTabItem {
               display.syncExec(new Runnable() {
                   @Override
                   public void run() {
-                      if (!edSearchfield.equals(EMPTYSTRING)) {
+                      if (!edSearchfield.getText().equals(EMPTYSTRING)) {
                           try {
                               log.setSearchField(edSearchfield.getText());
                           }

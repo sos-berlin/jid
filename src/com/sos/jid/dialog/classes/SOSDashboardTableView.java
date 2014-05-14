@@ -295,7 +295,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                        }
 	                }
 	                catch (Exception ee) {
-                        answer += String.format("Command: Start Job  %s: %s", dbItem.getJobName(), dbItem.getOrderId(),ee.getMessage())+ "\n";
+                        answer += String.format("Command: Start Job  %s: %s --> Error: %s", dbItem.getJobName(), dbItem.getOrderId(),ee.getMessage())+ "\n";
 	                    ee.printStackTrace();
 	                } finally {
 	                    this.RestoreCursor();
