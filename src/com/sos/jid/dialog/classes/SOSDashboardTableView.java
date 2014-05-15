@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.prefs.Preferences;
 
  
+
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.SOSTable;
@@ -27,6 +28,7 @@ import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
 
 
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -40,11 +42,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
-
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -157,6 +157,17 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			}
 		});
 		
+		tableList.addListener(SWT.MouseDown, new Listener() {
+            @Override
+            public void handleEvent(final Event event) {
+                if (event.button == RIGHT_MOUSE_BUTTON) // rechte maustaste
+                {
+                    setRightMausclick(true);
+                } else {
+                    setRightMausclick(false);
+                }
+            }
+        });
 		
 		tableList.addKeyListener( new KeyListener() {
             public void keyPressed(final KeyEvent e) {
