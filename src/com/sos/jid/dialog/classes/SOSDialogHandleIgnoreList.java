@@ -74,7 +74,7 @@ public class SOSDialogHandleIgnoreList {
 	}
 
 	private Shell showForm(final Display display, Shell parentShell) {
-		dialogShell = new Shell(parentShell, SWT.BORDER | SWT.RESIZE);
+		dialogShell = new Shell(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.APPLICATION_MODAL);
 		dialogShell.setMinimumSize(new Point(300, 500));
 		dialogShell.setSize(552, 595);
 		dialogShell.setLayout(new GridLayout(2, false));
