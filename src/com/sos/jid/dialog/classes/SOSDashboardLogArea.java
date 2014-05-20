@@ -1,8 +1,8 @@
 package com.sos.jid.dialog.classes;
 
 
+import java.awt.SystemColor;
 import java.io.File;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -12,13 +12,11 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.layout.GridData;
-
 import org.eclipse.swt.printing.PrinterData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -29,8 +27,15 @@ import org.eclipse.swt.widgets.MenuItem;
 
 import sos.scheduler.editor.conf.forms.SchedulerEditorFontDialog;
  
+
+
+
+
+
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSPrinter;
+import com.sos.dialog.components.SOSSearchFilter;
+import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.localization.Messages;
  
 /**
@@ -56,6 +61,7 @@ import com.sos.localization.Messages;
 
 public class SOSDashboardLogArea extends StyledText /* Text */{
 
+    private static final String EMPTY_STRING = "";
     private static final String JID_LOG = "jid_log";
     private static final String DEBUG_MARKER = "[debug]";
     private static final String DEBUG2_MARKER = "[debug2]";
@@ -83,9 +89,11 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     int lenghtOfLinebreak = 1;
     private String logContent;
     private boolean filtered;
-    private String searchField="";
+ 
     private MenuItem itemFilter;
+    private MenuItem itemSearch;
     private Messages messages;
+    private SOSSearchFilterData sosSearchFilterData;
     
     
     public SOSDashboardLogArea(Composite composite_, int arg1, Messages messages_) {
@@ -164,11 +172,17 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
          
     }
     
-    private void searchInLogWithRegularExpression() {
-        if (searchField != null && !searchField.trim().equals("")) {
+    private void searchInLog() {
+        if (sosSearchFilterData != null && sosSearchFilterData.getSearchfield() != null && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
             boolean first=true;
               this.unmark();
-              Pattern p = Pattern.compile(searchField); 
+              String s = sosSearchFilterData.getSearchfield();
+              if (sosSearchFilterData.isWildcardExpression()) {
+//                  s = Pattern.quote(sosSearchFilter.getSearchfield()).replaceAll("\\*",".*");
+                  s = s.replaceAll("([^a-zA-Z0-9*\\ ])", "\\\\$1");
+                  s = s.replaceAll("\\*",".*?");
+              }
+              Pattern p = Pattern.compile(s);
               Matcher m = p.matcher(this.getText() );
               while ( m.find() ) {
                    this.mark(m.start(),m.end());
@@ -180,7 +194,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         }
     }
     
-   
+    
     
    public void setText(String logContent) {
        
@@ -189,8 +203,8 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
        StringBuffer line = new StringBuffer();
        for (int i=0;i<this.getLineCount();i++) {
             String s= this.getLine(i);
-            if (filtered && !searchField.trim().equals("")) {
-                Pattern p = Pattern.compile(searchField); 
+            if (filtered && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
+                Pattern p = Pattern.compile(sosSearchFilterData.getSearchfield()); 
                 Matcher m = p.matcher(s );
                 if (m.find() ) {
                
@@ -207,7 +221,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
        String s = line.toString();
        super.setText(s);
        addStyles();
-       searchInLogWithRegularExpression();
+       searchInLog();
    }
    
    
@@ -222,9 +236,11 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         
        StyleRange styleRange = new StyleRange();
        styleRange.start = start;
-       styleRange.foreground = composite.getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE);
-       styleRange.background =  composite.getShell().getDisplay().getSystemColor(SWT.COLOR_BLACK);
-
+       //styleRange.foreground = composite.getShell().getDisplay().getSystemColor(SWT.COLOR_WHITE);
+       //styleRange.background =  composite.getShell().getDisplay().getSystemColor(SWT.COLOR_BLACK);
+       styleRange.foreground =  composite.getShell().getDisplay().getCurrent().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT);
+       styleRange.background = composite.getShell().getDisplay().getCurrent().getSystemColor(SWT.COLOR_LIST_SELECTION);
+ 
        styleRange.length = end-start;
        styleRange.fontStyle = SWT.NORMAL;
        setStyleRange(styleRange);
@@ -250,9 +266,14 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         itemSelectFont.setText(messages.getLabel(DashBoardConstants.conSOSDashB_SelectFont));
       
         new MenuItem(objContextMenu, SWT.SEPARATOR);
+        itemSearch = new MenuItem(objContextMenu, SWT.PUSH);
+        itemSearch.addListener(SWT.Selection, getSearchListener());
+        itemSearch.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Search));
+
         itemFilter = new MenuItem(objContextMenu, SWT.CHECK);
         itemFilter.addListener(SWT.Selection, getFilterListener());
         itemFilter.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Filter));
+                 
                  
         new MenuItem(objContextMenu, SWT.SEPARATOR);
         MenuItem itemSaveAsFile = new MenuItem(objContextMenu, SWT.PUSH);
@@ -315,6 +336,28 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
             public void handleEvent(Event e) {
                 setFiltered(itemFilter.getSelection());              
             }
+        };
+    }
+
+    private Listener getSearchListener() {
+
+        return new Listener() {
+            public void handleEvent(Event e) {
+               SOSSearchFilter sosSearchFilter = new SOSSearchFilter(composite.getShell());
+               sosSearchFilter.setEnableFilterCheckbox(true);
+                sosSearchFilter.execute(EMPTY_STRING);
+                if (sosSearchFilter.getSosSearchFilterData() != null) {
+                   if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                        try {
+                            setSOSSearchFilterData(sosSearchFilter.getSosSearchFilterData());
+                        }
+                         catch (Exception ee) {
+                             ee.printStackTrace();
+                         }
+                   
+                } 
+              }
+        }
         };
     }
 
@@ -411,11 +454,16 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     protected void checkSubclass() {
         // Disable the check that prevents subclassing of SWT components
     }
-    public void setSearchField(String searchField) {
-        this.searchField = searchField;
+    
+    
+    public void setSOSSearchFilterData(SOSSearchFilterData sosSearchFilterData_) {
+        this.sosSearchFilterData = sosSearchFilterData_;
         this.setText(this.logContent);
-        if (!searchField.trim().equals("")) {
-            this.searchInLogWithRegularExpression();
+        setFiltered(sosSearchFilterData.isFiltered());              
+        itemFilter.setSelection(sosSearchFilterData.isFiltered());
+        if (!sosSearchFilterData_.getSearchfield().trim().equals(EMPTY_STRING)) {
+            this.searchInLog();
         }
     }
+
 }

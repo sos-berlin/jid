@@ -118,19 +118,19 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
 			public void modifyText(ModifyEvent e) {
 				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
-				sosDashboardHeader.resetInputTimer();
+				actualizeList();
 			}
 		});
 		sosDashboardHeader.getToDate().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				tableDataProvider.setTo(sosDashboardHeader.getTo());
-				sosDashboardHeader.resetInputTimer();
+				actualizeList();
 			}
 		});
 		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				tableDataProvider.setFrom(sosDashboardHeader.getFrom());
-				sosDashboardHeader.resetInputTimer();
+				actualizeList();
 			}
 		});
 		sosDashboardHeader.getRefreshInterval().addModifyListener(new ModifyListener() {
@@ -142,14 +142,16 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			}
 		});
         sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
-		sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
+	 	sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
 			public void modifyText(final ModifyEvent e) {
 				if (sosDashboardHeader.getSearchField() != null) {
-					tableDataProvider.setSearchField(sosDashboardHeader.getSearchField().getText());
-					sosDashboardHeader.resetInputTimer();
+					tableDataProvider.setSearchField(sosDashboardHeader.getSosSearchFilterData());
+					actualizeList();
+					//sosDashboardHeader.resetInputTimer();
 				}
 			}
 		});
+		 
 		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
 				getList();

@@ -38,9 +38,12 @@ import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
@@ -50,7 +53,9 @@ import org.eclipse.swt.widgets.Text;
 import sos.scheduler.editor.classes.TextArea;
 
 import com.sos.jid.dialog.classes.SOSDialogHandleIgnoreList.InputTask;
+import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.hibernate.classes.DbItem;
+import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.localization.Messages;
 
 public class SosTabLogItem extends CTabItem {
@@ -66,6 +71,9 @@ public class SosTabLogItem extends CTabItem {
     public Timer        inputTimer;
     private Display     display         = null;
     private Messages    messages;
+    private SOSSearchFilter sosSearchFilter;
+    private SOSSearchFilterData sosSearchFilterData;
+    
 
 
 	public SosTabLogItem(String caption, CTabFolder parent, Messages messages_) {
@@ -85,16 +93,35 @@ public class SosTabLogItem extends CTabItem {
 		data = new GridData(GridData.FILL_BOTH);
 		data.horizontalSpan = 2;
 
+	/*	Button btnFilterButton = new Button(composite, SWT.NONE);
+	        btnFilterButton.addSelectionListener(new SelectionAdapter() {
+	            @Override
+	            public void widgetSelected(SelectionEvent e) {
+	                sosSearchFilter = new SOSSearchFilter(composite.getShell());
+	                sosSearchFilterData = sosSearchFilter.execute(edSearchfield.getText());
+	                if (sosSearchFilter.getSosSearchFilterData() != null) {
+	                    edSearchfield.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
+	                }
+	            }
+	        });
+	        btnFilterButton.setText("Filter");
+		
         edSearchfield = new Text(composite, SWT.BORDER);
         edSearchfield.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         edSearchfield.addModifyListener(new ModifyListener() {
             @Override
             public void modifyText(final ModifyEvent e) {
                 if (edSearchfield != null) {
+                    if (sosSearchFilterData == null) {
+                        sosSearchFilterData = new SOSSearchFilterData();
+                        sosSearchFilterData.setAsRegularExpression(false);
+                    }
+                    sosSearchFilterData.setSearchfield(edSearchfield.getText());
                     resetInputTimer();
                 }
             }
         });
+        */
 		log = new SOSDashboardLogArea(composite, SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI, messages);
 		log.setEditable(false);
 		log.setBackground(new Color(parentDisplay, 255, 255, 255));
@@ -153,7 +180,7 @@ public class SosTabLogItem extends CTabItem {
                   public void run() {
                       if (!edSearchfield.getText().equals(EMPTYSTRING)) {
                           try {
-                              log.setSearchField(edSearchfield.getText());
+                              log.setSOSSearchFilterData(sosSearchFilterData);
                           }
                           catch (Exception e) {
                               e.printStackTrace();
