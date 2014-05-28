@@ -1,11 +1,16 @@
 package com.sos.dailyschedule;
 
+import static org.junit.Assert.assertEquals;
+
+import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
  
 
 
+
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -27,6 +32,8 @@ import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.auth.SOSLoginDialog;
 import com.sos.i18n.I18NBase;
 import com.sos.i18n.annotation.I18NResourceBundle;
+import com.sos.scheduler.db.SchedulerInstancesDBItem;
+import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 
 /**
  * \class 		SosSchedulerDashboardMain - Main-Class for "Transfer files by FTP/SFTP and execute commands by SSH"
@@ -109,6 +116,16 @@ public class SosSchedulerDashboardMain extends I18NBase {
          
     }
     
+    private String getWebServiceAddress() {
+        String schedulerId = objOptions.schedulerId.Value();
+        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.JSFile());
+        schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
+        SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getInstanceById(schedulerId);
+        String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyPort());
+        return webServicAddress;
+         
+    }
+    
     private void execute(final String[] pstrArgs) {
         final String conMethodName = conClassName + "::Execute";
         try {
@@ -120,10 +137,11 @@ public class SosSchedulerDashboardMain extends I18NBase {
             
             objOptions = new SOSDashboardOptions();
             objOptions.CommandLineArgs(pstrArgs);
+            objOptions.securityServer.Value(getWebServiceAddress());
 
-           // SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
+            SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
             
-            if (false /*&& sosRestShiroClient.isEnabled(new URL(objOptions.securityServer.Value() + COMMAND_IS_ENABLED))*/) {
+            if (/*false &&*/ sosRestShiroClient.isEnabled(new URL(objOptions.securityServer.Value() + COMMAND_IS_ENABLED))) {
                  
               
                 isAuthenticated = doLogin() &&  (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE)) ;

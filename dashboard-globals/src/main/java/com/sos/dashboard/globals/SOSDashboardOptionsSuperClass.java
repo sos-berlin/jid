@@ -94,6 +94,19 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
                                                                   "Security Server for security rest service", // Titel
                                                                   " ", // InitValue
                                                                   " ", // DefaultValue
+                                                                  false // isMandatory
+                                                          );
+         
+    /**
+     * \var configurationFile : 
+     * 
+     *
+     */
+    @JSOptionDefinition(name = "scheduler_id", description = "", key = "scheduler_id", type = "SOSOptionString", mandatory = false)
+    public SOSOptionString schedulerId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
+                                                                  "scheduler_id that is assigned to this dashboard", // Titel
+                                                                  " ", // InitValue
+                                                                  " ", // DefaultValue
                                                                   true // isMandatory
                                                           );
          
@@ -174,6 +187,14 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
  
     public void setSecurityServer(final SOSOptionString p_securityServer) {
         this.securityServer = p_securityServer;
+    }
+    
+    public SOSOptionString getSchedulerId() {
+        return this.schedulerId;
+    }
+ 
+    public void setSchedulerId(final SOSOptionString p_schedulerId) {
+        this.schedulerId = p_schedulerId;
     }
     
     
