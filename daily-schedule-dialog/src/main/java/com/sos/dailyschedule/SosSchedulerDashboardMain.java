@@ -2,7 +2,6 @@ package com.sos.dailyschedule;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -10,6 +9,7 @@ import java.net.URL;
 
 
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -116,15 +116,34 @@ public class SosSchedulerDashboardMain extends I18NBase {
          
     }
     
-    private String getWebServiceAddress() {
-        String schedulerId = objOptions.schedulerId.Value();
+   
+    
+    private boolean getSecurityEnabled() {
+        boolean enabled = false;
+       // SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
+        
         SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.JSFile());
-        schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
-        SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getInstanceById(schedulerId);
-        String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyPort());
-        return webServicAddress;
-         
+        schedulerInstancesDBLayer.getFilter().setSosCommandWebservice(true);
+        List<SchedulerInstancesDBItem> l = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        Iterator <SchedulerInstancesDBItem> schedulerInstances = l.iterator();
+        while (!enabled && schedulerInstances.hasNext()) {
+            SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstances.next();
+            String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
+            try {
+//                enabled = sosRestShiroClient.isEnabled(new URL(webServicAddress + COMMAND_IS_ENABLED));
+                enabled = schedulerInstancesDBItem.getisSosCommandWebservice();
+                if (enabled) {
+                    objOptions.securityServer.Value(webServicAddress);
+                }
+            }catch (Exception e) {
+                enabled = true;
+            }
+        }            
+
+        
+        return enabled;
     }
+    
     
     private void execute(final String[] pstrArgs) {
         final String conMethodName = conClassName + "::Execute";
@@ -137,11 +156,12 @@ public class SosSchedulerDashboardMain extends I18NBase {
             
             objOptions = new SOSDashboardOptions();
             objOptions.CommandLineArgs(pstrArgs);
-            objOptions.securityServer.Value(getWebServiceAddress());
-
-            SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
             
-            if (/*false &&*/ sosRestShiroClient.isEnabled(new URL(objOptions.securityServer.Value() + COMMAND_IS_ENABLED))) {
+            boolean securityEnabled = getSecurityEnabled();
+                  
+            
+//            if (/*false &&*/ sosRestShiroClient.isEnabled(new URL(objOptions.securityServer.Value() + COMMAND_IS_ENABLED))) {
+            if (securityEnabled) {
                  
               
                 isAuthenticated = doLogin() &&  (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE)) ;
