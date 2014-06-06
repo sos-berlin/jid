@@ -89,15 +89,15 @@ public class SosSchedulerDashboardMain extends I18NBase {
         
         
         SOSLoginDialog sosLoginDialog = new SOSLoginDialog(new Shell(), 0);
+        SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
+        SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
+        sosLoginDialog.open();
         
         do {
           try {
         
-            SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
-            sosLoginDialog.open();
             if (sosLoginDialog.getUser() != null){
         
-                SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
                 sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
                 sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
                 sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.Value() + COMMAND_PERMISSION);
@@ -117,7 +117,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
               
           }
         }
-        while (!sosLoginDialog.isCancel() && (!(currentUser==null || currentUser.isAuthenticated())));              
+        while (!sosLoginDialog.isCancel() || ((currentUser!=null && !currentUser.isAuthenticated())));              
        
         return (currentUser != null && currentUser.isAuthenticated());
          
