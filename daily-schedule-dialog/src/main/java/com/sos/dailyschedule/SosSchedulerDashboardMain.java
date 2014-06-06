@@ -1,14 +1,8 @@
 package com.sos.dailyschedule;
 
-import static org.junit.Assert.assertEquals;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-
  
-
-
-
+import java.net.MalformedURLException;
+ 
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,6 +55,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
     public static final String    SOS_EXIT_CODE_RAISED = "SosSchedulerDashboardMain.SOS_EXIT_CODE_RAISED";
     private boolean isAuthenticated;
     private SOSJaxbSubject currentUser=null;
+    private  List<SchedulerInstancesDBItem> schedulerInstances;
     
     /**
      * 
@@ -90,58 +85,69 @@ public class SosSchedulerDashboardMain extends I18NBase {
         	*/
     }
 
-    private boolean doLogin() throws MalformedURLException {
+    private boolean doLogin() throws Exception {
         
         
         SOSLoginDialog sosLoginDialog = new SOSLoginDialog(new Shell(), 0);
         
         do {
+          try {
         
-        SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
-        sosLoginDialog.open();
-        if (sosLoginDialog.getUser() != null){
-    
-            SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
-            sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
-            sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
-            sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.Value() + COMMAND_PERMISSION);
-            sosWebserviceAuthenticationRecord.setSessionId("");
-           
-            SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
-            currentUser = new SOSJaxbSubject(sosPermissionShiro);
-            }}
+            SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
+            sosLoginDialog.open();
+            if (sosLoginDialog.getUser() != null){
+        
+                SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
+                sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
+                sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
+                sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.Value() + COMMAND_PERMISSION);
+                sosWebserviceAuthenticationRecord.setSessionId("");
+               
+                SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
+                currentUser = new SOSJaxbSubject(sosPermissionShiro);
+                }
+          }catch (Exception e) {
+              
+           boolean enabled=getNextSecurityServer();
+           if (!enabled) {
+               throw new Exception ("Security Server unreachable");
+           }
+              
+              
+              
+          }
+        }
         while (!sosLoginDialog.isCancel() && (!(currentUser==null || currentUser.isAuthenticated())));              
        
         return (currentUser != null && currentUser.isAuthenticated());
          
     }
     
-   
+   private boolean getNextSecurityServer() {
+       boolean enabled = false;
+       Iterator <SchedulerInstancesDBItem> schedulerInstancesIterator = schedulerInstances.iterator();
+       while (!enabled && schedulerInstancesIterator.hasNext()) {
+           SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstancesIterator.next();
+           String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
+           try {
+               enabled = schedulerInstancesDBItem.getisSosCommandWebservice();
+               if (enabled) {
+                   schedulerInstancesDBItem.setIsSosCommandWebservice(false);
+                   objOptions.securityServer.Value(webServicAddress);
+               }
+           }catch (Exception e) {
+               enabled = true;
+           }
+       }      
+       return enabled;     
+
+   }
     
     private boolean getSecurityEnabled() {
-        boolean enabled = false;
-       // SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
-        
         SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.JSFile());
         schedulerInstancesDBLayer.getFilter().setSosCommandWebservice(true);
-        List<SchedulerInstancesDBItem> l = schedulerInstancesDBLayer.getSchedulerInstancesList();
-        Iterator <SchedulerInstancesDBItem> schedulerInstances = l.iterator();
-        while (!enabled && schedulerInstances.hasNext()) {
-            SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstances.next();
-            String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
-            try {
-//                enabled = sosRestShiroClient.isEnabled(new URL(webServicAddress + COMMAND_IS_ENABLED));
-                enabled = schedulerInstancesDBItem.getisSosCommandWebservice();
-                if (enabled) {
-                    objOptions.securityServer.Value(webServicAddress);
-                }
-            }catch (Exception e) {
-                enabled = true;
-            }
-        }            
-
-        
-        return enabled;
+        schedulerInstances = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        return getNextSecurityServer();
     }
     
     
