@@ -87,15 +87,18 @@ public class SosSchedulerDashboardMain extends I18NBase {
 
     private boolean doLogin() throws Exception {
         
+        boolean tryingNextServer=false;
         
         SOSLoginDialog sosLoginDialog = new SOSLoginDialog(new Shell(), 0);
         SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
         SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
-        sosLoginDialog.open();
         
         do {
           try {
-        
+            if (!tryingNextServer || (currentUser!=null && !currentUser.isAuthenticated())) {
+                sosLoginDialog.open();
+            }
+
             if (sosLoginDialog.getUser() != null){
         
                 sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
@@ -109,7 +112,8 @@ public class SosSchedulerDashboardMain extends I18NBase {
           }catch (Exception e) {
               
            boolean enabled=getNextSecurityServer();
-           if (!enabled) {
+           tryingNextServer=true;
+              if (!enabled) {
                throw new Exception ("Security Server unreachable");
            }
               
@@ -117,7 +121,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
               
           }
         }
-        while (!sosLoginDialog.isCancel() || ((currentUser!=null && !currentUser.isAuthenticated())));              
+        while (! (sosLoginDialog.isCancel() || ((currentUser!=null && currentUser.isAuthenticated()))));              
        
         return (currentUser != null && currentUser.isAuthenticated());
          
