@@ -1,16 +1,8 @@
 package com.sos.scheduler.history.db;
 
-
- 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
-
-import java.text.ParseException;
 import java.util.List;
 import org.hibernate.Query;
-import org.junit.Test;
-
 import com.sos.hibernate.layer.SOSHibernateIntervalDBLayer;
 import com.sos.scheduler.history.SchedulerTaskHistoryFilter;
  
