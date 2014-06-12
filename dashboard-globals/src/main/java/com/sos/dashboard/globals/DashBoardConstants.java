@@ -94,6 +94,7 @@ public class DashBoardConstants {
 	public final static String	conSOSDashB_Status					= "SOSDashB_Status";
     public final static String  conSOSDashB_JobNet                  = "SOSDashB_JobNet";
     public final static String  conSOSDashB_CouldNotConnect         = "SOSDashB_CouldNotConnect";
+    public final static String  conSOSDashB_NoSecurityServer        = "SOSDashB_NoSecurityServer";
     public final static String  conSOSDashB_Copy                    = "SOSDashB_Copy";
     public final static String  conSOSDashB_SelectAll               = "SOSDashB_SelectAll";
     public final static String  conSOSDashB_SelectFont              = "SOSDashB_SelectFont";

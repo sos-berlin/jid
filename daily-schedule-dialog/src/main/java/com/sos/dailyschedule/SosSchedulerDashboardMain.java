@@ -1,8 +1,7 @@
 package com.sos.dailyschedule;
 
  
-import java.net.MalformedURLException;
- 
+  
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,7 +41,6 @@ import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 public class SosSchedulerDashboardMain extends I18NBase {
     private static final String COMMAND_PERMISSION = "/jobscheduler/rest/sosPermission/permissions?user=%s&pwd=%s";
     private static final String SOS_PRODUCTS_JID_EXECUTE = "sos:products:jid:execute";
-    private static final String COMMAND_IS_ENABLED = "/jobscheduler/engine/plugin/security/is_enabled";
     private final static String   conClassName         = "SosSchedulerDashboardMain";
     public static final String    conSVNVersion        = "$Id: SosSchedulerDashboardMain.java 16415 2012-02-01 17:21:40Z ur $";
     private static Logger         logger               = Logger.getLogger(SosSchedulerDashboardMain.class);
@@ -114,11 +112,13 @@ public class SosSchedulerDashboardMain extends I18NBase {
            boolean enabled=getNextSecurityServer();
            tryingNextServer=true;
               if (!enabled) {
-               throw new Exception ("Security Server unreachable");
-           }
-              
-              
-              
+                  Shell shell = new Shell();
+                  MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+                  String message = String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_NoSecurityServer) + ": %s",objOptions.securityServer.Value());
+                  messageBox.setMessage(message + "\nMessage: " + e.getMessage());
+                  int rc = messageBox.open();
+                  throw new Exception (message);
+            }
           }
         }
         while (! (sosLoginDialog.isCancel() || ((currentUser!=null && currentUser.isAuthenticated()))));              
@@ -170,10 +170,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
             boolean securityEnabled = getSecurityEnabled();
                   
             
-//            if (/*false &&*/ sosRestShiroClient.isEnabled(new URL(objOptions.securityServer.Value() + COMMAND_IS_ENABLED))) {
             if (securityEnabled) {
-                 
-              
                 isAuthenticated = doLogin() &&  (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE)) ;
                
 //              objOptions.enableJobnet.value(currentUser.hasRole("jobnet") ||  currentUser.isPermitted("sos:products:dashboard:jobnet"));
@@ -183,15 +180,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     logger.debug("pstrArgs = " + pstrArgs[0].toString());
                     logger.debug("user-dir = " + System.getProperty("user.dir"));
                     objOptions.CommandLineArgs(pstrArgs);
-                }
-                else {
-                  /* objOptions.enableJOC.value(true);
-                    objOptions.enableJOE.value(true);
-                    objOptions.enableEvents.value(true);
-                    objOptions.enableJobnet.value(false);
-
-                    objOptions.enableJobStart.value(true);
-                    */
                 }
             }
 
@@ -209,22 +197,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 try {
 
                     Composite composite = new Composite(shell, SWT.NONE);
-
-                    /*
-                    if (pstrArgs.length > 0) {
-                    	logger.debug("pstrArgs = " + pstrArgs[0].toString());
-                    	logger.debug("user-dir = " + System.getProperty("user.dir"));
-                    	objOptions.CommandLineArgs(pstrArgs);
-                    }
-                    else {
-                    	objOptions.enableJOC.value(true);
-                    	objOptions.enableJOE.value(true);
-                    	objOptions.enableEvents.value(true);
-                    	objOptions.enableJobnet.value(false);
-
-                    	objOptions.enableJobStart.value(true);
-                    }
-                    */
                     objOptions.CheckMandatory();
                     logger.debug(objOptions.toString());
                     DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.JSFile());

@@ -1,19 +1,13 @@
 package com.sos.dailyschedule.dialog.classes;
 
-import java.io.File;
 import java.util.Date;
  
-
-
-import com.sos.scheduler.model.commands.JSCmdModifyOrder;
-import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
 import com.sos.dailyschedule.db.DailyScheduleDBItem;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.components.SOSMenuItem;
 import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.dialog.interfaces.ITableView;
-import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.jid.dialog.classes.SOSDashboardTableView;
 import com.sos.jid.dialog.classes.SOSMenuLimitItem;
@@ -22,16 +16,12 @@ import com.sos.jid.dialog.classes.SosTabLogItem;
  
  
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
-import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
 import com.sos.scheduler.model.SchedulerObjectFactory;
 
 import org.eclipse.swt.SWT;
  
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -39,9 +29,6 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDateTime;
 
 public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implements ITableView {
     
