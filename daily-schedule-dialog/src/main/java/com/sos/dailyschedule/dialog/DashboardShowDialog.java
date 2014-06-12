@@ -427,10 +427,11 @@ public class DashboardShowDialog extends FormBase {
         tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmHistory.setControl(tableViewExecuted.getTableComposite());
  
-       /* CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
+        CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
         tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());
- */
+
+        
 		leftTabFolder.setSelection(0);
 		
 		
@@ -700,6 +701,9 @@ public class DashboardShowDialog extends FormBase {
 		executedHistoryDataProvider.setTo(new Date());
 	//	executedHistoryDataProvider.getData();
 		
+		 
+		schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(dataProvider_.getConfigurationFile());
+   
 
 		haveDb = true;
 
