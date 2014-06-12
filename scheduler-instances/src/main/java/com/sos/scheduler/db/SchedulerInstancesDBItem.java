@@ -58,12 +58,12 @@ public class SchedulerInstancesDBItem extends DbItem {
 	 private String logDir;
 	 private String includePath;
 	 private String iniPath;
-	 private boolean isService=false;
-	 private boolean isRunning=false;
-	 private boolean isPaused=false;
-	 private boolean isCluster=false;
-     private boolean isAgent=false;
-     private boolean isSosCommandWebservice=false;
+	 private Boolean isService=false;
+	 private Boolean isRunning=false;
+	 private Boolean isPaused=false;
+	 private Boolean isCluster=false;
+     private Boolean isAgent=false;
+     private Boolean isSosCommandWebservice=false;
      private String param;
 	 	 
   	 private String dateFormat="yyyy-MM-dd hh:mm";
@@ -155,12 +155,12 @@ public class SchedulerInstancesDBItem extends DbItem {
     
     
     @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
-    public void setIsSosCommandWebservice(boolean isSosCommandWebservice) {
+    public void setIsSosCommandWebservice(Boolean isSosCommandWebservice) {
         this.isSosCommandWebservice = isSosCommandWebservice;
     }
 
     @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
-    public boolean getisSosCommandWebservice() {
+    public Boolean getisSosCommandWebservice() {
         return isSosCommandWebservice;
     }
     
@@ -353,53 +353,53 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    
 	    @Column(name = "`IS_SERVICE`", nullable = true)
-		public void setIsService(boolean isService ) {
+		public void setIsService(Boolean isService ) {
 			this.isService = isService;
 		}
 
 	    @Column(name = "`IS_SERVICE`", nullable = true)
-		public boolean getIsService() {
+		public Boolean getIsService() {
 			return isService;
 		}
 	    
 	    
 	    @Column(name = "`IS_RUNNING`", nullable = true)
-		public void setIsRunning(boolean isRunning ) {
+		public void setIsRunning(Boolean isRunning ) {
 			this.isRunning = isRunning;
 		}
 
 	    @Column(name = "`IS_RUNNING`", nullable = true)
-		public boolean getIsRunning() {
+		public Boolean getIsRunning() {
 			return isRunning;
 		}	    
 	    
 	    @Column(name = "`IS_PAUSED`", nullable = true)
-		public void setIsPaused(boolean isPaused ) {
+		public void setIsPaused(Boolean isPaused ) {
 			this.isPaused = isPaused;
 		}
 
 	    @Column(name = "`IS_PAUSED`", nullable = true)
-		public boolean getIsPaused() {
+		public Boolean getIsPaused() {
 			return isPaused;
 		}	    
 	    
 	    @Column(name = "`IS_CLUSTER`", nullable = true)
-		public void setIsCluster(boolean isCluster ) {
+		public void setIsCluster(Boolean isCluster ) {
 			this.isCluster = isCluster;
 		}
 
 	    @Column(name = "`IS_CLUSTER`", nullable = true)
-		public boolean getIsCluster() {
+		public Boolean getIsCluster() {
 			return isCluster;
 		}	    
 
 	    @Column(name = "`IS_AGENT`", nullable = true)
-		public void setIsAgent(boolean isAgent ) {
+		public void setIsAgent(Boolean isAgent ) {
 			this.isAgent = isAgent;
 		}
 
 	    @Column(name = "`IS_AGENT`", nullable = true)
-		public boolean getIsAgent() {
+		public Boolean getIsAgent() {
 			return isAgent;
 		}	    
 	    
