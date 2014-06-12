@@ -2,20 +2,12 @@
 
 package com.sos.dailyschedule.job;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import com.sos.JSHelper.Basics.JSToolBox;
 import com.sos.JSHelper.Listener.JSListenerClass;
-import com.sos.JSHelper.Logging.Log4JHelper;
+import org.apache.log4j.Logger;
+import org.junit.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * \class 		CheckDailyScheduleOptionsJUnitTest - Checking a DailySchedule with runs in History
@@ -47,8 +39,6 @@ public class CheckDailyScheduleOptionsJUnitTest extends  JSToolBox {
 	private final String					conClassName						= "CheckDailyScheduleOptionsJUnitTest"; //$NON-NLS-1$
 		@SuppressWarnings("unused") //$NON-NLS-1$
 	private static Logger		logger			= Logger.getLogger(CheckDailyScheduleOptionsJUnitTest.class);
-	@SuppressWarnings("unused")
-	private static Log4JHelper	objLogger		= null;
 	private CheckDailySchedule objE = null;
 
 	protected CheckDailyScheduleOptions	objOptions			= null;
@@ -67,7 +57,6 @@ public class CheckDailyScheduleOptionsJUnitTest extends  JSToolBox {
 
 	@Before
 	public void setUp() throws Exception {
-		objLogger = new Log4JHelper("./log4j.properties"); //$NON-NLS-1$
 		objE = new CheckDailySchedule();
 		objE.registerMessageListener(this);
 		objOptions = objE.Options();

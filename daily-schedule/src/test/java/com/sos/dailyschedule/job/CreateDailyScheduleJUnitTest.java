@@ -1,24 +1,18 @@
 package com.sos.dailyschedule.job;
 
-import static org.junit.Assert.assertEquals;
+import com.sos.JSHelper.Basics.JSToolBox;
+import com.sos.JSHelper.Listener.JSListenerClass;
+import com.sos.dailyschedule.db.DailyScheduleDBItem;
+import com.sos.dailyschedule.db.DailyScheduleDBLayer;
+import org.apache.log4j.Logger;
+import org.hibernate.Query;
+import org.junit.*;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-import org.hibernate.Query;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import com.sos.JSHelper.Basics.JSToolBox;
-import com.sos.JSHelper.Listener.JSListenerClass;
-import com.sos.JSHelper.Logging.Log4JHelper;
-import com.sos.dailyschedule.db.DailyScheduleDBItem;
-import com.sos.dailyschedule.db.DailyScheduleDBLayer;
+import static org.junit.Assert.assertEquals;
 
 /**
  * \class 		CreateDaysScheduleJUnitTest - JUnit-Test for "Creating a DaysSchedule depending on actual Runtimes"
@@ -38,8 +32,6 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 	private final static String				conClassName	= "CreateDaysScheduleJUnitTest";						//$NON-NLS-1$
 	@SuppressWarnings("unused")
 	private static Logger					logger			= Logger.getLogger(CreateDailyScheduleJUnitTest.class);
-	@SuppressWarnings("unused")
-	private static Log4JHelper				objLogger		= null;
 
 	protected CreateDailyScheduleOptions	objOptions		= null;
 	private CreateDailySchedule				objE			= null;
@@ -58,7 +50,6 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 
 	@Before
 	public void setUp() throws Exception {
-		objLogger = new Log4JHelper("./log4j.properties"); //$NON-NLS-1$
 		objE = new CreateDailySchedule();
 		objE.registerMessageListener(this);
 		objOptions = objE.Options();
