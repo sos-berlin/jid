@@ -14,15 +14,15 @@ import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 
 /**
-* \class DailyScheduleTableItem
+* \class SosDailyScheduleTableItem
 *
-* \brief DailyScheduleTableItem -
+* \brief SosDailyScheduleTableItem -
 *
 * \details
 *
-* \section DailyScheduleTableItem.java_intro_sec Introduction
+* \section SosDailyScheduleTableItem.java_intro_sec Introduction
 *
-* \section DailyScheduleTableItem.java_samples Some Samples
+* \section SosDailyScheduleTableItem.java_samples Some Samples
 *
 * \code
 *   .... code goes here ...
@@ -149,7 +149,7 @@ public class SosDailyScheduleTableItem extends SOSTableItem implements ISOSTable
 		return textBuffer;
 	}
 	@SuppressWarnings("unused")
-	private final String	conClassName	= "DailyScheduleTableItem";
+	private final String	conClassName	= "SosDailyScheduleTableItem";
 
 
     @Override

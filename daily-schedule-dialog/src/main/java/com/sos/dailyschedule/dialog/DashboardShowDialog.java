@@ -4,6 +4,7 @@ import com.sos.JSHelper.Basics.JSVersionInfo;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewExecuted;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewPlanned;
+import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewSchedulerInstances;
 import com.sos.dailyschedule.dialog.classes.SosHistoryTable;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -16,6 +17,7 @@ import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
+import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -84,11 +86,13 @@ public class DashboardShowDialog extends FormBase {
     // private SOSTabJade tbtmJade;
 
 	private SOSDashboardTableViewExecuted tableViewExecuted;
-	private SOSDashboardTableViewPlanned tableViewPlanned;
+    private SOSDashboardTableViewPlanned tableViewPlanned;
+    private SOSDashboardTableViewSchedulerInstances tableViewSchedulerInstances;
 
 	private SchedulerHistoryDataProvider detailHistoryDataProvider = null;
 	private SchedulerHistoryDataProvider executedHistoryDataProvider = null;
-	private DailyScheduleDataProvider dailyScheduleDataProvider = null;
+    private DailyScheduleDataProvider dailyScheduleDataProvider = null;
+    private SchedulerInstancesDataProvider schedulerInstancesDataProvider = null;
 
  	
 	private SchedulerInstancesDBLayer schedulerInstancesDBLayer;
@@ -390,15 +394,43 @@ public class DashboardShowDialog extends FormBase {
 			tableViewExecuted.getTableList().setEnabled(false);
 		}
 
-		 
+
+		tableViewSchedulerInstances = new SOSDashboardTableViewSchedulerInstances(composite);
+		tableViewSchedulerInstances.setObjOptions(objOptions);
+		tableViewSchedulerInstances.setDBLayer(schedulerInstancesDBLayer.getConfigurationFile());
+
+		tableViewSchedulerInstances.setLeftTabFolder(leftTabFolder);
+		tableViewSchedulerInstances.setPrefs(prefs);
+		tableViewSchedulerInstances.setLeft(left);
+		tableViewSchedulerInstances.setTableDataProvider(schedulerInstancesDataProvider);
+		tableViewSchedulerInstances.setDetailHistoryDataProvider(detailHistoryDataProvider);
+		tableViewSchedulerInstances.createTable();
+		tableViewSchedulerInstances.createMenue();
+	        if (haveDb) {
+	            tableViewSchedulerInstances.actualizeList();
+	            tableViewSchedulerInstances.getSchedulerIds();
+	        } else {
+	            tableViewSchedulerInstances.getSosDashboardHeader().getRefreshTimer().cancel();
+	            tableViewSchedulerInstances.getSosDashboardHeader().setEnabled(false);
+	            tableViewSchedulerInstances.getTableList().setEnabled(false);
+	        }
+
+
+		
+		
+		
 		CTabItem tbtmDailyPlan = new CTabItem(leftTabFolder, SWT.NONE);
 		tbtmDailyPlan.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_PLANNED));
 		tbtmDailyPlan.setControl(tableViewPlanned.getTablePlannedComposite());
 
-		CTabItem tbtmHistory = new CTabItem(leftTabFolder, SWT.NONE);
-		tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
-		tbtmHistory.setControl(tableViewExecuted.getTableComposite());
+        CTabItem tbtmHistory = new CTabItem(leftTabFolder, SWT.NONE);
+        tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
+        tbtmHistory.setControl(tableViewExecuted.getTableComposite());
  
+       /* CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
+        tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
+        tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());
+ */
 		leftTabFolder.setSelection(0);
 		
 		

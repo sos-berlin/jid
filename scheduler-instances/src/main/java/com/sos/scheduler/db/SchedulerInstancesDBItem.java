@@ -128,6 +128,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 		return tcpPort;
 	}
 	
+	@Transient
+    public String getTcpPortValue() {
+        return String.valueOf(tcpPort);
+    }
+	
     @Column(name = "`JETTY_HTTP_PORT`", nullable = true)
     public void setJettyHttpPort(Integer jettyHttpPort) {
         this.jettyHttpPort = jettyHttpPort;
@@ -165,6 +170,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 		this.udpPort = udpPort;
 	}
 
+    @Transient
+    public String getUdpPortValue() {
+        return String.valueOf(udpPort);
+    }
+
 	@Column(name = "`UDP_PORT`", nullable = true)
 	public Integer getUdpPort() {
 		return udpPort;
@@ -194,7 +204,6 @@ public class SchedulerInstancesDBItem extends DbItem {
 	 	}
 	    
 	    @Transient 
-	    
 	    public String getStartTimeFormated(){
 	        return getDateFormatted(this.getStartTime());
 	 	}
@@ -228,18 +237,7 @@ public class SchedulerInstancesDBItem extends DbItem {
 	 	}
 
 	    
-	    /*
-	        @Column(name="`SECURITY_SERVER`",nullable=false)
-	    public void setSecurityServer(String securityServer) {
-	        this.securityServer = securityServer;
-	    }
-	    
 	     
-	    @Column(name="`SECURITY_SERVER`",nullable=false)
-	    public String getSecurityServer() {
-	        return securityServer;
-	    }
-	    */
 	    @Column(name = "`DB_NAME`", nullable = true)
 		public void setDbName(String dbName) {
 			this.dbName = dbName;

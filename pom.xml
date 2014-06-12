@@ -20,6 +20,7 @@
         <module>daily-schedule</module>
         <module>daily-schedule-dialog</module>
         <module>scheduler-history</module>
+        <module>scheduler-instances</module>
         <module>eventing-frontend</module>
         <module>events</module>
     </modules>

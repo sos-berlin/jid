@@ -80,6 +80,12 @@
         
         <dependency>
             <groupId>com.sos-berlin.products.jid</groupId>
+            <artifactId>scheduler-instances</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.sos-berlin.products.jid</groupId>
             <artifactId>jid-cockpit</artifactId>
             <version>${project.version}</version>
         </dependency>

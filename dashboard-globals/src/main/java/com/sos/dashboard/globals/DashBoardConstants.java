@@ -3,7 +3,6 @@
  */
 package com.sos.dashboard.globals;
 
-
 /**
  * @author KB
  *
@@ -110,6 +109,34 @@ public class DashBoardConstants {
     public static final String  conSettingREFRESH                   = "refresh";
     public static final String  conSettingLIMIT                     = "limit";
 
+    public static final String  conSOSDashB_Hostname                   = "Host";
+    public static final String  conSOSDashB_TCP_PORT                   = "TCP Port";
+    public static final String  conSOSDashB_UDP_PORT                   = "UDP Port";
+    public static final String  conSOSDashB_START_TIME                 = "Start";
+    public static final String  conSOSDashB_STOP_TIME                  = "Stop";
+    public static final String  conSOSDashB_DB_NAME                    = "DB Name";
+    public static final String  conSOSDashB_DB_HISTORY_TABLENAME       = "History";
+    public static final String  conSOSDashB_DB_ORDERHISTORY_TABLENAME  = "Order History";
+    public static final String  conSOSDashB_DB_ORDERS_TABLENAME        = "Orders";
+    public static final String  conSOSDashB_DB_TASKS_TABLENAME         = "Tasks";
+    public static final String  conSOSDashB_DB_VARIABLES_TABLENAME     = "Variables";
+    public static final String  conSOSDashB_WORKING_DIRECTORY          = "Working Directory";
+    public static final String  conSOSDashB_LIVE_DIRECTORY             = "Live";
+    public static final String  conSOSDashB_LOGDIR                     = "Logdir";
+    public static final String  conSOSDashB_INCLUDEPATH                = "Include Path";
+    public static final String  conSOSDashB_INIPATH                    = "Ini Path";
+    public static final String  conSOSDashB_IS_SERVICE                 = "Service";
+    public static final String  conSOSDashB_IS_RUNNING                 = "Running";
+    public static final String  conSOSDashB_IS_PAUSED                  = "Paused";
+    public static final String  conSOSDashB_IS_CLUSTER                 = "Cluster";
+    public static final String  conSOSDashB_IS_AGENT                   = "Agent";
+    public static final String  conSOSDashB_PARAM                      = "Param";
+    public static final String  conSOSDashB_JETTY_HTTP_PORT            = "Jetty HTTP";
+    public static final String  conSOSDashB_JETTY_HTTPS_PORT           = "Jetty HTTPS";
+    public static final String  conSOSDashB_IS_COMMAND_WEBSERVICE      = "Command Webservice";
+    
+    
+    
     
  
 	private DashBoardConstants() {
