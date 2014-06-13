@@ -17,7 +17,7 @@
   <!-- Bewirkt die Kopie in lib_release_unversioned_jar und lib_release_jar -->
     <properties>
         <setup.do.not.deploy>false</setup.do.not.deploy>
-        <setup.target.name>com.sos.${artifactId}</setup.target.name>
+        <setup.target.name>com.sos.${project.artifactId}</setup.target.name>
         
     </properties>
 
