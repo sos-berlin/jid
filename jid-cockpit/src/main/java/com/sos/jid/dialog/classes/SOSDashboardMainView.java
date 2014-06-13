@@ -1,4 +1,5 @@
 package com.sos.jid.dialog.classes;
+import java.util.List;
 import java.util.prefs.Preferences;
 
 import org.eclipse.swt.custom.CTabFolder;
@@ -12,6 +13,7 @@ import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.FormBase;
 import com.sos.hibernate.classes.DbItem;
+import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
 
 public class SOSDashboardMainView extends FormBase {
@@ -31,6 +33,7 @@ public class SOSDashboardMainView extends FormBase {
         super(composite_, DashBoardConstants.conPropertiesFileName);
     }
  
+  
 
     protected void showLog(Table table) { 
         this.showWaitCursor();

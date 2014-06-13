@@ -143,9 +143,19 @@ public class SchedulerInstancesDBItem extends DbItem {
         return jettyHttpPort;
     }
     
+    @Transient
+    public String getJettyHttpPortValue() {
+        return String.valueOf(jettyHttpPort);
+    }
+
     @Column(name = "`JETTY_HTTPS_PORT`", nullable = true)
     public void setJettyHttpsPort(Integer jettyHttpsPort) {
         this.jettyHttpsPort = jettyHttpsPort;
+    }
+
+    @Transient
+    public String getJettyHttpsPortValue() {
+        return String.valueOf(jettyHttpsPort);
     }
 
     @Column(name = "`JETTY_HTTPS_PORT`", nullable = true)
@@ -160,7 +170,7 @@ public class SchedulerInstancesDBItem extends DbItem {
     }
 
     @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
-    public Boolean getisSosCommandWebservice() {
+    public Boolean getIsSosCommandWebservice() {
         return isSosCommandWebservice;
     }
     

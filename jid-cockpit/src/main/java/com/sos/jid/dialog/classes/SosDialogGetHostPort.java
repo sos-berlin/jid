@@ -20,7 +20,6 @@ import org.eclipse.swt.graphics.Point;
 public class SosDialogGetHostPort {
     final int             conDefaultPort  = 4444;
     final String          conDefaultHost  = "localhost";
-    private GridLayout    gridLayout;
     private Logger        logger      = Logger.getLogger(SosDialogGetHostPort.class);
     private IntegerField  edPort;
     private Text          edHost;

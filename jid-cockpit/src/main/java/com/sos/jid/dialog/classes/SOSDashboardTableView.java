@@ -1,9 +1,15 @@
 package com.sos.jid.dialog.classes;
 
 import java.io.File;
+import java.util.List;
 import java.util.prefs.Preferences;
 
  
+
+
+
+
+
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -28,6 +34,12 @@ import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
 
 
+
+
+
+
+
+import com.sos.schedulerinstances.classes.SelectSchedulerInstance;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -70,6 +82,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		super(composite_);
 	}
 
+	
+	
 	@Override
 	public void getTableData() {
 		logger.debug("...getTableData");
@@ -188,7 +202,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		
 			tableList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
-				if (!isRightMouseclick()) {
+				if (right != null && !isRightMouseclick()) {
 				    if (tableList.getSelectionIndex() >= 0) {
     					TableItem t = tableList.getItem(tableList.getSelectionIndex());
     					if (t != null) {
@@ -276,6 +290,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	}
 
 	
+	
+	   
 	   protected SchedulerInstancesDBItem start(DbItem dbItem) {
 	        this.showWaitCursor();
   
@@ -320,7 +336,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	
 	protected void showLog(Table table) {
 		this.showWaitCursor();
-		if (table.getSelectionIndex() >= 0 && table.getSelectionIndex() >= 0) {
+		if (logTabFolder != null && table.getSelectionIndex() >= 0 && table.getSelectionIndex() >= 0) {
 			SosTabLogItem logItem = (SosTabLogItem) logTabFolder.getSelection();
 			if (logItem == null) {
 				logTabFolder.setSelection(0);

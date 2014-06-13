@@ -4,12 +4,18 @@ package com.sos.scheduler.db;
 import java.io.File;
 import java.util.List;
 
+import org.eclipse.swt.widgets.Shell;
 import org.hibernate.Query;
  
+
+
+
+
 
 import com.sos.scheduler.db.SchedulerInstancesFilter;
 import com.sos.hibernate.layer.SOSHibernateDBLayer;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;  
+import com.sos.schedulerinstances.classes.SelectSchedulerInstance;
 
 
 /**
@@ -161,16 +167,25 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
 
 	}
 
+	  private SchedulerInstancesDBItem selectSchedulerInstance(List<SchedulerInstancesDBItem>  l) {
+	        
+	        if (l.size() == 1){
+	            return (SchedulerInstancesDBItem)l.get(0);    
+	        }else {
+	            Shell shell = new Shell();
+	            SelectSchedulerInstance s = new SelectSchedulerInstance(shell,l);
+	            return (SchedulerInstancesDBItem)s.getSelectedSchedulerInstancesDBItem();    
+	        }
+	    }
  
 	public SchedulerInstancesDBItem getInstanceById(String schedulerId) {
 		initFilter();
-		this.filter.setLimit(1);
-		filter.setSchedulerId(schedulerId);
+    	filter.setSchedulerId(schedulerId);
  			
 	  	List<SchedulerInstancesDBItem> schedulerList = getSchedulerInstancesList(); 
 	  	if (schedulerList.size() > 0) {
-	       SchedulerInstancesDBItem schedulerDbItem = (SchedulerInstancesDBItem) schedulerList.get(0);
-	  	   return schedulerDbItem;
+	        SchedulerInstancesDBItem schedulerInstanceDBItem = selectSchedulerInstance(schedulerList);
+	  	    return schedulerInstanceDBItem;
 	  	}else {
 	  		return null;
 	  	}

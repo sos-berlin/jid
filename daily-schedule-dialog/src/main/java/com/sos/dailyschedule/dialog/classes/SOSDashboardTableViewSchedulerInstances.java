@@ -10,6 +10,8 @@ import com.sos.jid.dialog.classes.SosTabLogItem;
  
  
 
+
+
 import org.eclipse.swt.SWT;
  
 import org.eclipse.swt.layout.GridLayout;
@@ -38,57 +40,9 @@ public class SOSDashboardTableViewSchedulerInstances extends SOSDashboardTableVi
     public void createMenue() {
         Menu contentMenu = new Menu(tableList);
         tableList.setMenu(contentMenu);
-
-        MenuItem showLog = new MenuItem(contentMenu, SWT.PUSH);
-
-        showLog.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_show_log_in_new_tab));
-        showLog.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                SosTabLogItem tbtmLog = new SosTabLogItem(conTabLOG, logTabFolder, Messages);
-                logTabFolder.setSelection(tbtmLog);
-                showLog(tableList);
- 
-            }
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            }
-        });
-        // =============================================================================================
-
+    
         new MenuItem(contentMenu, SWT.SEPARATOR);
 
-       
-
-        // =============================================================================================
-        
-        MenuItem search = new MenuItem(contentMenu, SWT.PUSH);
-        search.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
-        search.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
-            public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-               
-                SOSSearchFilter sosSearchFilter = new SOSSearchFilter(getParentShell());
-                sosSearchFilter.setEnableFilterCheckbox(false);
-                 sosSearchFilter.execute(EMPTY_STRING);
-                 if (sosSearchFilter.getSosSearchFilterData() != null) {
-                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-                         try {
-                             tableDataProvider.setSearchField(sosSearchFilter.getSosSearchFilterData());
-                             actualizeList();
-                         }
-                          catch (Exception ee) {
-                              ee.printStackTrace();
-                          }
-                    }
-                 }
-                
-            }
-
-            public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
-            }
-        });
-        
-      
-        
         new MenuItem(contentMenu, SWT.SEPARATOR);
         MenuItem excel = new MenuItem(contentMenu, SWT.PUSH);
         excel.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Export_To_Excel));
@@ -100,13 +54,7 @@ public class SOSDashboardTableViewSchedulerInstances extends SOSDashboardTableVi
               public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
               }
           });
-        
-         
-      
     }
-
-  
-  
  
     public void createTable () {
 
@@ -117,10 +65,8 @@ public class SOSDashboardTableViewSchedulerInstances extends SOSDashboardTableVi
         sosDashboardHeader.setPrefs(prefs);
         sosDashboardHeader.initLimit(DashBoardConstants.SOS_DASHBOARD_HEADER + "_" + className);
 
-
         tableList = new SosSchedulerInstancesTable(mainViewComposite, SWT.FULL_SELECTION | SWT.MULTI);
         
-
         super.createTable();
     }
     

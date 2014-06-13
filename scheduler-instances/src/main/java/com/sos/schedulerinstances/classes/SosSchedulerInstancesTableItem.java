@@ -1,14 +1,18 @@
 package com.sos.schedulerinstances.classes;
 
 
+import sos.scheduler.editor.app.ResourceManager;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.SWT;
+ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
+import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSTableItem;
+import com.sos.dialog.components.SOSTableColumn;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
@@ -67,6 +71,19 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	}
 
 
+	  private void setImage(int column, Boolean checked) {
+	       
+	        
+	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
+	        Image uncheckedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");
+	        
+	        if (checked) {
+	            this.setImage(column, checkedImage);
+	        }else {
+	            this.setImage(column, uncheckedImage);
+	        }
+
+	    }
 
 	public void setColor() {
          org.eclipse.swt.graphics.Color magenta = Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA);
@@ -92,24 +109,65 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 
 	public void setColumns() {
 		SchedulerInstancesDBItem d = schedulerInstancesDBItem;
-
 		logger.debug("...creating tableItem: " + d.getSchedulerId() + ":" + getParent().getItemCount());
 
 
-		textBuffer = new String[] { "",d.getSchedulerId(),
-				                    d.getHostname(),
-
+		textBuffer = new String[] { d.getSchedulerId(),
+		                            d.getHostname(),
 				                    d.getTcpPortValue(),
 				                    d.getUdpPortValue(),
 				                    d.getStartTimeFormated(),
 				                    d.getStopTimeFormated(),
  				                    d.getDbName(),
-				                    d.getDbHistoryTableName()
-				                    };
+                                    d.getDbHistoryTableName(),
+                                    d.getDbOrderHistoryTableName(),
+                                    d.getDbOrdersTableName(),
+                                    d.getDbTasksTableName(),
+                                    d.getDbVariablesTableName(),
+                                    d.getWorkingDirectory(),
+                                    d.getLiveDirectory(),
+                                    d.getLogDir(),
+                                    d.getIncludePath(),
+                                    d.getIniPath(),
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    "",
+                                    d.getParam(),
+                                    d.getJettyHttpPortValue(),
+                                    d.getJettyHttpsPortValue(),
+                                    ""};
+ 				                
  
 		this.setText(textBuffer);
+		
+        setImage(17,d.getIsService());
+        setImage(18,d.getIsRunning());
+        setImage(19,d.getIsPaused());
+        setImage(20,d.getIsCluster());
+        setImage(21,d.getIsAgent());
+        setImage(25,d.getIsSosCommandWebservice());
+        
 	}
 
+	
+	   public void setColumnsShort() {
+	        SchedulerInstancesDBItem d = schedulerInstancesDBItem;
+	        logger.debug("...creating tableItem: " + d.getSchedulerId() + ":" + getParent().getItemCount());
+
+
+	        textBuffer = new String[] { d.getSchedulerId(),
+	                                    d.getHostname(),
+	                                    d.getTcpPortValue(),
+	                                    d.getUdpPortValue(),
+	                                    };
+	                                
+	 
+	        this.setText(textBuffer);
+	        
+	    }
+	
 	public String[] getTextBuffer() {
 		return textBuffer;
 	}
@@ -145,6 +203,10 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
     }
 
 
+    
+ 
+     
+      
 
 
 

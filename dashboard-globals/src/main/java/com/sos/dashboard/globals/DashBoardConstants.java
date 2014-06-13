@@ -72,7 +72,10 @@ public class DashBoardConstants {
 	public static final String	conSOSDashB_new_log					= "SOSDashB_new_log";				  // "New Log";
 	public static final String	conSOSDashB_NAME_TAB_HISTORY		= "SOSDashB_NAME_TAB_HISTORY";
 	public static final String	conSOSDashB_NAME_TAB_PLANNED		= "SOSDashB_NAME_TAB_PLANNED";
+    public static final String  conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES     = "SOSDashB_NAME_TAB_SCHEDULER_INSTANCES";
 	public static final String	conSOSDashB_NAME_TAB_JOBNET			= "SOSDashB_NAME_TAB_JOBNET";
+
+	
 	public static final String	conSOSDashB_FROM					= "SOSDashB_FROM";
 	public static final String	conSOSDashB_TO						= "SOSDashB_TO";
 	public final static String	conSOSDashB_JOBS					= "SOSDashB_JOBS";
@@ -109,36 +112,33 @@ public class DashBoardConstants {
     public static final String  conSettingREFRESH                   = "refresh";
     public static final String  conSettingLIMIT                     = "limit";
 
-    public static final String  conSOSDashB_Hostname                   = "Host";
-    public static final String  conSOSDashB_TCP_PORT                   = "TCP Port";
-    public static final String  conSOSDashB_UDP_PORT                   = "UDP Port";
-    public static final String  conSOSDashB_START_TIME                 = "Start";
-    public static final String  conSOSDashB_STOP_TIME                  = "Stop";
-    public static final String  conSOSDashB_DB_NAME                    = "DB Name";
-    public static final String  conSOSDashB_DB_HISTORY_TABLENAME       = "History";
-    public static final String  conSOSDashB_DB_ORDERHISTORY_TABLENAME  = "Order History";
-    public static final String  conSOSDashB_DB_ORDERS_TABLENAME        = "Orders";
-    public static final String  conSOSDashB_DB_TASKS_TABLENAME         = "Tasks";
-    public static final String  conSOSDashB_DB_VARIABLES_TABLENAME     = "Variables";
-    public static final String  conSOSDashB_WORKING_DIRECTORY          = "Working Directory";
-    public static final String  conSOSDashB_LIVE_DIRECTORY             = "Live";
-    public static final String  conSOSDashB_LOGDIR                     = "Logdir";
-    public static final String  conSOSDashB_INCLUDEPATH                = "Include Path";
-    public static final String  conSOSDashB_INIPATH                    = "Ini Path";
-    public static final String  conSOSDashB_IS_SERVICE                 = "Service";
-    public static final String  conSOSDashB_IS_RUNNING                 = "Running";
-    public static final String  conSOSDashB_IS_PAUSED                  = "Paused";
-    public static final String  conSOSDashB_IS_CLUSTER                 = "Cluster";
-    public static final String  conSOSDashB_IS_AGENT                   = "Agent";
-    public static final String  conSOSDashB_PARAM                      = "Param";
-    public static final String  conSOSDashB_JETTY_HTTP_PORT            = "Jetty HTTP";
-    public static final String  conSOSDashB_JETTY_HTTPS_PORT           = "Jetty HTTPS";
-    public static final String  conSOSDashB_IS_COMMAND_WEBSERVICE      = "Command Webservice";
+    public static final String  conSOSDashB_Hostname                   = "SOSDashB_Hostname";
+    public static final String  conSOSDashB_TCP_PORT                   = "SOSDashB_TCP_PORT";
+    public static final String  conSOSDashB_UDP_PORT                   = "SOSDashB_UDP_PORT";
+    public static final String  conSOSDashB_START_TIME                 = "SOSDashB_START_TIME";
+    public static final String  conSOSDashB_STOP_TIME                  = "SOSDashB_STOP_TIME";
+    public static final String  conSOSDashB_DB_NAME                    = "SOSDashB_DB_NAME";
+    public static final String  conSOSDashB_DB_HISTORY_TABLENAME       = "SOSDashB_DB_HISTORY_TABLENAME";
+    public static final String  conSOSDashB_DB_ORDERHISTORY_TABLENAME  = "SOSDashB_DB_ORDERHISTORY_TABLENAME";
+    public static final String  conSOSDashB_DB_ORDERS_TABLENAME        = "SOSDashB_DB_ORDERS_TABLENAME";
+    public static final String  conSOSDashB_DB_TASKS_TABLENAME         = "SOSDashB_DB_TASKS_TABLENAME";
+    public static final String  conSOSDashB_DB_VARIABLES_TABLENAME     = "SOSDashB_DB_VARIABLES_TABLENAME";
+    public static final String  conSOSDashB_WORKING_DIRECTORY          = "SOSDashB_WORKING_DIRECTORY";
+    public static final String  conSOSDashB_LIVE_DIRECTORY             = "SOSDashB_LIVE_DIRECTORY";
+    public static final String  conSOSDashB_LOGDIR                     = "SOSDashB_LOGDIR";
+    public static final String  conSOSDashB_INCLUDEPATH                = "SOSDashB_INCLUDEPATH";
+    public static final String  conSOSDashB_INIPATH                    = "SOSDashB_INIPATH";
+    public static final String  conSOSDashB_IS_SERVICE                 = "SOSDashB_IS_SERVICE";
+    public static final String  conSOSDashB_IS_RUNNING                 = "SOSDashB_IS_RUNNING";
+    public static final String  conSOSDashB_IS_PAUSED                  = "SOSDashB_IS_PAUSED";
+    public static final String  conSOSDashB_IS_CLUSTER                 = "SOSDashB_IS_CLUSTER";
+    public static final String  conSOSDashB_IS_AGENT                   = "SOSDashB_IS_AGENT";
+    public static final String  conSOSDashB_PARAM                      = "SOSDashB_PARAM";
+    public static final String  conSOSDashB_JETTY_HTTP_PORT            = "SOSDashB_JETTY_HTTP_PORT";
+    public static final String  conSOSDashB_JETTY_HTTPS_PORT           = "SOSDashB_JETTY_HTTPS_PORT";
+    public static final String  conSOSDashB_IS_COMMAND_WEBSERVICE      = "SOSDashB_IS_COMMAND_WEBSERVICE";
     
-    
-    
-    
- 
+     
 	private DashBoardConstants() {
 		// TODO Auto-generated constructor stub
 	}

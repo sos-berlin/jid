@@ -134,7 +134,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
            SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstancesIterator.next();
            String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
            try {
-               enabled = schedulerInstancesDBItem.getisSosCommandWebservice();
+               enabled = schedulerInstancesDBItem.getIsSosCommandWebservice();
                if (enabled) {
                    schedulerInstancesDBItem.setIsSosCommandWebservice(false);
                    objOptions.securityServer.Value(webServicAddress);
@@ -204,6 +204,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
 
                     try {
                         window.setDataProvider(dataProvider);
+                        window.setCurrentUser(currentUser);
                     }
                     catch (Exception e) {
                         e.printStackTrace();

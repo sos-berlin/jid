@@ -1,6 +1,7 @@
 package com.sos.dailyschedule.dialog;
 
 import com.sos.JSHelper.Basics.JSVersionInfo;
+import com.sos.auth.SOSJaxbSubject;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewExecuted;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewPlanned;
@@ -99,6 +100,9 @@ public class DashboardShowDialog extends FormBase {
 	private SOSDashboardOptions objOptions = null;
 
 	private boolean haveDb;
+	
+    private SOSJaxbSubject currentUser=null;
+
 
 	  public class ShowTimeTask extends TimerTask {
           private static final String EMPTYSTRING = "";
@@ -373,6 +377,7 @@ public class DashboardShowDialog extends FormBase {
 			tableViewPlanned.getTableList().setEnabled(false);
 		}
 
+		
 		tableViewExecuted = new SOSDashboardTableViewExecuted(composite);
 		tableViewExecuted.setObjOptions(objOptions);
 		tableViewExecuted.setDBLayer(schedulerInstancesDBLayer.getConfigurationFile());
@@ -406,7 +411,7 @@ public class DashboardShowDialog extends FormBase {
 		tableViewSchedulerInstances.setDetailHistoryDataProvider(detailHistoryDataProvider);
 		tableViewSchedulerInstances.createTable();
 		tableViewSchedulerInstances.createMenue();
-	        if (haveDb) {
+	        if (haveDb) {	
 	            tableViewSchedulerInstances.actualizeList();
 	            tableViewSchedulerInstances.getSchedulerIds();
 	        } else {
@@ -417,8 +422,6 @@ public class DashboardShowDialog extends FormBase {
 
 
 		
-		
-		
 		CTabItem tbtmDailyPlan = new CTabItem(leftTabFolder, SWT.NONE);
 		tbtmDailyPlan.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_PLANNED));
 		tbtmDailyPlan.setControl(tableViewPlanned.getTablePlannedComposite());
@@ -427,9 +430,11 @@ public class DashboardShowDialog extends FormBase {
         tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmHistory.setControl(tableViewExecuted.getTableComposite());
  
-        CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
-        tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
-        tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());
+        if (currentUser.isPermitted("sos:products:jid:instances:show")) {
+            CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
+            tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES));
+            tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());            
+        }
 
         
 		leftTabFolder.setSelection(0);
@@ -730,5 +735,9 @@ public class DashboardShowDialog extends FormBase {
 	public void setObjOptions(final SOSDashboardOptions objOptions) {
 		this.objOptions = objOptions;
 	}
+
+    public void setCurrentUser(SOSJaxbSubject currentUser) {
+        this.currentUser = currentUser;
+    }
 
 }

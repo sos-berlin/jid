@@ -58,7 +58,6 @@ public class SosSchedulerInstancesTable extends SOSTable implements ISOSTable {
 		this.setSortDirection(SWT.UP);
 		this.setLinesVisible(true);
 		this.setHeaderVisible(true);
-        new SOSTableColumn(this, " " , 30, messages);
 		new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID), 50);
 		new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_Hostname), 100);
 		new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_TCP_PORT), 100);

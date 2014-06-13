@@ -28,6 +28,13 @@
             <version>${project.version}</version>
         </dependency>
         
+ <!--  Wird wegen Ressourcen Manager benötigt -->
+         <dependency>
+            <groupId>com.sos-berlin.products.joe</groupId>
+            <artifactId>joe-cockpit</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
         <dependency>
 		    <groupId>com.sos-berlin.products.jobscheduler</groupId>
             <artifactId>jobscheduler-helper</artifactId>
