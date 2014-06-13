@@ -1,22 +1,20 @@
 package com.sos.dailyschedule.db;
 
 
+import com.sos.dailyschedule.job.CheckDailyScheduleOptions;
+import com.sos.dashboard.globals.DashBoardConstants;
+import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
+import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
+import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
+import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
-import com.sos.dailyschedule.job.CheckDailyScheduleMain;
-import com.sos.dailyschedule.job.CheckDailyScheduleOptions;
-import com.sos.dashboard.globals.DashBoardConstants;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
 
 /**
 * \class DaysScheduleAdjustment 

@@ -1,28 +1,23 @@
 package com.sos.dailyschedule.db;
 
 
+import com.sos.dailyschedule.job.CreateDailyScheduleOptions;
+import com.sos.dashboard.globals.DashBoardConstants;
+import com.sos.scheduler.model.SchedulerObjectFactory;
+import com.sos.scheduler.model.SchedulerObjectFactory.enu4What;
+import com.sos.scheduler.model.answers.*;
+import com.sos.scheduler.model.commands.JSCmdShowCalendar;
+import com.sos.scheduler.model.commands.JSCmdShowOrder;
+import com.sos.scheduler.model.commands.JSCmdShowState;
+import com.sos.scheduler.model.objects.Spooler;
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
-import org.apache.log4j.Logger;
-import com.sos.JSHelper.Logging.Log4JHelper;
-import com.sos.dailyschedule.job.CreateDailyScheduleOptions;
-import com.sos.dashboard.globals.DashBoardConstants;
-import com.sos.scheduler.model.SchedulerObjectFactory;
-import com.sos.scheduler.model.SchedulerObjectFactory.enu4What;
-import com.sos.scheduler.model.answers.At;
-import com.sos.scheduler.model.answers.Calendar;
-import com.sos.scheduler.model.answers.Order;
-import com.sos.scheduler.model.answers.Period;
-import com.sos.scheduler.model.answers.State;
-import com.sos.scheduler.model.commands.JSCmdShowCalendar;
-import com.sos.scheduler.model.commands.JSCmdShowOrder;
-import com.sos.scheduler.model.commands.JSCmdShowState;
-import com.sos.scheduler.model.objects.Spooler;
 
 
 /**
@@ -59,7 +54,6 @@ public class Calendar2DB {
 	private final String	conClassName	= "Calender2DB";
 	private static Logger					logger			= Logger.getLogger(Calendar2DB.class);
 	@SuppressWarnings("unused")
-	private static Log4JHelper				objLogger		= null;
 	private static SchedulerObjectFactory	objFactory		= null;
 	 
 	private Date from;
@@ -77,8 +71,6 @@ public class Calendar2DB {
 	
 	private void initSchedulerConnection()   {
 		if (schedulerId.equals("")){
-     		objLogger = new Log4JHelper("./log4j.properties");
-	    	logger = Logger.getRootLogger();
 		    logger.debug("Calender2DB");
 		    objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().Value(), options.getscheduler_port().value());
 		    objFactory.initMarshaller(Spooler.class);
