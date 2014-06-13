@@ -5,7 +5,6 @@ package com.sos.test;
 import org.apache.log4j.Logger;
 
 import com.sos.JSHelper.Basics.JSToolBox;
-import com.sos.JSHelper.Logging.Log4JHelper;
 
 
 /**
@@ -25,8 +24,6 @@ import com.sos.JSHelper.Logging.Log4JHelper;
 public class CreateGenerateOrderMain extends JSToolBox {
 	private final static String					conClassName						= "CreateGenerateOrderMain"; //$NON-NLS-1$
 	private static Logger		logger			= Logger.getLogger(CreateGenerateOrderMain.class);
-	@SuppressWarnings("unused")	
-	private static Log4JHelper	objLogger		= null;
 
 	protected CreateGenerateOrderOptions	objOptions			= null;
 
@@ -45,9 +42,6 @@ public class CreateGenerateOrderMain extends JSToolBox {
 
 		final String conMethodName = conClassName + "::Main"; //$NON-NLS-1$
 
-		objLogger = new Log4JHelper("./log4j.properties"); //$NON-NLS-1$
-
-		logger = Logger.getRootLogger();
 		logger.info("CreateGenerateOrder - Main"); //$NON-NLS-1$
 
 		try {
