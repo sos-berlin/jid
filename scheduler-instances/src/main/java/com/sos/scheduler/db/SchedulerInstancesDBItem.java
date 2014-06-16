@@ -65,6 +65,10 @@ public class SchedulerInstancesDBItem extends DbItem {
      private Boolean isAgent=false;
      private Boolean isSosCommandWebservice=false;
      private String param;
+     
+     private Integer supervisorTcpPort;
+     private String supervisorHostName;
+     
 	 	 
   	 private String dateFormat="yyyy-MM-dd hh:mm";
 
@@ -113,6 +117,21 @@ public class SchedulerInstancesDBItem extends DbItem {
 		return hostName;
 	}
 	
+    @Column(name = "`SUPERVISOR_HOSTNAME`", nullable = true)
+    public void setSupervisorHostName(String supervisorHostname) {
+        this.supervisorHostName = supervisorHostname; 
+    }
+
+    public void setSupervisorHostname(String supervisorHostname) {
+        setSupervisorHostName(supervisorHostname);
+    }
+    
+    @Column(name = "`SUPERVISOR_HOSTNAME`", nullable = true)
+    public String getSupervisorHostName() {
+        return supervisorHostName;
+    }
+    
+	
 	@Transient
     public String getHostname() {
         return getHostName();
@@ -132,6 +151,22 @@ public class SchedulerInstancesDBItem extends DbItem {
     public String getTcpPortValue() {
         return String.valueOf(tcpPort);
     }
+
+    @Column(name = "`SUPERVISOR_TCP_PORT`", nullable = true)
+    public void setSupervisorTcpPort(Integer supervisorTcpPort) {
+        this.supervisorTcpPort = supervisorTcpPort;
+    }
+
+    @Column(name = "`SUPERVISOR_TCP_PORT`", nullable = true)
+    public Integer getSupervisorTcpPort() {
+        return supervisorTcpPort;
+    }
+    
+    @Transient
+    public String getSupervisorTcpPortValue() {
+        return String.valueOf(supervisorTcpPort);
+    }
+	
 	
     @Column(name = "`JETTY_HTTP_PORT`", nullable = true)
     public void setJettyHttpPort(Integer jettyHttpPort) {

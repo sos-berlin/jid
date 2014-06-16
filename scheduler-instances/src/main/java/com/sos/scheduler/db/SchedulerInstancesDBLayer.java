@@ -12,6 +12,9 @@ import org.hibernate.Query;
 
 
 
+
+import sos.spooler.Spooler;
+
 import com.sos.scheduler.db.SchedulerInstancesFilter;
 import com.sos.hibernate.layer.SOSHibernateDBLayer;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;  
@@ -200,24 +203,66 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
 		this.filter = filter;
 	}
 	
-	public void insertScheduler(String schedulerId, String hostName, Integer port) {
+	public SchedulerInstancesDBItem setInstancesDbItemValues(Spooler objSpooler) {
+        SchedulerInstancesDBItem schedulerInstancesDbItem = new SchedulerInstancesDBItem();
+        schedulerInstancesDbItem.setHostName(objSpooler.hostname());
+        schedulerInstancesDbItem.setTcpPort(objSpooler.tcp_port());
+        schedulerInstancesDbItem.setSchedulerId(objSpooler.id());
+        schedulerInstancesDbItem.setDbName(objSpooler.db_name());
+        schedulerInstancesDbItem.setDbHistoryTableName(objSpooler.db_history_table_name());
+        schedulerInstancesDbItem.setDbOrdersTableName(objSpooler.db_orders_table_name());
+        schedulerInstancesDbItem.setDbTasksTableName(objSpooler.db_tasks_table_name());
+        schedulerInstancesDbItem.setDbVariablesTableName(objSpooler.db_variables_table_name());
+        schedulerInstancesDbItem.setIncludePath(objSpooler.include_path());
+        schedulerInstancesDbItem.setIniPath(objSpooler.ini_path());
+        schedulerInstancesDbItem.setLogDir(objSpooler.log_dir());
+        schedulerInstancesDbItem.setParam(objSpooler.param());
+        schedulerInstancesDbItem.setIsService(objSpooler.is_service());
+        schedulerInstancesDbItem.setLiveDirectory(objSpooler.configuration_directory());
+        if (objSpooler.supervisor_client() != null) {
+            schedulerInstancesDbItem.setSupervisorHostName(objSpooler.supervisor_client().hostname());
+            schedulerInstancesDbItem.setSupervisorTcpPort(objSpooler.supervisor_client().tcp_port());
+        }
+
+        return schedulerInstancesDbItem;
+	    
+	}
+
+	public void insertScheduler(SchedulerInstancesDBItem newSchedulerInstancesDbItem) {
 		SchedulerInstancesDBItem schedulerDbItem = null;
 		initFilter();
-		this.getFilter().setHostname(hostName);
-		this.getFilter().setPort(port);
+		this.getFilter().setHostname(newSchedulerInstancesDbItem.getHostname());
+		this.getFilter().setPort(newSchedulerInstancesDbItem.getTcpPort());
 		this.getFilter().setLimit(1);
-		this.getFilter().setSchedulerId(schedulerId);
+		this.getFilter().setSchedulerId(newSchedulerInstancesDbItem.getSchedulerId());
  			
+
 	  	List<SchedulerInstancesDBItem> schedulerList = getSchedulerInstancesList(); 
 	  	if (schedulerList.size() > 0) {
 	         schedulerDbItem =   schedulerList.get(0);
 	  	}else {
 	  		 schedulerDbItem = new SchedulerInstancesDBItem();
-	 		 schedulerDbItem.setHostName(hostName);
- 			 schedulerDbItem.setTcpPort(port);
-			 schedulerDbItem.setSchedulerId(schedulerId);
-			 this.saveOrUpdate(schedulerDbItem);
 	  	}
+	 	
+	  	schedulerDbItem.setHostName(newSchedulerInstancesDbItem.getHostname());
+ 		schedulerDbItem.setTcpPort(newSchedulerInstancesDbItem.getTcpPort());
+        schedulerDbItem.setSchedulerId(newSchedulerInstancesDbItem.getSchedulerId());
+        schedulerDbItem.setDbName(newSchedulerInstancesDbItem.getDbName());
+        schedulerDbItem.setDbHistoryTableName(newSchedulerInstancesDbItem.getDbHistoryTableName());
+        schedulerDbItem.setDbOrdersTableName(newSchedulerInstancesDbItem.getDbOrdersTableName());
+        schedulerDbItem.setDbTasksTableName(newSchedulerInstancesDbItem.getDbTasksTableName());
+        schedulerDbItem.setDbVariablesTableName(newSchedulerInstancesDbItem.getDbVariablesTableName());
+        schedulerDbItem.setIncludePath(newSchedulerInstancesDbItem.getIncludePath());
+        schedulerDbItem.setIniPath(newSchedulerInstancesDbItem.getIniPath());
+        schedulerDbItem.setLogDir(newSchedulerInstancesDbItem.getLogDir());
+        schedulerDbItem.setParam(newSchedulerInstancesDbItem.getParam());
+        schedulerDbItem.setIsService(newSchedulerInstancesDbItem.getIsService());
+        schedulerDbItem.setLiveDirectory(newSchedulerInstancesDbItem.getLiveDirectory());
+        schedulerDbItem.setSupervisorHostName(newSchedulerInstancesDbItem.getSupervisorHostName());
+        schedulerDbItem.setSupervisorTcpPort(newSchedulerInstancesDbItem.getSupervisorTcpPort());
+
+	  	
+        this.saveOrUpdate(schedulerDbItem);
 		
  	}
 	

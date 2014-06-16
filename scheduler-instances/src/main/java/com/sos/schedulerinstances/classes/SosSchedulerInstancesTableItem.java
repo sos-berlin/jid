@@ -116,25 +116,27 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 		                            d.getHostname(),
 				                    d.getTcpPortValue(),
 				                    d.getUdpPortValue(),
-				                    d.getStartTimeFormated(),
-				                    d.getStopTimeFormated(),
- 				                    d.getDbName(),
-                                    d.getDbHistoryTableName(),
-                                    d.getDbOrderHistoryTableName(),
-                                    d.getDbOrdersTableName(),
-                                    d.getDbTasksTableName(),
-                                    d.getDbVariablesTableName(),
-                                    d.getWorkingDirectory(),
-                                    d.getLiveDirectory(),
-                                    d.getLogDir(),
-                                    d.getIncludePath(),
-                                    d.getIniPath(),
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    "",
-                                    d.getParam(),
+				                    //d.getStartTimeFormated(),
+				                    //d.getStopTimeFormated(),
+				                    d.getDbName(),
+				                    d.getDbHistoryTableName(),
+				                    d.getDbOrderHistoryTableName(),
+				                    d.getDbOrdersTableName(),
+				                    d.getDbTasksTableName(),
+				                    d.getDbVariablesTableName(),
+				                    d.getWorkingDirectory(),
+				                    d.getLiveDirectory(),
+				                    d.getLogDir(),
+				                    d.getIncludePath(),
+				                    d.getIniPath(),
+				                    "",
+				                    //"",
+				                    //"",
+				                    //"",
+				                    //"",
+				                    d.getParam(),
+                                    d.getSupervisorHostName(),
+                                    d.getSupervisorTcpPortValue(),
                                     d.getJettyHttpPortValue(),
                                     d.getJettyHttpsPortValue(),
                                     ""};
@@ -142,12 +144,12 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
  
 		this.setText(textBuffer);
 		
-        setImage(17,d.getIsService());
-        setImage(18,d.getIsRunning());
-        setImage(19,d.getIsPaused());
-        setImage(20,d.getIsCluster());
-        setImage(21,d.getIsAgent());
-        setImage(25,d.getIsSosCommandWebservice());
+        setImage(15,d.getIsService());
+       // setImage(18,d.getIsRunning());
+       // setImage(19,d.getIsPaused());
+       // setImage(20,d.getIsCluster());
+       // setImage(21,d.getIsAgent());
+        setImage(21,d.getIsSosCommandWebservice());
         
 	}
 

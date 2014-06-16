@@ -75,7 +75,7 @@ public class SelectSchedulerInstance {
       tableList.setLayoutData(gd_tableList_1);
       tableList.setLayoutData(gd_tableList_1);
       new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID), 50);
-      new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_Hostname), 100);
+      new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_HOSTNAME), 100);
       new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_TCP_PORT), 100);
       new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_UDP_PORT), 100);
       

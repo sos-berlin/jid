@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import sos.spooler.Spooler;
+
 /**
 * \class SchedulerInstancesDBLayerTest 
 * 
@@ -96,20 +98,42 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Test
 	public void testInsertScheduler() {
+ 	    
 		String schedulerId = "myScheduler";
 		String hostname = "myHost";
 		Integer port = 4711;
 		
+	
+		SchedulerInstancesDBItem schedulerInstancesDbItem = new SchedulerInstancesDBItem();
+	    schedulerInstancesDbItem.setHostName(hostname);
+	    schedulerInstancesDbItem.setTcpPort(port);
+	    schedulerInstancesDbItem.setSchedulerId(schedulerId);
+	    schedulerInstancesDbItem.setDbName("myDbname");
+	    schedulerInstancesDbItem.setDbHistoryTableName("myDbHistoryTableName");
+	    schedulerInstancesDbItem.setDbOrdersTableName("myDbOrdersTableName");
+	    schedulerInstancesDbItem.setDbTasksTableName("myDbTasksTableName");
+	    schedulerInstancesDbItem.setDbVariablesTableName("myDbVariablesTableName");
+	    schedulerInstancesDbItem.setIncludePath("myIncludePath");
+	    schedulerInstancesDbItem.setIniPath("myIniPath");
+	    schedulerInstancesDbItem.setLogDir("myLogDir");
+	    schedulerInstancesDbItem.setParam("myParam");
+	    schedulerInstancesDbItem.setIsService(true);
+	    schedulerInstancesDbItem.setLiveDirectory("myLiveDirectory");
+        schedulerInstancesDbItem.setSupervisorHostName("mySupervisorHostname");
+        schedulerInstancesDbItem.setSupervisorTcpPort(4712);
+
+		
+		
 		
 		//Test prepare
-		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("c:/temp/hibernate_pgsql.cfg.xml"));
+		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
 		schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
 		schedulerInstancesDBLayer.getFilter().setHostname(hostname);
 		schedulerInstancesDBLayer.getFilter().setPort(port);
  		schedulerInstancesDBLayer.delete();
  		
  		//Test execute
- 		schedulerInstancesDBLayer.insertScheduler(schedulerId, hostname, port);
+ 		schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDbItem);
 		schedulerInstancesDBLayer.commit();		
 
  		

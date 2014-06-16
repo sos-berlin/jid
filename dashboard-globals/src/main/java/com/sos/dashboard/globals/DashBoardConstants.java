@@ -112,8 +112,10 @@ public class DashBoardConstants {
     public static final String  conSettingREFRESH                   = "refresh";
     public static final String  conSettingLIMIT                     = "limit";
 
-    public static final String  conSOSDashB_Hostname                   = "SOSDashB_Hostname";
+    public static final String  conSOSDashB_HOSTNAME                   = "SOSDashB_Hostname";
     public static final String  conSOSDashB_TCP_PORT                   = "SOSDashB_TCP_PORT";
+    public static final String  conSOSDashB_SUPERVISOR_HOSTNAME        = "SOSDashB_Supervisor_Hostname";
+    public static final String  conSOSDashB_SUPERVISOR_TCP_PORT        = "SOSDashB_Supervisor_TCP_PORT";
     public static final String  conSOSDashB_UDP_PORT                   = "SOSDashB_UDP_PORT";
     public static final String  conSOSDashB_START_TIME                 = "SOSDashB_START_TIME";
     public static final String  conSOSDashB_STOP_TIME                  = "SOSDashB_STOP_TIME";
