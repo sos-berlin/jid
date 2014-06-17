@@ -41,9 +41,6 @@ public class SOSDashboardTableViewSchedulerInstances extends SOSDashboardTableVi
         Menu contentMenu = new Menu(tableList);
         tableList.setMenu(contentMenu);
     
-        new MenuItem(contentMenu, SWT.SEPARATOR);
-
-        new MenuItem(contentMenu, SWT.SEPARATOR);
         MenuItem excel = new MenuItem(contentMenu, SWT.PUSH);
         excel.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Export_To_Excel));
         excel.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {

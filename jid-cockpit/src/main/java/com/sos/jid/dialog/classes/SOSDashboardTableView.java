@@ -1,16 +1,8 @@
 package com.sos.jid.dialog.classes;
 
 import java.io.File;
-import java.util.List;
 import java.util.prefs.Preferences;
-
  
-
-
-
-
-
-
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.SOSTable;
@@ -32,15 +24,7 @@ import com.sos.scheduler.model.SchedulerObjectFactory;
 import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
-
-
-
-
-
-
-
-import com.sos.schedulerinstances.classes.SelectSchedulerInstance;
-
+ 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;

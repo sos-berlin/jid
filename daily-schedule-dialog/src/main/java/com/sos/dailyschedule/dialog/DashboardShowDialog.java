@@ -430,7 +430,7 @@ public class DashboardShowDialog extends FormBase {
         tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmHistory.setControl(tableViewExecuted.getTableComposite());
  
-        if (currentUser.isPermitted("sos:products:jid:instances:show")) {
+        if (currentUser == null || currentUser.isPermitted("sos:products:jid:instances:show")) {
             CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
             tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES));
             tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());            

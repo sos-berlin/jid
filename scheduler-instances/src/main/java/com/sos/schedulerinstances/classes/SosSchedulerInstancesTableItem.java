@@ -10,9 +10,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
-import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSTableItem;
-import com.sos.dialog.components.SOSTableColumn;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
