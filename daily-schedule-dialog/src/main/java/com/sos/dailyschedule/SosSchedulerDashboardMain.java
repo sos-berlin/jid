@@ -14,7 +14,6 @@ import org.eclipse.swt.widgets.Shell;
 import sos.scheduler.editor.app.ErrorLog;
 import sos.util.SOSClassUtil;
 
-import com.sos.JSHelper.Logging.Log4JHelper;
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.auth.rest.SOSWebserviceAuthenticationRecord;
 import com.sos.auth.rest.client.SOSRestShiroClient;
@@ -44,8 +43,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
     private final static String   conClassName         = "SosSchedulerDashboardMain";
     public static final String    conSVNVersion        = "$Id: SosSchedulerDashboardMain.java 16415 2012-02-01 17:21:40Z ur $";
     private static Logger         logger               = Logger.getLogger(SosSchedulerDashboardMain.class);
-    @SuppressWarnings("unused")
-    private static Log4JHelper    objLogger            = null;
     protected SOSDashboardOptions objOptions           = null;
     public static final String    SOSDashBoard_Intro   = "SosSchedulerDashboardMain.SOSDB-Intro";
     public static final String    SOSDashboard_E_0001  = "SosSchedulerDashboardMain.SOSDX_E_0001";
@@ -158,7 +155,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
     private void execute(final String[] pstrArgs) {
         final String conMethodName = conClassName + "::Execute";
         try {
-            objLogger = new Log4JHelper("./log4j.properties"); //$NON-NLS-1$
+            
             logger = Logger.getRootLogger();
             logger.info(Messages.getMsg(SOSDashBoard_Intro)); // $NON-NLS-1$
             logger.info(conSVNVersion);
