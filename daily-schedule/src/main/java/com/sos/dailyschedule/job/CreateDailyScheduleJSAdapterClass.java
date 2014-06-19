@@ -136,7 +136,7 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File(configuration_file));
 		schedulerInstancesDBLayer.beginTransaction();
 		
-		schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDBLayer.setInstancesDbItemValues(objSpooler));
+		schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDBLayer.setInstancesDbItemValues(host,objSpooler));
 		schedulerInstancesDBLayer.commit();
 
 		objR.Execute();

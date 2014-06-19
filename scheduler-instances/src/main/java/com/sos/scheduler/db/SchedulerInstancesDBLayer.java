@@ -203,9 +203,9 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
 		this.filter = filter;
 	}
 	
-	public SchedulerInstancesDBItem setInstancesDbItemValues(Spooler objSpooler) {
+	public SchedulerInstancesDBItem setInstancesDbItemValues(String host, Spooler objSpooler) {
         SchedulerInstancesDBItem schedulerInstancesDbItem = new SchedulerInstancesDBItem();
-        schedulerInstancesDbItem.setHostName(objSpooler.hostname());
+        schedulerInstancesDbItem.setHostName(host);
         schedulerInstancesDbItem.setTcpPort(objSpooler.tcp_port());
         schedulerInstancesDbItem.setSchedulerId(objSpooler.id());
         schedulerInstancesDbItem.setDbName(objSpooler.db_name());
