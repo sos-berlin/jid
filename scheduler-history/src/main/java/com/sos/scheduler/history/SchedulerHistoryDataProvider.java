@@ -16,6 +16,7 @@ import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
 import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
+import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 
 /**
@@ -59,6 +60,7 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 
 	private SchedulerTaskHistoryDataProvider schedulerTaskHistoryDataProvider;
     private SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider;
+    private SchedulerInstancesDataProvider schedulerInstancesDataProvider;
     
     public void setJobName(String jobName) {
 		schedulerTaskHistoryDataProvider.getFilter().setJobname(jobName);
@@ -79,7 +81,8 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     
 	public SchedulerHistoryDataProvider(File configurationFile) {
 		schedulerTaskHistoryDataProvider = new SchedulerTaskHistoryDataProvider(configurationFile);
-		schedulerOrderHistoryDataProvider = new SchedulerOrderHistoryDataProvider(configurationFile);
+        schedulerOrderHistoryDataProvider = new SchedulerOrderHistoryDataProvider(configurationFile);
+        schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(configurationFile);
 	}
 	
 	public void setShowJobs(boolean showJobs) {
@@ -152,8 +155,10 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
  	}
 		
 	public void fillSchedulerIds(CCombo cbSchedulerId)	{
+        schedulerInstancesDataProvider.getData(0);
+        schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
 		schedulerTaskHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
-		schedulerOrderHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
+        schedulerOrderHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
 	}
 	
  

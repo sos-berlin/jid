@@ -34,6 +34,12 @@
             <version>${project.version}</version>
         </dependency>
 
+    <dependency>
+		    <groupId>com.sos-berlin.products.jid</groupId>
+            <artifactId>scheduler-instances</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.sos-berlin.products.commons</groupId>
             <artifactId>sos-util</artifactId>

@@ -40,6 +40,9 @@
             <artifactId>jobscheduler-helper</artifactId>
             <version>${project.version}</version>
         </dependency>
+        
+    
+        
     
         <dependency>
             <groupId>com.sos-berlin.products.jid</groupId>

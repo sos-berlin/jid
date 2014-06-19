@@ -69,12 +69,13 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     }
 
     public void fillSchedulerIds(CCombo cbSchedulerId) {
+        
         if (listOfSchedulerInstancesDBItems != null) {
             //Es ist schneller, die vorhandenen Sätze zu verwenden.
 //          listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleSchedulerList(0);
-            Iterator <SchedulerInstancesDBItem> dailyScheduleEntries = listOfSchedulerInstancesDBItems.iterator();
-            while (dailyScheduleEntries.hasNext()) {
-                SchedulerInstancesDBItem h = (SchedulerInstancesDBItem) dailyScheduleEntries.next();
+            Iterator <SchedulerInstancesDBItem> schedulerInstancesEntries = listOfSchedulerInstancesDBItems.iterator();
+            while (schedulerInstancesEntries.hasNext()) {
+                SchedulerInstancesDBItem h = (SchedulerInstancesDBItem) schedulerInstancesEntries.next();
                 if (cbSchedulerId.indexOf(h.getSchedulerId()) < 0) {
                     logger.debug("... cbSchedulerId --> : " + h.getSchedulerId());
                     cbSchedulerId.add(h.getSchedulerId());
