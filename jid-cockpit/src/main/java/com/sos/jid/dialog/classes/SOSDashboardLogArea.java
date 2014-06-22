@@ -25,8 +25,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-import sos.scheduler.editor.conf.forms.SchedulerEditorFontDialog;
+import sos.scheduler.editor.app.SchedulerEditorFontDialog;
  
+
 
 
 

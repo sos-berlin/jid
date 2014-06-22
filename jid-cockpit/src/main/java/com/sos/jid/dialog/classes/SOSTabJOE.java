@@ -4,12 +4,11 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
 
+import sos.scheduler.editor.app.Editor;
+import sos.scheduler.editor.app.MainWindow;
 
 import com.sos.JSHelper.Basics.JSVersionInfo;
-
-import sos.scheduler.editor.app.Editor;
-import sos.scheduler.editor.app.MainWindow; 
-import sos.scheduler.editor.app.Options;
+import com.sos.joe.globals.options.Options;
 
 public class SOSTabJOE extends CTabItem {
  
