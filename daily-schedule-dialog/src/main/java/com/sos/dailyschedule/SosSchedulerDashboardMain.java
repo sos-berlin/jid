@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-import sos.scheduler.editor.app.ErrorLog;
+import com.sos.joe.globals.messages.ErrorLog;
 import sos.util.SOSClassUtil;
 
 import com.sos.auth.SOSJaxbSubject;
