@@ -69,13 +69,26 @@ public class SchedulerTaskHistoryFilter extends SchedulerHistoryFilter implement
 	public SchedulerTaskHistoryFilter() {
 		super();
 	}
-
+	
+	private boolean filterRunningOrError(SchedulerTaskHistoryDBItem h) {
+        if (this.isShowWithError() && !this.isShowRunning() ) {
+            return !h.haveError();
+        }
+        if (!this.isShowWithError() && this.isShowRunning() ) {
+            return (h.getEndTime() != null);
+        }
+        if (this.isShowWithError() && this.isShowRunning() ) {
+            return !((h.getEndTime() == null) || h.haveError());
+        }
+        return false;
+	}
+ 
+	   
 	public boolean isFiltered(DbItem dbitem) {
 			  SchedulerTaskHistoryDBItem h = (SchedulerTaskHistoryDBItem) dbitem;
 			  return( this.getTaskIgnoreList().contains(h) || 
 					  (this.getJobname() != null && this.getJobname().equalsIgnoreCase("(Spooler)")) ||
-					  this.isShowWithError() && !h.haveError() ||					
-                      this.isShowRunning() && (h.getEndTime() != null) ||
+					  (filterRunningOrError(h)) ||
                       this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield() != null && !this.getSosSearchFilterData().getSearchfield().equals("") && 		 
 					 ((h.getJob() != null && !h.getJob().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase())))); 
 	    

@@ -71,7 +71,6 @@ public class SchedulerOrderHistoryFilter extends SchedulerHistoryFilter implemen
  
 		  
 		  return( this.getOrderIgnoreList().contains(h) || 
-                  this.isShowRunning() ||
                   this.isShowWithError() & !h.haveError() ||
                   this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield() != null && !this.getSosSearchFilterData().getSearchfield().equals("") && 
 				 ((h.getJobChain() != null && !h.getJobChain().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase())) &&
