@@ -1,14 +1,12 @@
 package com.sos.jid.dialog.classes;
+import com.sos.JSHelper.Basics.VersionInfo;
+import com.sos.joe.globals.options.Options;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.widgets.Composite;
-
 import sos.scheduler.editor.app.Editor;
 import sos.scheduler.editor.app.MainWindow;
-
-import com.sos.JSHelper.Basics.JSVersionInfo;
-import com.sos.joe.globals.options.Options;
 
 public class SOSTabJOE extends CTabItem {
  
@@ -19,7 +17,7 @@ public class SOSTabJOE extends CTabItem {
         MainWindow window = new MainWindow();
         
         window.createSShell(joeComposite,joeComposite);
-        String strT =  JSVersionInfo.conVersionNumber;
+        String strT = VersionInfo.JAR_VERSION;
         MainWindow.container.setTitleText(strT);
         joeComposite.getShell().setText(strT);
         Options.conJOEGreeting = strT;

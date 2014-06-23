@@ -1,6 +1,6 @@
 package com.sos.dailyschedule.dialog;
 
-import com.sos.JSHelper.Basics.JSVersionInfo;
+import com.sos.JSHelper.Basics.VersionInfo;
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewExecuted;
@@ -19,7 +19,6 @@ import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -322,7 +321,7 @@ public class DashboardShowDialog extends FormBase {
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 9;
 		parent.setLayout(gridLayout);
-		dashboardShell.setText(conJOB_SCHEDULER_DASHBOARD + " (" + JSVersionInfo.getVersionString() + ")");
+		dashboardShell.setText(conJOB_SCHEDULER_DASHBOARD + " (" + VersionInfo.VERSION_STRING + ")");
 		dashboardShell.setSize(1000, 550);
 		
 
