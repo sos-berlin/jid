@@ -142,7 +142,7 @@ public class SchedulerTaskHistoryDBLayerTest {
 	   @Test
     	public void testDeleteInterval() throws ParseException {
 	       schedulerTaskHistoryDBLayer.beginTransaction();
-	       int i = schedulerTaskHistoryDBLayer.deleteInterval(30);
+	       long i = schedulerTaskHistoryDBLayer.deleteInterval(30);
 		   schedulerTaskHistoryDBLayer.beginTransaction();
     	    i = schedulerTaskHistoryDBLayer.deleteInterval(3);
 		   assertEquals("testDeleteInterval fails...:", 0, i);			

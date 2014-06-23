@@ -9,6 +9,7 @@ import java.util.List;
 import org.hibernate.Query;
 
 import com.sos.dailyschedule.DailyScheduleFilter;
+import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.layer.SOSHibernateIntervalDBLayer;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
@@ -303,5 +304,42 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 		List<DailyScheduleDBItem> daysScheduleList = query.list();
 		return daysScheduleList.size() > 0;
 	}
+
+    @Override
+    public void onAfterDeleting(DbItem h) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<DbItem> getListOfItemsToDelete() {
+       
+            
+            int limit = this.getFilter().getLimit();
+            initSession();
+            
+
+            Query query = session.createQuery("from DailyScheduleDBItem " + getWhere() + filter.getOrderCriteria() + filter.getSortMode());
+
+            if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+                query.setText("schedulerId", filter.getSchedulerId());
+            }
+           
+            if (filter.getPlannedUtcFrom() != null) {
+                query.setTimestamp("schedulePlannedFrom", filter.getExecutedUtcFrom());
+            }
+            if (filter.getPlannedUtcTo() != null ) {
+                query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
+            }
+
+            if (limit > 0) {
+                query.setMaxResults(limit);
+            }
+
+            List<DbItem> schedulerPlannedList = query.list();
+            return schedulerPlannedList;
+                 
+         
+    }
 
 }

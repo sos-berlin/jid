@@ -1,16 +1,16 @@
 package com.sos.schedulerinstances.classes;
 
 
-import sos.scheduler.editor.app.ResourceManager;
-
+ 
 import org.apache.log4j.Logger;
- import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
 import com.sos.dialog.classes.SOSTableItem;
+import com.sos.dialog.swtdesigner.SWTResourceManager;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
@@ -72,8 +72,8 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	  private void setImage(int column, Boolean checked) {
 	       
 	        
-	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
-	        Image uncheckedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");
+	        Image checkedImage =  SWTResourceManager.getImage("/sos/scheduler/editor/icons/config.gif");
+	        Image uncheckedImage =  SWTResourceManager.getImage("/sos/scheduler/editor/icons/thin_close_view.gif");
 	        
 	        if (checked) {
 	            this.setImage(column, checkedImage);
@@ -198,7 +198,6 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 
     @Override
     public boolean isDisposed() {
-        // TODO Auto-generated method stub
         return false;
     }
 

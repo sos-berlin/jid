@@ -82,8 +82,8 @@ public class SchedulerOrderHistoryDBLayerTest {
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom("2011-01-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo("2011-10-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setSchedulerId("scheduler_4139");
-		schedulerOrderHistoryDBLayer.deleteInterval();
-		int i = schedulerOrderHistoryDBLayer.deleteInterval();
+		schedulerOrderHistoryDBLayer.deleteInterval(10,100);
+		long i = schedulerOrderHistoryDBLayer.deleteInterval(10,100);
 		schedulerOrderHistoryDBLayer.commit();
 		assertEquals("testDeleteString fails...:",0,i);
 	}
@@ -153,8 +153,8 @@ public class SchedulerOrderHistoryDBLayerTest {
 
 	@Test
 	public void testDeleteInterval() throws ParseException {
-		schedulerOrderHistoryDBLayer.deleteInterval(30);
-		int i= schedulerOrderHistoryDBLayer.deleteInterval(3);
+		schedulerOrderHistoryDBLayer.deleteInterval(30,100);
+		long i= schedulerOrderHistoryDBLayer.deleteInterval(3,100);
 
 		schedulerOrderHistoryDBLayer.commit();
 		assertEquals("testDeleteInterval fails...:",0,i);

@@ -1,10 +1,16 @@
 package com.sos.scheduler.history.db;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
+
+import org.eclipse.swt.SWT;
 import org.hibernate.Query;
+
+import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.layer.SOSHibernateIntervalDBLayer;
 import com.sos.scheduler.history.SchedulerTaskHistoryFilter;
+import com.sos.scheduler.history.classes.SchedulerHistoryTableItem;
  
 /**
 *  
@@ -182,13 +188,16 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
 
     }
      
-	@Override
+	
 	public int deleteInterval() {
 
 		if (session == null) {
 			beginTransaction();
 		}
-
+		
+ 
+		
+		
 		String hql = "delete from SchedulerTaskHistoryDBItem " + getWhereFromTo();
 
 		Query query = session.createQuery(hql);
@@ -200,11 +209,13 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
 		}
 
 		int row = query.executeUpdate();
+		
 
 		return row;
 	}
  
-	 
+    
+ 	 
 	
 	public int delete() {
 
@@ -406,6 +417,53 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
 
     public String getLastQuery() {
         return lastQuery;
+    }
+
+
+
+    @Override
+    public void onAfterDeleting(DbItem h) {
+        //Nothing to do
+        
+    }
+
+
+
+    @Override
+    public List<DbItem> getListOfItemsToDelete() {
+        
+        int limit = this.getFilter().getLimit();
+        initSession();
+        
+
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
+
+        if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+            query.setText("schedulerId", filter.getSchedulerId());
+        }
+        
+        if (filter.getSeverity() != null) {
+            query.setInteger("severity", filter.getSeverity().getIntValue());
+        }
+        
+        if (filter.getJobname() != null && !filter.getJobname().equals("")) {
+            query.setText("jobName", filter.getJobname());
+        }
+        
+        if (filter.getExecutedUtcFrom() != null) {
+            query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
+        }
+        if (filter.getExecutedUtcTo() != null ) {
+            query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
+        }
+
+        if (limit > 0) {
+            query.setMaxResults(limit);
+        }
+
+        List<DbItem> schedulerHistoryList = query.list();
+        return schedulerHistoryList;
+             
     }
 
 

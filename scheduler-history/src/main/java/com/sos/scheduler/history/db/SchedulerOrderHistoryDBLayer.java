@@ -7,7 +7,8 @@ import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
 import org.hibernate.Query;
 
-
+import com.sos.hibernate.classes.DbItem;
+import com.sos.hibernate.classes.SOSHibernateIntervalFilter;
 import com.sos.hibernate.layer.SOSHibernateIntervalDBLayer;
 import com.sos.scheduler.history.SchedulerOrderHistoryFilter;
 
@@ -190,53 +191,19 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 
     }
     
-    
-	@Override
-	public int deleteInterval() {
-
-		if (session == null) {
-			beginTransaction();
-		}
-
-		String q;
-		if   ((filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) ||
-              filter.getJobchain() != null && !filter.getJobchain().equals("") || 
-		      filter.getOrderid() != null && !filter.getOrderid().equals("")  ) {
-	        q = "delete from SchedulerOrderStepHistoryDBItem e where e.schedulerOrderHistoryDBItem.historyId IN (select historyId from SchedulerOrderHistoryDBItem " + getWhereFromTo() + ")";
-        }else {
-            q = "delete from SchedulerOrderStepHistoryDBItem " + getWhereFromToStep();
-            logger.info("Using patch:" + q);
-        }
-		
-		Query query = session.createQuery(q);
-		
-		if (filter.getExecutedUtcFrom()!= null ) {
-			query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-		}
-		if (filter.getExecutedUtcTo()!= null ) {
-			query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
-		}
+    @Override
+    public void onAfterDeleting(DbItem h) {
+        
+        SchedulerOrderHistoryDBItem x = (SchedulerOrderHistoryDBItem)h;
+        String q = "delete from SchedulerOrderStepHistoryDBItem where id.historyId=" + x.getHistoryId();
+        Query query = session.createQuery(q);
  
-		int row = query.executeUpdate();
+        int row = query.executeUpdate();
+        logger.debug(String.format("%s steps deleted",row)); 
 
-		String hql = "delete from SchedulerOrderHistoryDBItem " + getWhereFromTo();
-
-		query = session.createQuery(hql);
-
-		if (filter.getExecutedUtcFrom()!= null ) {
-			query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-		}
-		if (filter.getExecutedUtcTo()!= null ) {
-			query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
-		}
-
-		row = query.executeUpdate();
-
-		return row;
-	}
-
-
-
+    }
+  	
+ 
 	public int delete() {
 
 		if (session == null) {
@@ -430,6 +397,37 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
     public String getLastQuery() {
         return lastQuery;
     }
+
+    @Override      
+    public List<DbItem> getListOfItemsToDelete() {
+            
+            int limit = this.getFilter().getLimit();
+            initSession();
+            
+            Query query = session.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
+
+            if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+                query.setText("schedulerId", filter.getSchedulerId());
+            }
+            
+          
+            if (filter.getExecutedUtcFrom() != null) {
+                query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
+            }
+            if (filter.getExecutedUtcTo() != null ) {
+                query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
+            }
+
+            if (limit > 0) {
+                query.setMaxResults(limit);
+            }
+
+            List<DbItem> schedulerHistoryList = query.list();
+            return schedulerHistoryList;
+                 
+        
+    }
+
 
 	
  

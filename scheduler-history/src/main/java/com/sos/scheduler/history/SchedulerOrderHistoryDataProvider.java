@@ -9,9 +9,13 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.sos.dialog.components.SOSTableColumn;
 import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
 import com.sos.scheduler.history.classes.SchedulerHistoryTableItem;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
@@ -135,6 +139,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 					newItemTableItem.setData(h);
 					newItemTableItem.setColor();
 					newItemTableItem.setColumnsShort();
+ 				 
 				}
 			}
 		}
@@ -157,6 +162,25 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 					newItemTableItem.setData(h);
 					newItemTableItem.setColor();
 					newItemTableItem.setColumns();
+
+				/*	Table table2 = new Table(table.getParent(), SWT.NONE);
+					  table2.setLinesVisible(true);
+					  table2.setBounds(new org.eclipse.swt.graphics.Rectangle(47,67,190,70));
+
+					  SOSTableColumn tableColumn = new SOSTableColumn(table, SWT.NONE, "Spalte1", 30);
+					  tableColumn.setWidth(100);
+					  tableColumn.setText("Check Column");
+
+					  SOSTableColumn tableColumn1 = new SOSTableColumn(table, SWT.NONE, "Spalte2", 30);
+					  tableColumn1.setWidth(100);
+					  tableColumn1.setText("Combo Column");
+ 
+					
+					TableEditor editor = new TableEditor (table);
+
+                   
+                     editor.horizontalAlignment = SWT.CENTER;
+                    editor.setEditor(table2, newItemTableItem, 0);            */       
 				}
 			}
 		}
