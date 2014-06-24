@@ -27,10 +27,10 @@
             <version>${project.version}</version>
         </dependency>
         
- <!--  Wird wegen Ressourcen Manager benötigt -->
+ <!--  Wird wegen icons benötigt -->
          <dependency>
             <groupId>com.sos-berlin.products.joe</groupId>
-            <artifactId>joe-cockpit</artifactId>
+            <artifactId>joe-globals</artifactId>
             <version>${project.version}</version>
         </dependency>
         
