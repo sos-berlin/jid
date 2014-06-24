@@ -13,6 +13,7 @@ import com.sos.dialog.classes.SOSTableItem;
 import com.sos.dialog.swtdesigner.SWTResourceManager;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
+import com.sos.joe.globals.misc.ResourceManager;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 
 /**
@@ -72,8 +73,8 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	  private void setImage(int column, Boolean checked) {
 	       
 	        
-	        Image checkedImage =  SWTResourceManager.getImage("/sos/scheduler/editor/icons/config.gif");
-	        Image uncheckedImage =  SWTResourceManager.getImage("/sos/scheduler/editor/icons/thin_close_view.gif");
+	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
+	        Image uncheckedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");
 	        
 	        if (checked) {
 	            this.setImage(column, checkedImage);
