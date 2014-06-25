@@ -269,7 +269,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBS));
 		}
 		if (showJobChains) {
-			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBCHAINS));
+			s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBCHAINS));
 		}
 		if (late) {
 			s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_LATE));

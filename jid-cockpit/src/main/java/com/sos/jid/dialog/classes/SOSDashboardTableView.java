@@ -87,7 +87,10 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		if (tableList != null) {
 		    tableList.setRedraw(false);
 			if (tableDataProvider.getFilter() != null && left != null) {
-				left.setText(tableDataProvider.getFilter().getTitle());
+			    String s = tableDataProvider.getFilter().getTitle();
+			    if (s != null) {
+	                left.setText(s);
+			    }
 			}
 			clearTable(tableList);
 			tableDataProvider.fillTable(tableList);

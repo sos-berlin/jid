@@ -491,7 +491,6 @@ public class DashboardShowDialog extends FormBase {
 		prefs = Preferences.userNodeForPackage(this.getClass());
 		if (haveDb) {
 			executedHistoryDataProvider.setIgnoreList(prefs);
-			String s = executedHistoryDataProvider.getFilter().getTitle();
 		}
 		dashboardShell = new Shell();
 		dashboardShell.setLayout(new GridLayout());
