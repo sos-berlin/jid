@@ -122,9 +122,13 @@ public class SchedulerInstancesFilter extends SOSHibernateFilter implements ISOS
 
 	@Override
 	public String getTitle() {
-		return this.getSchedulerId() + ":" + this.getHostname() + String.valueOf(this.getPort());
+	    if (this.getSchedulerId() == null) {
+	        return null;
+	    }else {
+		   return this.getSchedulerId() + ":" + this.getHostname() + String.valueOf(this.getPort());
+	    }
 	}
-
+	
 	public Integer getPort() {
 		return port;
 	}
