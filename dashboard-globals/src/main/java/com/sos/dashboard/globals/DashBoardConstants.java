@@ -10,7 +10,7 @@ package com.sos.dashboard.globals;
 public class DashBoardConstants {
 	/**
 	 * 
-	 */
+	 */ 
     public final static String  conPropertiesFileName               = "com.sos.dailyschedule.SOSSchedulerDashboardMain";
 
     
