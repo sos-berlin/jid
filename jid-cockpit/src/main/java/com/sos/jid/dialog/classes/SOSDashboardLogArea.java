@@ -204,7 +204,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
        StringBuffer line = new StringBuffer();
        for (int i=0;i<this.getLineCount();i++) {
             String s= this.getLine(i);
-            if (filtered && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
+            if (filtered && sosSearchFilterData != null && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
                 Pattern p = Pattern.compile(sosSearchFilterData.getSearchfield()); 
                 Matcher m = p.matcher(s );
                 if (m.find() ) {
