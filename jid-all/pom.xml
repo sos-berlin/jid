@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     
     <parent>
-        <groupId>com.sos-berlin.products</groupId>
+        <groupId>com.sos-berlin</groupId>
         <artifactId>jid</artifactId>
         <version>1.8-SNAPSHOT</version>
     </parent>
     
-    <groupId>com.sos-berlin.products.jid</groupId>
+    <groupId>com.sos-berlin.jid</groupId>
     <artifactId>jid-all</artifactId>
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
@@ -43,49 +43,49 @@
     <dependencies>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>daily-schedule</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>daily-schedule-dialog</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>dashboard-globals</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>eventing-frontend</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>events</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>scheduler-history</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>scheduler-instances</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>jid-cockpit</artifactId>
             <version>${project.version}</version>
         </dependency>

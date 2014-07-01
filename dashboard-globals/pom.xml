@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.sos-berlin.products</groupId>
+        <groupId>com.sos-berlin</groupId>
         <artifactId>jid</artifactId>
         <version>1.8-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.sos-berlin.products.jid</groupId>
+    <groupId>com.sos-berlin.jid</groupId>
     <artifactId>dashboard-globals</artifactId>
     <name>${project.artifactId}</name>
 
@@ -21,7 +21,7 @@
     <dependencies>
 
         <dependency>
-	        <groupId>com.sos-berlin.products.jobscheduler</groupId>
+	        <groupId>com.sos-berlin.jobscheduler</groupId>
           <artifactId>jobscheduler-helper</artifactId>
           <version>${project.version}</version>
         </dependency>

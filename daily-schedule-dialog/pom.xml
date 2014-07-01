@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.sos-berlin.products</groupId>
+        <groupId>com.sos-berlin</groupId>
         <artifactId>jid</artifactId>
         <version>1.8-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.sos-berlin.products.jid</groupId>
+    <groupId>com.sos-berlin.jid</groupId>
     <artifactId>daily-schedule-dialog</artifactId>
     <name>${project.artifactId}</name>
 
@@ -22,103 +22,103 @@
     <dependencies>
         <!-- these are the dependencies for projects already moved to maven  -->
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>dashboard-globals</artifactId>
             <version>${project.version}</version>
         </dependency>
                 
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>eventing-frontend</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>daily-schedule</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>jid-cockpit</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>jobscheduler-helper</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.commons</groupId>
+            <groupId>com.sos-berlin.commons</groupId>
             <artifactId>sos-util</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>sos-security</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobnet</groupId>
+            <groupId>com.sos-berlin.jobnet</groupId>
             <artifactId>jobnet-frontend</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.commons</groupId>
+            <groupId>com.sos-berlin.commons</groupId>
             <artifactId>sos-connection</artifactId>
             <version>${project.version}</version>
         </dependency>
     
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>sos-dialog</artifactId>
             <version>${project.version}</version>
         </dependency>
     
         <dependency>
-            <groupId>com.sos-berlin.products.commons</groupId>
+            <groupId>com.sos-berlin.commons</groupId>
             <artifactId>sos-settings</artifactId>
             <version>${project.version}</version>
         </dependency>
         
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>scheduler-instances</artifactId>
             <version>${project.version}</version>
         </dependency>
     
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>hibernate-commons</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>sos-scheduler</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jid</groupId>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>scheduler-history</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>jobscheduler-object-model</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products.jobscheduler</groupId>
+            <groupId>com.sos-berlin.jobscheduler</groupId>
             <artifactId>virtual-file-system</artifactId>
             <version>${project.version}</version>
         </dependency>
