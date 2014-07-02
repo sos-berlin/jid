@@ -109,29 +109,7 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 		return log;
 	}
 
-	public void fillTableShort(Table table) {
-
-		if (listOfSchedulerOrderStepHistoryDBItems != null) {
-		    table.setRedraw(false);
-
-			Iterator<SchedulerOrderStepHistoryDBItem> schedulerHistoryEntries = listOfSchedulerOrderStepHistoryDBItems.iterator();
-			while (schedulerHistoryEntries.hasNext()) {
-			    SchedulerOrderStepHistoryDBItem h = (SchedulerOrderStepHistoryDBItem) schedulerHistoryEntries.next();
-				if (schedulerOrderStepHistoryDBLayer.getFilter().isFiltered(h)) {
-				}
-				else {
-					final SchedulerOrderStepHistoryTableItem newItemTableItem = new SchedulerOrderStepHistoryTableItem(table, SWT.BORDER);
-					newItemTableItem.setDBItem(h);
-
-					logger.debug("...creating tableItem: " + h.getJobName() + ":" + table.getItemCount());
-					newItemTableItem.setData(h);
-					newItemTableItem.setColor();
-					newItemTableItem.setColumnsShort();
-				}
-			}
-	         table.setRedraw(true);
-		}
-	}
+	
 
 	public void fillTable(Table table) {
 
