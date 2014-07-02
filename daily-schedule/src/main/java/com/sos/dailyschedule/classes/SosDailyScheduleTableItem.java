@@ -131,17 +131,7 @@ public class SosDailyScheduleTableItem extends SOSTableItem implements ISOSTable
 				                    d.getExecutionState().getLate()
 				                    };
 
-		/* textBuffer = new String[] { d.getSchedulerId(),
-				                    d.getJobNotNull(),
-				                    d.getJobChainNotNull(),
-				                    d.getOrderIdNotNull(),
-				                    d.getSchedulePlannedFormated(),
-				                    d.getScheduleExecutedFormated(),
-				                    d.getScheduleEndedFormated(),
-				                    String.valueOf(d.getResultValue()),
-				                    d.getExecutionState().getExecutionState(),
-				                    d.getExecutionState().getLate()
-				                    }; */
+		
 		this.setText(textBuffer);
 	}
 

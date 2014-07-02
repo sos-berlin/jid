@@ -75,7 +75,7 @@ public class SchedulerTaskHistoryFilter extends SchedulerHistoryFilter implement
             return !h.haveError();
         }
         if (!this.isShowWithError() && this.isShowRunning() ) {
-            return (h.getEndTime() != null);
+            return (h.getEndTime() != null || h.haveError());
         }
         if (this.isShowWithError() && this.isShowRunning() ) {
             return !((h.getEndTime() == null) || h.haveError());

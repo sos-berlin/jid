@@ -96,23 +96,32 @@ public class SosDashboardHeader extends JSToolBox {
 			});
 		}
 	}
-	/*public class InputTask extends TimerTask {
+
+    public class InputTask extends TimerTask {
 		public void run() {
 			if (display == null) {
 				display = Display.getDefault();
 			}
 			display.syncExec(new Runnable() {
 				public void run() {
-					if (!getSearchField().getText().equals(EMPTY_STRING)) {
-						main.actualizeList();
-						inputTimer.cancel();
-					}
+					    if   (sosSearchFilterData == null) {
+					        sosSearchFilterData = new SOSSearchFilterData();
+					    }
+
+                        sosSearchFilterData.setRegularExpression(false);
+                        sosSearchFilterData.setSearchfield(getSearchField().getText());
+                        sosSearchFilterData.setFiltered(true);
+                       
+ 						main.actualizeList();
+ 						sosSearchFilterData = null;
+                        inputTimer.cancel();
+  
 					
 				};
 			});
 		}
 	}
-	*/
+	
 
 	public SosDashboardHeader(Composite parent_, ITableView main_) {
 		super(DashBoardConstants.conPropertiesFileName);
@@ -152,12 +161,12 @@ public class SosDashboardHeader extends JSToolBox {
 		refreshTimer.schedule(new RefreshTask(), refresh * 1000, refresh * 1000);
 	}
 
-	/*public void resetInputTimer() {
+	public void resetInputTimer() {
 		inputTimer.cancel();
 		inputTimer = new Timer();
-		inputTimer.schedule(new InputTask(), 2 * 1000, 2 * 1000);
+		inputTimer.schedule(new InputTask(), 1 * 1000, 1 * 1000);
 	}
-*/
+
 
 	private void createHeader() {
 		refreshButton = new Button(parent, SWT.NONE);
@@ -187,7 +196,7 @@ public class SosDashboardHeader extends JSToolBox {
 		 
 		searchField = new Text(parent, SWT.BORDER);
 		searchField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		searchField.setVisible(false);
+		searchField.setVisible(true);
 		 
 	}
 

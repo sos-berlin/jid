@@ -40,6 +40,7 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implemen
 
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerHistoryFilter";
+	private Long            historyId=null;
 	private String			dateFormat		= "yyyy-MM-dd HH:mm:ss";
 	private Date			executedFrom;
 	private Date			executedTo;
@@ -169,6 +170,14 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implemen
 		}
 		return s;
 	}
+
+    public Long getHistoryId() {
+        return historyId;
+    }
+
+    public void setHistoryId(long historyId) {
+        this.historyId = historyId;
+    }
 	
 	
 

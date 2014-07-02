@@ -1,24 +1,27 @@
 package com.sos.dailyschedule.dialog.classes;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSTable;
 import com.sos.dialog.components.SOSTableColumn;
-import com.sos.jid.dialog.classes.SOSMenuLimitItem;
+import com.sos.dialog.interfaces.ISOSTable;
 import com.sos.jid.dialog.classes.SosTabLogItem;
 import com.sos.localization.Messages;
 
 /**
-* \class SosHistoryTable 
+* \class SosSchedulerOrderStepHistoryTable 
 * 
-* \brief SosHistoryTable - 
+* \brief SosSchedulerOrderStepHistoryTable - 
 * 
 * \details
+*
+* \section SosSchedulerOrderStepHistoryTable.java_intro_sec Introduction
+*
+* \section SosSchedulerOrderStepHistoryTable.java_samples Some Samples
 *
 * \code
 *   .... code goes here ...
@@ -31,50 +34,56 @@ import com.sos.localization.Messages;
 * <br />---------------------------------------------------------------------------
 * </p>
 * \author Uwe Risse
-* \version 31.01.2012
+* \version 27.06.2014
 * \see reference
 *
-* Created on 31.01.2012 09:59:28
+* Created on 27.06.2014 09:59:28
  */
-public class SosHistoryTable extends SOSSchedulerJIDHistoryTable {
+public class SosSchedulerOrderStepHistoryTable extends SOSSchedulerJIDHistoryTable implements ISOSTable {
 	@SuppressWarnings("unused")
-	private final String	conClassName	= "SosHistoryTable";
-	private SOSTableColumn	c1;
-	private SOSTableColumn	c2;
-	private SOSTableColumn	c3;
-	private SOSTableColumn	c4;
+	private final String	conClassName	= "SosSchedulerOrderStepHistoryTable";
+ 
 
-	public SosHistoryTable(Composite composite, int style, Messages messages_) {
+	public SosSchedulerOrderStepHistoryTable(Composite composite, int style,Messages messages_) {
 		super(composite, style);
 		createTable();
 		messages = messages_;
-		createMenueTableHistoryDetail();
+		createMenueTableOrderStepHistory();		 
+		
 	}
 
 	protected void checkSubclass() {
 		// Disable the check that prevents subclassing of SWT components
 	}
 
-	
     @Override
-    public void createTable() {
-        this.setSortDirection(SWT.UP);
-        this.setLinesVisible(true);
-        this.setHeaderVisible(true);
-        Messages messages = new Messages(DashBoardConstants.conPropertiesFileName);
-        c1 = new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_START), 90, SOSTableColumn.ColumnType.DATE);
-        c2 = new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_END), 90, SOSTableColumn.ColumnType.DATE);
-        c3 = new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_DURATION), 90);
-        c4 = new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_EXIT), 90);
+	public void createTable() {
+		
+		Messages messages = new Messages(DashBoardConstants.conPropertiesFileName);
+		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 7, 2));
+		this.setSortDirection(SWT.UP);
+		this.setLinesVisible(true);
+		this.setHeaderVisible(true);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_STEP), 50);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_STATE), 50);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_JOB), 70);
+    	new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_START_TIME), 90,SOSTableColumn.ColumnType.DATE);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_STOP_TIME), 90,SOSTableColumn.ColumnType.DATE);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_DURATION), 90);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_EXIT), 90);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_ERROR_CODE), 90);
+        new SOSTableColumn(this, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_ERROR_TEXT), 90);
         setMoveableColums(true);
-        
-    }
-    
-    private void createMenueTableHistoryDetail() {
-        Menu contentMenuHistory = new Menu(this);
-        this.setMenu(contentMenuHistory);
+ 
+	}
+
+      
+
+    private void createMenueTableOrderStepHistory() {
+        Menu contentMenuStepHistory = new Menu(this);
+        this.setMenu(contentMenuStepHistory);
         // =============================================================================================
-        MenuItem showLogHistory = new MenuItem(contentMenuHistory, SWT.PUSH);
+        MenuItem showLogHistory = new MenuItem(contentMenuStepHistory, SWT.PUSH);
         showLogHistory.setText(messages.getLabel(DashBoardConstants.conSOSDashB_show_log_in_new_tab));
         showLogHistory.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
             @Override
@@ -88,9 +97,8 @@ public class SosHistoryTable extends SOSSchedulerJIDHistoryTable {
             public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-       
         
-        MenuItem excel = new MenuItem(contentMenuHistory, SWT.PUSH);
+        MenuItem excel = new MenuItem(contentMenuStepHistory, SWT.PUSH);
         excel.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Export_To_Excel));
         excel.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
               public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -102,8 +110,12 @@ public class SosHistoryTable extends SOSSchedulerJIDHistoryTable {
           });
 
         // =============================================================================================
-
+        
+        
     }
+  
         
     
+    
+ 
 }

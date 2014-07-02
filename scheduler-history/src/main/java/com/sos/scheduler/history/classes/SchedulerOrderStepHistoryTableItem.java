@@ -6,20 +6,24 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
+import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSTableItem;
+import com.sos.dialog.components.SOSTableColumn;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.interfaces.ISOSTableItem;
+import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
+import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 
 /**
-* \class SchedulerHistoryTableItem
+* \class SchedulerOrderStepHistoryTableItem
 *
-* \brief SchedulerHistoryTableItem -
+* \brief SchedulerOrderStepHistoryTableItem -
 *
 * \details
 *
-* \section SchedulerHistoryTableItem.java_intro_sec Introduction
+* \section SchedulerOrderStepHistoryTableItem.java_intro_sec Introduction
 *
-* \section SchedulerHistoryTableItem.java_samples Some Samples
+* \section SchedulerOrderStepHistoryTableItem.java_samples Some Samples
 *
 * \code
 *   .... code goes here ...
@@ -32,13 +36,13 @@ import com.sos.hibernate.interfaces.ISOSTableItem;
 * <br />---------------------------------------------------------------------------
 * </p>
 * \author Uwe Risse
-* \version 14.12.2011
+* \version 27.06.2014
 * \see reference
 *
-* Created on 14.12.2011 13:51:13
+* Created on 27.06.2014 13:51:13
  */
 
-public class SchedulerHistoryTableItem extends SOSTableItem implements ISOSTableItem {
+public class SchedulerOrderStepHistoryTableItem extends SOSTableItem implements ISOSTableItem {
 	@SuppressWarnings("unused")
 	private final String conClassName = this.getClass().getSimpleName();
 	@SuppressWarnings("unused")
@@ -50,7 +54,7 @@ public class SchedulerHistoryTableItem extends SOSTableItem implements ISOSTable
     private String[]         textBuffer          = null;
 
 
-    public SchedulerHistoryTableItem(final Table arg0, final int arg1) {
+    public SchedulerOrderStepHistoryTableItem(final Table arg0, final int arg1) {
         super(arg0, arg1);
     }
 
@@ -70,7 +74,7 @@ public class SchedulerHistoryTableItem extends SOSTableItem implements ISOSTable
     }
 
     @Override
-	public void setColor() {
+    public void setColor() {
 
         org.eclipse.swt.graphics.Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
         org.eclipse.swt.graphics.Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
@@ -100,36 +104,35 @@ public class SchedulerHistoryTableItem extends SOSTableItem implements ISOSTable
 
         colorSave();
     }
-
+ 
+    
     @Override
-	public void setColumns() {
-        DbItem d = dbItem;
+    public void setColumns() {
+        SchedulerOrderStepHistoryDBItem d = (SchedulerOrderStepHistoryDBItem)dbItem;
+        
+        String jobname = "";
+        if (d.getSchedulerTaskHistoryDBItem() != null){
+          jobname =  d.getSchedulerTaskHistoryDBItem().getJob();
+        }
 
-        textBuffer = new String[] { "", 
-                d.getSpoolerId(), 
-                d.getJobOrJobchain(), 
+        textBuffer = new String[] {
+                d.getId().getStepValue(), 
+                d.getState(), 
+                jobname,
                 d.getStartTimeFormated(), 
                 d.getEndTimeFormated(), 
-                d.getDurationFormated(), 
-                d.getExecResult() };
+                d.getDurationFormated(),
+                d.getExecResult(),
+                d.getErrorCode(),
+                d.getErrorText()
+        };
 
        
 
         this.setText(textBuffer);
     }
 
-    public void setColumnsShort() {
-        DbItem d = dbItem;
-
-        textBuffer = new String[] { 
-                d.getStartTimeFormated(), 
-                d.getEndTimeFormated(), 
-                d.getDurationFormated(), 
-                String.valueOf(d.getExecResult())
-
-        };
-        this.setText(textBuffer);
-    }
+    
 
     @Override
 	public String[] getTextBuffer() {

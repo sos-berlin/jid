@@ -2,7 +2,6 @@ package com.sos.dailyschedule.dialog.classes;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSTable;

@@ -1,62 +1,43 @@
 package com.sos.jid.dialog.classes;
-import java.util.List;
 import java.util.prefs.Preferences;
 
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.apache.log4j.Logger;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.FormBase;
-import com.sos.hibernate.classes.DbItem;
-import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
+import com.sos.scheduler.history.SchedulerOrderStepHistoryDataProvider;
 
 public class SOSDashboardMainView extends FormBase {
     protected Group                         right;
     protected Group                         left;
-    protected CTabFolder                    leftTabFolder                       = null;
+    protected Composite                     leftTabFolder                       = null;
     protected CTabFolder                    logTabFolder                        = null;
     protected Preferences                   prefs;
     private static Logger                   logger                              = Logger.getLogger(SOSDashboardMainView.class);
     protected SchedulerHistoryDataProvider  detailHistoryDataProvider           = null;
+    protected SchedulerOrderStepHistoryDataProvider  schedulerOrderStepHistoryDataProvider           = null;
     protected SosDashboardHeader            sosDashboardHeader                  = null;
-    public Composite                        mainViewComposite                       = null;
+    public Composite                        mainViewComposite                   = null;
     protected Table                         tableHistoryDetail                  = null;
+    protected Table                         tableStepHistory                    = null;
     protected SOSDashboardOptions           objOptions                          = null;
 
     public SOSDashboardMainView(Composite composite_) {
         super(composite_, DashBoardConstants.conPropertiesFileName);
     }
  
-  
-
-    protected void showLog(Table table) { 
-        this.showWaitCursor();
-        if (table.getSelectionIndex() >= 0 && table.getSelectionIndex() >= 0) {
-            SosTabLogItem logItem = (SosTabLogItem) logTabFolder.getSelection();
-            if (logItem == null) {
-                logTabFolder.setSelection(0);
-                logItem = (SosTabLogItem) logTabFolder.getSelection();
-            }
-            TableItem t = table.getItem(table.getSelectionIndex());
-            DbItem d = (DbItem) t.getData();
-            logItem.addLog(table, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
-        }
-        this.RestoreCursor();
-    }
-
-      
-    public void setLeftTabFolder(CTabFolder leftTabFolder) {
+    
+    public void setLeftTabFolder(Composite leftTabFolder) {
         this.leftTabFolder = leftTabFolder;
     }
 
     
-
     public void setDetailHistoryDataProvider(SchedulerHistoryDataProvider detailHistoryDataProvider) {
         this.detailHistoryDataProvider = detailHistoryDataProvider;
     }
@@ -95,6 +76,11 @@ public class SOSDashboardMainView extends FormBase {
 
     public Composite getTableComposite() {
         return mainViewComposite;
+    }
+
+
+    public void setTableStepHistory(Table tableStepHistory) {
+        this.tableStepHistory = tableStepHistory;
     }
 
     

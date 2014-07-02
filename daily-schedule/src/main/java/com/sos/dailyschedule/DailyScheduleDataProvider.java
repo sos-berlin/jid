@@ -22,6 +22,7 @@ import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
 import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.scheduler.history.SchedulerOrderHistoryDataProvider;
 import com.sos.scheduler.history.SchedulerTaskHistoryDataProvider;
+import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 /**
  * \class DailyScheduleDataProvider
@@ -72,6 +73,11 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
  	}
 
 	public void fillSchedulerIds(CCombo cbSchedulerId) {
+	    
+	    SchedulerInstancesDataProvider schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(this.getConfigurationFile());
+	    schedulerInstancesDataProvider.getData(0);
+	    schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
+	    
 		if (listOfDaysScheduleDBItems != null) {
             //Es ist schneller, die vorhandenen Sätze zu verwenden.
 //	        listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleSchedulerList(0);

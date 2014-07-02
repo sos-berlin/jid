@@ -37,156 +37,202 @@ import com.sos.hibernate.classes.DbItem;
 
 @Entity
 @Table(name = "SCHEDULER_ORDER_STEP_HISTORY")
-public class SchedulerOrderStepHistoryDBItem extends DbItem implements
-		Serializable {
+public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializable {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private SchedulerOrderStepHistoryCompoundKey id;
+    /**
+     * 
+     */
+    private static final long                    serialVersionUID = 1L;
+    private SchedulerOrderStepHistoryCompoundKey id;
 
- 
-	private Long taskId;
-	private String state;
-	private Date startTime;
-	private Date endTime;
-	private Boolean error;
-	private String errorText;
-	private String errorCode;
-	private SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem;
+    private Long                                 taskId;
+    private String                               state;
+    private Date                                 startTime;
+    private Date                                 endTime;
+    private Boolean                              error;
+    private String                               errorText;
+    private String                               errorCode;
+    private SchedulerOrderHistoryDBItem          schedulerOrderHistoryDBItem;
+    private SchedulerTaskHistoryDBItem           schedulerTaskHistoryDBItem;
 
-	public SchedulerOrderStepHistoryDBItem() {
-	}
+    public SchedulerOrderStepHistoryDBItem() {
+    }
 
-	@ManyToOne(optional = true)
-	@JoinColumn(name = "`HISTORY_ID`", insertable = false, updatable = false)
-	public SchedulerOrderHistoryDBItem getSchedulerOrderHistoryDBItem() {
-		return this.schedulerOrderHistoryDBItem;
-	}
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "`HISTORY_ID`", insertable = false, updatable = false)
+    public SchedulerOrderHistoryDBItem getSchedulerOrderHistoryDBItem() {
+        return this.schedulerOrderHistoryDBItem;
+    }
 
-	public void setSchedulerOrderHistoryDBItem(
-			SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem) {
-		this.schedulerOrderHistoryDBItem = schedulerOrderHistoryDBItem;
-	}
+    public void setSchedulerOrderHistoryDBItem(SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem) {
+        this.schedulerOrderHistoryDBItem = schedulerOrderHistoryDBItem;
+    }
 
-	@Id
-	public SchedulerOrderStepHistoryCompoundKey getId() {
-		return id;
-	}
+    @ManyToOne(optional = true)
+    @JoinColumn(name = "`TASK_ID`", insertable = false, updatable = false)
+    public SchedulerTaskHistoryDBItem getSchedulerTaskHistoryDBItem() {
+        return this.schedulerTaskHistoryDBItem;
+    }
 
-	public void setId(SchedulerOrderStepHistoryCompoundKey id) {
-		this.id = id;
-	}
+    public void setSchedulerTaskHistoryDBItem(SchedulerTaskHistoryDBItem schedulerTaskHistoryDBItem) {
+        this.schedulerTaskHistoryDBItem = schedulerTaskHistoryDBItem;
+    }
+    
+    @Id
+    public SchedulerOrderStepHistoryCompoundKey getId() {
+        return id;
+    }
 
-	 
+    public void setId(SchedulerOrderStepHistoryCompoundKey id) {
+        this.id = id;
+    }
 
-	@Column(name = "`TASK_ID`", nullable = false)
-	public void setTaskId(Long taskId) {
-		this.taskId = taskId;
-	}
+    @Column(name = "`TASK_ID`", nullable = false)
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
 
-	@Column(name = "`TASK_ID`", nullable = false)
-	public Long getTaskId() {
-		return taskId;
-	}
+    @Column(name = "`TASK_ID`", nullable = false)
+    public Long getTaskId() {
+        return taskId;
+    }
 
-	@Column(name = "`STATE`", nullable = true)
-	public void setState(String state) {
-		this.state = state;
-	}
+    
+  
 
-	@Column(name = "`STATE`", nullable = true)
-	public String getState() {
-		return state;
-	}
+    @Column(name = "`STATE`", nullable = true)
+    public void setState(String state) {
+        this.state = state;
+    }
 
-	@Column(name = "`START_TIME`", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getStartTime() {
-		return startTime;
-	}
+    @Column(name = "`STATE`", nullable = true)
+    public String getState() {
+        return state;
+    }
 
-	@Column(name = "`START_TIME`", nullable = false)
-	@Temporal(TemporalType.TIMESTAMP)
-	public void setStartTime(Date startTime) {
-		this.startTime = startTime;
-	}
+    @Column(name = "`START_TIME`", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getStartTime() {
+        return startTime;
+    }
 
-	@Column(name = "`END_TIME`", nullable = true)
-	@Temporal(TemporalType.TIMESTAMP)
-	public Date getEndTime() {
-		return endTime;
-	}
+    @Column(name = "`START_TIME`", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
 
-	@Column(name = "`END_TIME`", nullable = true)
-	@Temporal(TemporalType.TIMESTAMP)
-	public void setEndTime(Date endTime) {
-		this.endTime = endTime;
-	}
+    @Column(name = "`END_TIME`", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    public Date getEndTime() {
+        return endTime;
+    }
 
-	@Column(name = "`ERROR`", nullable = true)
-	public Boolean isError() {
-		return error;
-	}
+    @Column(name = "`END_TIME`", nullable = true)
+    @Temporal(TemporalType.TIMESTAMP)
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
 
-	@Column(name = "`ERROR`", nullable = true)
-	public void setError(Boolean error) {
-		this.error = error;
-	}
+    @Column(name = "`ERROR`", nullable = true)
+    public Boolean isError() {
+        return error;
+    }
 
-	@Column(name = "`ERROR_CODE`", nullable = true)
-	public String getErrorCode() {
-		return errorCode;
-	}
+    @Column(name = "`ERROR`", nullable = true)
+    public void setError(Boolean error) {
+        this.error = error;
+    }
 
-	@Column(name = "`ERROR_CODE`", nullable = true)
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
+    @Column(name = "`ERROR_CODE`", nullable = true)
+    public String getErrorCode() {
+        return errorCode;
+    }
 
-	@Column(name = "`ERROR_TEXT`", nullable = true)
-	public String getErrorText() {
-		return errorText;
-	}
+    @Column(name = "`ERROR_CODE`", nullable = true)
+    public void setErrorCode(String errorCode) {
+        this.errorCode = errorCode;
+    }
 
-	@Column(name = "`ERROR_TEXT`", nullable = true)
-	public void setErrorText(String errorText) {
-		this.errorText = errorText;
-	}
+    @Column(name = "`ERROR_TEXT`", nullable = true)
+    public String getErrorText() {
+        return errorText;
+    }
 
-	@Transient
-	public String getStartTimeIso() {
-		if (this.getStartTime() == null) {
-			return "";
-		} else {
-			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm");
-			String startTimeIso = formatter.format(this.getStartTime());
-			return startTimeIso;
-		}
-	}
+    @Column(name = "`ERROR_TEXT`", nullable = true)
+    public void setErrorText(String errorText) {
+        this.errorText = errorText;
+    }
 
-	@Transient
-	public String getEndTimeIso() {
-		if (this.getEndTime() == null) {
-			return "";
-		} else {
-			SimpleDateFormat formatter = new SimpleDateFormat(
-					"yyyy-MM-dd HH:mm");
-			String endTimeIso = formatter.format(this.getEndTime());
-			return endTimeIso;
-		}
-	}
+    @Transient
+    public String getStartTimeIso() {
+        if (this.getStartTime() == null) {
+            return "";
+        }
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String startTimeIso = formatter.format(this.getStartTime());
+            return startTimeIso;
+        }
+    }
 
-	@Transient
-	public Long getLogId() {
-		return this.getTaskId();
-	}
+    @Transient
+    public String getEndTimeIso() {
+        if (this.getEndTime() == null) {
+            return "";
+        }
+        else {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String endTimeIso = formatter.format(this.getEndTime());
+            return endTimeIso;
+        }
+    }
 
-	@Transient
-	public String getIdentifier() {
-		return getTitle() + getLogId().toString();
-	}
+    @Transient
+    public String getStartTimeFormated() {
+        return getDateFormatted(this.getStartTime());
+    }
+
+    @Transient
+    public String getEndTimeFormated() {
+        return getDateFormatted(this.getEndTime());
+    }
+
+    @Transient
+    public String getDurationFormated() {
+        return this.getDateDiff(this.getStartTime(), this.getEndTime());
+    }
+
+    @Transient
+    public String getExecResult() {
+        return String.valueOf(schedulerTaskHistoryDBItem.getExecResult());
+    }
+
+    @Transient
+    public boolean haveError() {
+        return (schedulerTaskHistoryDBItem.haveError());
+    }
+
+    @Transient
+    public Long getLogId() {
+        return this.getTaskId();
+    }
+    
+    
+    @Transient
+    public boolean isStandalone() {
+        return true;
+    }
+    
+    @Override
+    @Transient
+    public String getTitle() {
+        return String.format("%s:%s (%s)",this.getState(),schedulerOrderHistoryDBItem.getJobChain(), schedulerOrderHistoryDBItem.getOrderId()) ;
+    }
+
+    @Transient
+    public String getIdentifier() {
+        return getTitle() + getLogId().toString();
+    }
 
 }

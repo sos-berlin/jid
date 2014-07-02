@@ -2,14 +2,9 @@ package com.sos.dailyschedule.dialog.classes;
 
 
 import com.sos.dashboard.globals.DashBoardConstants;
-import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.dialog.interfaces.ITableView;
 import com.sos.jid.dialog.classes.SOSDashboardTableView;
 import com.sos.jid.dialog.classes.SosDashboardHeader;
-import com.sos.jid.dialog.classes.SosTabLogItem;
- 
- 
-
 
 
 import org.eclipse.swt.SWT;

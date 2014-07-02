@@ -100,9 +100,9 @@ public class SchedulerOrderStepHistoryDBLayerTest {
 
 	@Test
 	public void testGetOrderStepHistoryItems() throws Exception {
-		schedulerOrderStepHistoryDBLayer.filter.setExecutedFrom("2000-01-01 00:00:00");
+ 		schedulerOrderStepHistoryDBLayer.filter.setExecutedFrom("2000-01-01 00:00:00");
 		schedulerOrderStepHistoryDBLayer.filter.setExecutedTo(new Date());
-  		List<SchedulerOrderStepHistoryDBItem>  historyList = schedulerOrderStepHistoryDBLayer.getOrderStepHistoryItems(1); 
+  		List<SchedulerOrderStepHistoryDBItem>  historyList = schedulerOrderStepHistoryDBLayer.getSchedulerOrderStepHistoryListFromTo(1); 
 		assertEquals("testGetOrderStepHistoryList fails...:",1,historyList.size());	
 	}
 	

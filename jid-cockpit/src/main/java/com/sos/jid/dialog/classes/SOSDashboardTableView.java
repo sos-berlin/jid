@@ -3,6 +3,8 @@ package com.sos.jid.dialog.classes;
 import java.io.File;
 import java.util.prefs.Preferences;
  
+
+
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.SOSTable;
@@ -18,6 +20,7 @@ import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
+import com.sos.scheduler.history.SchedulerOrderStepHistoryDataProvider;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
 import com.sos.scheduler.model.SchedulerObjectFactory;
@@ -25,6 +28,8 @@ import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
  
+
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -49,12 +54,13 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
      
+ 
 	private static Logger logger = Logger.getLogger(SOSDashboardTableView.class);
-	protected SOSTable tableList = null;
+	protected SOSTable tableList                          = null;
 	protected ISOSDashboardDataProvider tableDataProvider = null;
-	private SortBaseComparator[][] comparables = null;
-	private            String answer = "";
-	private Integer historyLimit=0;
+	private   SortBaseComparator[][] comparables          = null;
+	private   String answer                               = "";
+	private   Integer historyLimit                        = 0;
 
 
 	protected SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
@@ -116,50 +122,47 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
 	@Override
 	public void createTable() {
-		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
-			public void modifyText(ModifyEvent e) {
-				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
-				actualizeList();
-			}
-		});
-		sosDashboardHeader.getToDate().addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				tableDataProvider.setTo(sosDashboardHeader.getTo());
-				actualizeList();
-			}
-		});
-		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				tableDataProvider.setFrom(sosDashboardHeader.getFrom());
-				actualizeList();
-			}
-		});
-		sosDashboardHeader.getRefreshInterval().addModifyListener(new ModifyListener() {
-			public void modifyText(final ModifyEvent arg0) {
-				sosDashboardHeader.setRefresh(getIntValue(sosDashboardHeader.getRefreshInterval().getText(), 10));
-				sosDashboardHeader.resetRefreshTimer();
-				prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingREFRESH, sosDashboardHeader.getRefreshInterval().getText());
-
-			}
-		});
-        sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
-	 	sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
-			public void modifyText(final ModifyEvent e) {
-				if (sosDashboardHeader.getSearchField() != null) {
-					tableDataProvider.setSearchField(sosDashboardHeader.getSosSearchFilterData());
-					actualizeList();
-					//sosDashboardHeader.resetInputTimer();
-				}
-			}
-		});
-		 
-		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(final SelectionEvent e) {
-				getList();
-				getSchedulerIds();
-			}
-		});
-		
+	    if (sosDashboardHeader != null) {
+    		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
+    			public void modifyText(ModifyEvent e) {
+    				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
+    				actualizeList();
+    			}
+    		});
+    		sosDashboardHeader.getToDate().addSelectionListener(new SelectionAdapter() {
+    			public void widgetSelected(SelectionEvent e) {
+    				tableDataProvider.setTo(sosDashboardHeader.getTo());
+    				actualizeList();
+    			}
+    		});
+    		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
+    			public void widgetSelected(SelectionEvent e) {
+    				tableDataProvider.setFrom(sosDashboardHeader.getFrom());
+    				actualizeList();
+    			}
+    		});
+    		sosDashboardHeader.getRefreshInterval().addModifyListener(new ModifyListener() {
+    			public void modifyText(final ModifyEvent arg0) {
+    				sosDashboardHeader.setRefresh(getIntValue(sosDashboardHeader.getRefreshInterval().getText(), 10));
+    				sosDashboardHeader.resetRefreshTimer();
+    				prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingREFRESH, sosDashboardHeader.getRefreshInterval().getText());
+    
+    			}
+    		});
+            sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
+    	 	sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
+    			public void modifyText(final ModifyEvent e) {
+                    sosDashboardHeader.resetInputTimer();
+    			}
+    		});
+    		 
+    		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
+    			public void widgetSelected(final SelectionEvent e) {
+    				getList();
+    				getSchedulerIds();
+    			}
+    		});
+	    }
 		tableList.addListener(SWT.MouseDown, new Listener() {
             @Override
             public void handleEvent(final Event event) {
@@ -175,36 +178,42 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		tableList.addKeyListener( new KeyListener() {
             public void keyPressed(final KeyEvent e) {
                 final int code = e.keyCode;
-                System.out.println("pressed: " + (char)code);
             }
 
             @Override
             public void keyReleased(KeyEvent e) {
                  
             }
- 
-          
         });
 		
 		
 			tableList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
-				if (right != null && !isRightMouseclick()) {
+				if (!isRightMouseclick()) {
 				    if (tableList.getSelectionIndex() >= 0) {
     					TableItem t = tableList.getItem(tableList.getSelectionIndex());
     					if (t != null) {
         					showLog(tableList);
         					DbItem d = (DbItem) t.getData();
-        					right.setText(d.getTitle());
-        					detailHistoryDataProvider.setFrom(sosDashboardHeader.getFrom());
-        					detailHistoryDataProvider.setTo(sosDashboardHeader.getTo());
-        					detailHistoryDataProvider.setSchedulerId(d.getSchedulerId());
-        					detailHistoryDataProvider.setJobname(d.getJob());
-        					detailHistoryDataProvider.setJobchain(d.getJobChain());
-        					detailHistoryDataProvider.setOrderid(d.getOrderId());
-        					detailHistoryDataProvider.getData(getHistoryLimit());
-        					clearTable(tableHistoryDetail);
-        					detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
+        					if (right != null){
+            					right.setText(d.getTitle());
+            					detailHistoryDataProvider.setFrom(sosDashboardHeader.getFrom());
+            					detailHistoryDataProvider.setTo(sosDashboardHeader.getTo());
+            					detailHistoryDataProvider.setSchedulerId(d.getSchedulerId());
+            					detailHistoryDataProvider.setJobname(d.getJob());
+            					detailHistoryDataProvider.setJobchain(d.getJobChain());
+            					detailHistoryDataProvider.setOrderid(d.getOrderId());
+            					detailHistoryDataProvider.getData(getHistoryLimit());
+            					clearTable(tableHistoryDetail);
+            					detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
+            					if (d.isOrderJob() && tableStepHistory != null && d.getLogId() != null){
+                                    clearTable(tableStepHistory);
+            					    schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer.getConfigurationFile(),d.getLogId());
+            					    schedulerOrderStepHistoryDataProvider.getData(0);
+            					    schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistory);
+            					      
+			                    }
+        					}
     					}
 				    }
 				}
@@ -275,10 +284,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			});
 		}
 	}
-
-	
-	
-	   
+   
 	   protected SchedulerInstancesDBItem start(DbItem dbItem) {
 	        this.showWaitCursor();
   
@@ -332,6 +338,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			TableItem t = table.getItem(table.getSelectionIndex());
 			DbItem d = (DbItem) t.getData();
 			logItem.addLog(table, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
+			 
 		}
 		this.RestoreCursor();
 	}
@@ -343,6 +350,11 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	        int i = tableList.getTopIndex();
 	        
 	        tableDataProvider.getData(getLimit());
+	        
+	        if (sosDashboardHeader != null && sosDashboardHeader.getSosSearchFilterData() != null) {
+               tableDataProvider.setSearchField(sosDashboardHeader.getSosSearchFilterData());
+            }
+	        
  			buildTable();
 			tableList.setTopIndex(i);		
 			}
@@ -361,7 +373,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
  	    getList();
 	}
 
-	public void setLeftTabFolder(CTabFolder leftTabFolder) {
+	public void setLeftTabFolder(Composite leftTabFolder) {
 		this.leftTabFolder = leftTabFolder;
 	}
 

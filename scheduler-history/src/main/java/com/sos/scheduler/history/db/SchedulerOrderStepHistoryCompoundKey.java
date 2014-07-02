@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
  
 /**
@@ -69,6 +70,11 @@ public class SchedulerOrderStepHistoryCompoundKey implements Serializable {
 	     @Column(name="STEP",nullable=false)
 	     public void setStep(Long step) {
 	       this.step = step;
+	     }
+	     
+	     @Transient
+	     public String getStepValue() {
+	         return String.valueOf(step);
 	     }
 	     
 	     public boolean equals(Object key) {

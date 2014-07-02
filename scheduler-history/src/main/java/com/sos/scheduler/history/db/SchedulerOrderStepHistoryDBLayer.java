@@ -95,6 +95,11 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer{
 		String where = "";
 		String and = "";
 	 
+	    if (filter.getHistoryId() != null) {
+            where += and + " id.historyId = :historyId";
+            and = " and ";
+        }
+	    
 		if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
 			where += and + " startTime>= :startTime";
 			and = " and ";
@@ -163,25 +168,39 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer{
 
    
 
-	public List<SchedulerOrderStepHistoryDBItem> getOrderStepHistoryItems(final int limit) throws Exception {
+	public List<SchedulerOrderStepHistoryDBItem> getOrderStepHistoryItems(final int limit, long historyId)  {
 		initSession();
 
+		filter.setHistoryId(historyId);
+		
 		transaction = session.beginTransaction();
 		Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhere());
 
-		if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
-			query.setTimestamp("startTime", filter.getStartTime());
-		}
+        if (filter.getHistoryId() != null ) {
+           query.setLong("historyId", filter.getHistoryId());
+        }
+        if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
+            query.setTimestamp("startTime", filter.getStartTime());
+        }
+        if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
+            query.setTimestamp("startTime", filter.getStartTime());
+        }
 		if (filter.getEndTime() != null && !filter.getEndTime().equals("")) {
 			query.setTimestamp("endTime", filter.getEndTime());
 		}
 
-		query.setMaxResults(limit);
+		if (limit != 0) {
+	        query.setMaxResults(limit);
+		}
 
 		List<SchedulerOrderStepHistoryDBItem> historyList = query.list();
 		transaction.commit();
 		return historyList;
 	}
+
+    public SchedulerOrderStepHistoryFilter getFilter() {
+        return filter;
+    }
 	
 	 
 

@@ -11,6 +11,10 @@ public class DashBoardConstants {
 	/**
 	 * 
 	 */ 
+    
+    public static final String SOS_DASHBOARD = "SOS_DASHBOARD";
+
+    
     public final static String  conPropertiesFileName               = "com.sos.dailyschedule.SOSSchedulerDashboardMain";
 
     
@@ -47,7 +51,8 @@ public class DashBoardConstants {
 	
 	public static final String	conSOSDashB_disableIgnore			= "SOSDashB_DisableIgnore";		      // "Disable ignore";
 	public static final String	conSOSDashB_enableIgnore			= "SOSDashB_EnableIgnore";		      // "Enable ignore";
-	public static final String	conSOSDashB_resetIgnore				= "SOSDashB_ResetIgnore";		      // "Reset ignore";
+    public static final String  conSOSDashB_stepHistory             = "SOSDashB_StepHistory";             // "Step History";
+    public static final String  conSOSDashB_resetIgnore             = "SOSDashB_ResetIgnore";             // "Reset ignore";
 	public static final String	conTabLOG							= "Log";
     public static final String  conSOSDashB_addIgnore               = "SOSDashB_AddIgnore";               // "Add to ignore";
     public static final String  conSOSDashB_handleIgnore            = "SOSDashB_HandleIgnore";               // "Add to ignore";
@@ -64,13 +69,15 @@ public class DashBoardConstants {
     public static final String  conSOSDashB_start_on_demand         = "SOSDashB_start_on_demand";         // "Start on demand";
     public static final String  conSOSDashB_start_at_runtime        = "SOSDashB_start_at_runtime";        // "Start at runtime";
 	public static final String	conSOSDashB_Today					= "SOSDashB_Today";				      // "Today";
-	public static final String	conSOSDashB_Reset					= "SOSDashB_Reset";				      // "Reset";
+    public static final String  conSOSDashB_Reset                   = "SOSDashB_Reset";                   // "Reset";
+    public static final String  conSOSDashB_Reset_Filter            = "SOSDashB_Reset_Filter";            // "Reset Filter";
 	public static final String	conSOSDashB_only_executed			= "SOSDashB_only_executed";		      // "only executed"
 	public static final String	conSOSDashB_show_log_in_new_tab		= "SOSDashB_show_log_in_new_tab";	  // "Show log in a new tab";
 	public static final String	conSOSDashB_open_scheduler			= "SOSDashB_open_scheduler";		  // "Open Scheduler";
 	public static final String	conSOSDashB_close					= "SOSDashB_close";				      // "close";
 	public static final String	conSOSDashB_new_log					= "SOSDashB_new_log";				  // "New Log";
-	public static final String	conSOSDashB_NAME_TAB_HISTORY		= "SOSDashB_NAME_TAB_HISTORY";
+    public static final String  conSOSDashB_NAME_TAB_HISTORY        = "SOSDashB_NAME_TAB_HISTORY";
+    public static final String  conSOSDashB_NAME_TAB_STEP_HISTORY   = "SOSDashB_NAME_TAB_STEP_HISTORY";
 	public static final String	conSOSDashB_NAME_TAB_PLANNED		= "SOSDashB_NAME_TAB_PLANNED";
     public static final String  conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES     = "SOSDashB_NAME_TAB_SCHEDULER_INSTANCES";
 	public static final String	conSOSDashB_NAME_TAB_JOBNET			= "SOSDashB_NAME_TAB_JOBNET";
@@ -89,7 +96,12 @@ public class DashBoardConstants {
 	public final static String	conSOSDashB_START					= "SOSDashB_START";
 	public final static String	conSOSDashB_END						= "SOSDashB_END";
 	public final static String	conSOSDashB_DURATION				= "SOSDashB_DURATION";
-	public final static String	conSOSDashB_EXIT					= "SOSDashB_EXIT";
+    public final static String  conSOSDashB_EXIT                    = "SOSDashB_EXIT";
+    public final static String  conSOSDashB_STATE                   = "SOSDashB_STATE";
+    public final static String  conSOSDashB_STEP                    = "SOSDashB_STEP";
+    public final static String  conSOSDashB_ERROR                   = "SOSDashB_ERROR";
+    public final static String  conSOSDashB_ERROR_CODE              = "SOSDashB_ERROR_CODE";
+    public final static String  conSOSDashB_ERROR_TEXT              = "SOSDashB_ERROR_TEXT";
 	public static final String	conSOSDashB_ShowIgnored				= "SOSDashB_ShowIgnored";			// "%1s Jobs %2s Orders ignored";
 	public final static String	conSOSDashB_Planned					= "SOSDashB_Planned";
 	public final static String	conSOSDashB_Executed				= "SOSDashB_Executed";

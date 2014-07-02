@@ -6,6 +6,7 @@ package com.sos.scheduler.history;
  
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
+import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 
 /**
 * \class SchedulerOrderHistoryFilter 
@@ -64,6 +65,18 @@ public class SchedulerOrderHistoryFilter extends SchedulerHistoryFilter implemen
 		}
 	}
 
+	   private boolean filterRunningOrError(SchedulerOrderHistoryDBItem h) {
+	        if (this.isShowWithError() && !this.isShowRunning() ) {
+	            return !h.haveError();
+	        }
+	        if (!this.isShowWithError() && this.isShowRunning() ) {
+	            return (h.getEndTime() != null || h.haveError());
+	        }
+	        if (this.isShowWithError() && this.isShowRunning() ) {
+	            return !((h.getEndTime() == null) || h.haveError());
+	        }
+	        return false;
+	    }
 
 	public boolean isFiltered(DbItem dbitem) {
 		  SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) dbitem;
@@ -71,7 +84,8 @@ public class SchedulerOrderHistoryFilter extends SchedulerHistoryFilter implemen
  
 		  
 		  return( this.getOrderIgnoreList().contains(h) || 
-                  this.isShowWithError() & !h.haveError() ||
+                  (filterRunningOrError(h)) ||
+
                   this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield() != null && !this.getSosSearchFilterData().getSearchfield().equals("") && 
 				 ((h.getJobChain() != null && !h.getJobChain().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase())) &&
 				 (h.getOrderId() != null && !h.getOrderId().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase())))); 
