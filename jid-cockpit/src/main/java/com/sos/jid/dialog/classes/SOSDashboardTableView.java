@@ -221,12 +221,12 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		});
 
 		this.setColumnsListener();
-		this.tableResize();
+		//this.tableResize();
 	}
 	
 
 
-	private void tableResize() {
+ /*	private void tableResize() {
 		mainViewComposite.addControlListener(new ControlAdapter() {
 			public void controlResized(ControlEvent e) {
 				Rectangle area = mainViewComposite.getClientArea();
@@ -256,7 +256,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			}
 		});
 	}
-
+*/
 	public void setColumnsListener() {
 		TableColumn[] columns = tableList.getColumns();
 		
