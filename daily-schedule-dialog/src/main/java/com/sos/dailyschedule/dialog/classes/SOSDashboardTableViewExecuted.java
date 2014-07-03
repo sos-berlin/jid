@@ -78,7 +78,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
 		final SOSMenuItem orderJobs = new SOSMenuItem(contentMenu, SWT.CHECK,className,Messages.getLabel(DashBoardConstants.conSOSDashB_show_job_chains));
 		orderJobs.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 			public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-			    SosDialogGetHostPort s = new SosDialogGetHostPort(getParentShell());
 				tableDataProvider.setShowJobChains(orderJobs.getSelection());
                 getList();
 			}
