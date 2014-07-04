@@ -126,7 +126,7 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
         }
          
         if (filter.isSosCommandWebservice()) {
-            where += and + " isSosCommandWebservice = '1'";
+            where += and + " isSosCommandWebservice is true";
             and = " and ";
         }
         

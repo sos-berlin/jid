@@ -38,8 +38,8 @@ import com.sos.scheduler.db.SchedulerInstancesDBLayer;
  */
 @I18NResourceBundle(baseName = "SOSSchedulerDashboardMain", defaultLocale = "en")
 public class SosSchedulerDashboardMain extends I18NBase {
-    private static final String COMMAND_PERMISSION = "/jobscheduler/rest/sosPermission/permissions?user=%s&pwd=%s";
-    private static final String SOS_PRODUCTS_JID_EXECUTE = "sos:products:jid:execute";
+    private static final String   COMMAND_PERMISSION = "/jobscheduler/rest/sosPermission/permissions?user=%s&pwd=%s";
+    private static final String   SOS_PRODUCTS_JID_EXECUTE = "sos:products:jid:execute";
     private final static String   conClassName         = "SosSchedulerDashboardMain";
     public static final String    conSVNVersion        = "$Id: SosSchedulerDashboardMain.java 16415 2012-02-01 17:21:40Z ur $";
     private static Logger         logger               = Logger.getLogger(SosSchedulerDashboardMain.class);
@@ -193,6 +193,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
             if (isAuthenticated) {
                 if (currentUser != null) {
                     objOptions.enableJOC.value(currentUser.hasRole("joc") || currentUser.isPermitted("sos:products:jid:joctab:show"));
+                    objOptions.enableReports.value(currentUser.hasRole("reports") || currentUser.isPermitted("sos:products:jid:reportstab:show"));
                     objOptions.enableJOE.value(currentUser.hasRole("joe") || currentUser.isPermitted("sos:products:jid:joetab:show"));
                     objOptions.enableEvents.value(currentUser.hasRole("events") || currentUser.isPermitted("sos:products:jid:eventtab:show"));
                     //objOptions.enableJobnet.value(currentUser.hasRole("jobnet") || currentUser.isPermitted("sos:products:jid:jobnettab:show"));

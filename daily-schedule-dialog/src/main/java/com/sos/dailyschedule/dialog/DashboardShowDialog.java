@@ -3,6 +3,7 @@ package com.sos.dailyschedule.dialog;
 import com.sos.JSHelper.Basics.VersionInfo;
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
+import com.sos.dailyschedule.dialog.classes.SOSBrowserTabFolder;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewExecuted;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewPlanned;
 import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewSchedulerInstances;
@@ -51,9 +52,11 @@ public class DashboardShowDialog extends FormBase {
     private static final String LEFT_SASH = "LEFT_SASH";
     private static final String RIGHT_SASH = "RIGHT_SASH";
     private static final String LIST_OF_SCHEDULERS = "list_of_schedulers";
+    private static final String LIST_OF_REPORTS = "list_of_reports";
 	private static final String TABNAME_DASHBOARD = "Dashboard";
-	private static final String TABNAME_SCHEDULER_OPERATIONS_CENTER = "JOC";
-	private static final String TABNAME_SCHEDULER_JOE = "JOE";
+    private static final String TABNAME_SCHEDULER_OPERATIONS_CENTER = "JOC";
+    private static final String TABNAME_REPORTS = "Reports";
+    private static final String TABNAME_SCHEDULER_JOE = "JOE";
 	private static final String TABNAME_SCHEDULER_EVENTS = "Events";
     private static final String TABNAME_SCHEDULER_JOBNET = "Jobnet";
     private static final String TABNAME_SCHEDULER_JADE = "Jade";
@@ -76,11 +79,11 @@ public class DashboardShowDialog extends FormBase {
 	private Group bottom = null;
 	private Composite parent = null;
 	private CTabFolder mainTabFolder = null;
-	private CTabFolder browserTabFolder = null;
+    private SOSBrowserTabFolder sosJocTabFolder;
+    private SOSBrowserTabFolder sosReportsTabFolder;
     private CTabFolder leftTabFolder = null;
     private CTabFolder rightTabFolder = null;
 	private CTabFolder logTabFolder = null;
-	private Composite jocComposite;
 	private Composite joeComposite;
 	private Composite eventsComposite;
 	private Composite dashboardComposite;
@@ -136,51 +139,55 @@ public class DashboardShowDialog extends FormBase {
 
 	}
 
-	private void showBrowser() {
-	    SOSUrl url=null;
-	    
-		if (objOptions != null && objOptions.getEnableJOC().isTrue()) {
-			String listOfScheduler = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(LIST_OF_SCHEDULERS, "");
-			if (haveDb && listOfScheduler.equals("")) { // Den ersten aus den
-														// Instances öffnen.
-				schedulerInstancesDBLayer.initFilter();
-				List<SchedulerInstancesDBItem> instances = schedulerInstancesDBLayer.getSchedulerInstancesList();
-				if (instances.size() > 0) {
-					SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
-					url = new SOSUrl (schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort()); 
-				}
-			} else {// Den ersten aus den Preferences öffnen
-				String hostPort = listOfScheduler.split(",")[0];
-                url = new SOSUrl(hostPort);
-			}
+    private void showJoc() {
+        SOSUrl defaultUrl = null;
+        if (objOptions != null && objOptions.getEnableJOC().isTrue()) {
+            sosJocTabFolder = new SOSBrowserTabFolder(mainTabFolder,TABNAME_SCHEDULER_OPERATIONS_CENTER, Messages);
+            
+            
+            String listOfScheduler = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(LIST_OF_SCHEDULERS, "");
+            if (haveDb && listOfScheduler.equals("")) { // Den ersten aus den
+                                                        // Instances öffnen.
+                schedulerInstancesDBLayer.initFilter();
+                List<SchedulerInstancesDBItem> instances = schedulerInstancesDBLayer.getSchedulerInstancesList();
+                if (instances.size() > 0) {
+                    SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
+                    defaultUrl = new SOSUrl (schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort()); 
+                }
+            } else {// Den ersten aus den Preferences öffnen
+                String hostPort = listOfScheduler.split(",")[0];
+                defaultUrl = new SOSUrl(hostPort);
+            }
+            
+            sosJocTabFolder.setOpenMenueItem(Messages.getLabel(DashBoardConstants.conSOSDashB_open_scheduler));
+            sosJocTabFolder.setDefaultUrl(defaultUrl);
+            sosJocTabFolder.setPrefKey(LIST_OF_SCHEDULERS);
+            sosJocTabFolder.setPrefs(prefs);
+            sosJocTabFolder.openUrls();
+ 
+        }
 
-			jocComposite = new Composite(mainTabFolder, SWT.NONE);
-			jocComposite.setLayout(new GridLayout());
+    }
 
-			CTabItem tbtmJOCs = new CTabItem(mainTabFolder, SWT.NONE);
-			tbtmJOCs.setText(TABNAME_SCHEDULER_OPERATIONS_CENTER);
-			tbtmJOCs.setControl(jocComposite);
+    private void showReports() {
+         if (objOptions != null && objOptions.getEnableReports().isTrue()) {
+       
+            sosReportsTabFolder = new SOSBrowserTabFolder(mainTabFolder,TABNAME_REPORTS, Messages);
+             
+           
+            sosReportsTabFolder.setPrefKey(LIST_OF_REPORTS);
+            sosReportsTabFolder.setPrefs(prefs);
+            sosReportsTabFolder.addUrl(new SOSUrl("http://www.lego.com"));
+            sosReportsTabFolder.addUrl(new SOSUrl("http://www.google.com"));
+            sosReportsTabFolder.openUrls();
+ 
+        }
 
-			browserTabFolder = new CTabFolder(jocComposite, SWT.NONE);
-			createContextMenuBrowserTabfolder(browserTabFolder);
-			createContextMenuBrowserTabfolder(mainTabFolder);
+    }
+    
+ 
 
-			browserTabFolder.setTabPosition(SWT.BOTTOM);
-			browserTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
-			new SosTabJOC( browserTabFolder, url);
-			if (!listOfScheduler.equals("")) { // Die weiteren öffnen
-				String[] hostPorts = listOfScheduler.split(",");
-				for (int i = 1; i < hostPorts.length; i++) {
-					this.openScheduler(hostPorts[i]);
-				}
-			}
-			browserTabFolder.setSelection(0);
-		}
-
-	}
-
-	private void createMainWindow() {
+    private void createMainWindow() {
 		if (objOptions != null && (objOptions.getEnableJOC().isTrue() || objOptions.getEnableJOE().isTrue() || objOptions.getEnableEvents().isTrue() ||  objOptions.getEnableJobnet().isTrue())) {
 			mainTabFolder = new CTabFolder(dashboardShell, SWT.NONE);
 			mainTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -269,7 +276,8 @@ public class DashboardShowDialog extends FormBase {
 	private void createFormParts() {
 		createMainWindow();
 		showJoe();
-		showBrowser();
+		showJoc();
+		showReports();
 		showEvents();
 		showJade();
 		showJobnet();
@@ -330,10 +338,7 @@ public class DashboardShowDialog extends FormBase {
 		parent.setLayout(gridLayout);
 		dashboardShell.setText(conJOB_SCHEDULER_DASHBOARD + " (" + VersionInfo.VERSION_STRING + ")");
 		dashboardShell.setSize(1000, 550);
-		
-
-	 
-		
+		 
 		dashboardShell.addMouseMoveListener(new MouseMoveListener() {
 			@Override
 			public void mouseMove(final MouseEvent arg0) {
@@ -558,83 +563,7 @@ public class DashboardShowDialog extends FormBase {
 		dashboardShell.open();
 		dashboardShell.layout();
 	}
-
-	private void openScheduler(final String hostport_) {
-	    
-	    SOSUrl url = new SOSUrl(hostport_);
-		SosTabJOC tbtmJoc = new SosTabJOC( browserTabFolder, url);
-		browserTabFolder.setSelection(tbtmJoc);
-		saveSchedulerTabs();
-	}
-
  
-
-	private void saveSchedulerTabs() {
-		String listOfScheduler = "";
-		CTabItem[] tabs = browserTabFolder.getItems();
-		for (CTabItem tab : tabs) {
-            SOSUrl url = (SOSUrl)tab.getData();
-            if (url != null) {
-    			if (listOfScheduler.equals("")) {
-    				listOfScheduler = url.getUrlValue();
-    			} else {
-    				listOfScheduler = listOfScheduler + "," + url.getUrlValue();
-    			}
-    		}
-		}
-		prefs.node(DashBoardConstants.SOS_DASHBOARD).put(LIST_OF_SCHEDULERS, listOfScheduler);
-	}
-
- 
-	private void createContextMenuBrowserTabfolder(final CTabFolder cParent) {
-		Menu contentMenu = new Menu(cParent);
-		cParent.setMenu(contentMenu);
-		MenuItem addItem = new MenuItem(contentMenu, SWT.PUSH);
-		addItem.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_open_scheduler));
-		addItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
-			@Override
-			public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-			  
-				SosDialogGetHostPort s = new SosDialogGetHostPort(dashboardShell);
-				if (!s.cancel()) {
-					openScheduler(s.getUrl());
-					for (int i = 0; i < mainTabFolder.getTabList().length; i++) {
-						try {
-							if (mainTabFolder.getItem(i).getText().equals(TABNAME_SCHEDULER_OPERATIONS_CENTER)) {
-								mainTabFolder.setSelection(i);
-							}
-
-						} catch (Exception ee) {
-						}
-					}
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
-			}
-		});
-		// =============================================================================================
-		MenuItem closeItem = new MenuItem(contentMenu, SWT.PUSH);
-		closeItem.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_close));
-		closeItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
-			@Override
-			public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-				SosTabJOC tbtmJoc = (SosTabJOC) browserTabFolder.getSelection();
-				if (tbtmJoc != null) {
-					if (browserTabFolder.getItemCount() > 1) {
-						tbtmJoc.dispose();
-						saveSchedulerTabs();
-					}
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
-			}
-		});
-		// =============================================================================================
-	}
 
 	private void createContextMenuLogTabfolder() {
 		Menu contentMenu = new Menu(logTabFolder);

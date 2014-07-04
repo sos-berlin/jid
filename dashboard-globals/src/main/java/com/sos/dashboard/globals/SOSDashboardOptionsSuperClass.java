@@ -125,6 +125,14 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
                                                                   "false", // InitValue
                                                                   "false", // DefaultValue
                                                                   false // isMandatory
+            );
+     
+    @JSOptionDefinition(name = "enable_reports", description = "", key = "enable_reports", type = "SOSOptionBoolean", mandatory = false)
+    public SOSOptionBoolean    enableReports                  = new SOSOptionBoolean(this, conClassName + ".enable_reports", // HashMap-Key
+                                                                  "Show Reports", // Titel
+                                                                  "false", // InitValue
+                                                                  "false", // DefaultValue
+                                                                  false // isMandatory
                                                           );
 
     @JSOptionDefinition(name = "enable_joe", description = "", key = "enable_joe", type = "SOSOptionBoolean", mandatory = false)
@@ -151,6 +159,10 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
                                                                   false // isMandatory
                                                           );
 
+    public SOSOptionBoolean getEnableReports() {
+        return enableReports;
+    }
+    
     public SOSOptionBoolean getEnableJOC() {
         return enableJOC;
     }

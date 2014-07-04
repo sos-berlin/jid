@@ -75,7 +75,7 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	        
 	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
 	        Image uncheckedImage = ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");	        
-	        if (checked) {
+	        if (checked != null && checked) {
 	            this.setImage(column, checkedImage);
 	        }else {
 	            this.setImage(column, uncheckedImage);
@@ -96,8 +96,8 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 
 
 		if (schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
-            this.setBackground(0,gray);  //Ausführung in der Zukunft
-            this.setBackground(STATUS_COLUMN_NUMBER,gray);  //Ausführung in der Zukunft
+            this.setBackground(0,gray);  
+            this.setBackground(STATUS_COLUMN_NUMBER,gray);   
 		}else {
  			this.setBackground(white);
 		 
