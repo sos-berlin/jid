@@ -93,7 +93,7 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
 			query.setText("schedulerId", filter.getSchedulerId());
 		}
 		
-		if (filter.getPort() > 0) {
+		if (filter.getPort() != null && filter.getPort() > 0) {
 			query.setInteger("tcpPort", filter.getPort());
 		}		
 		 

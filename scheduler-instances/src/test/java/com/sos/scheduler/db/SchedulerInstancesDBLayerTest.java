@@ -3,13 +3,19 @@ package com.sos.scheduler.db;
 import static org.junit.Assert.*;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+  
 
 import sos.spooler.Spooler;
 
@@ -43,12 +49,54 @@ import sos.spooler.Spooler;
 
 public class SchedulerInstancesDBLayerTest {
 
-	@SuppressWarnings("unused")
+	private static final String HOSTNAME_DELETE = "xxxTest";
+    @SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerInstancesDBLayerTest";
+    private SchedulerInstancesDBLayer schedulerInstancesDBLayer;
+    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
+    private File configurationFile;
 
 	public SchedulerInstancesDBLayerTest() {
 		//
 	}
+	
+	   private SchedulerInstancesDBItem getNewSchedulerInstancesDBItem() {
+	        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+
+	        SchedulerInstancesDBItem schedulerInstancesDBItem = new SchedulerInstancesDBItem();
+            schedulerInstancesDBItem.setSchedulerId("mySchedulerId");
+            schedulerInstancesDBItem.setHostname("myHostname");
+	        schedulerInstancesDBItem.setIncludePath("myIncludePath");;
+            schedulerInstancesDBItem.setIniPath("myIniPath"); 
+            schedulerInstancesDBItem.setTcpPort(4711); 
+            schedulerInstancesDBItem.setUdpPort(4712); 
+            schedulerInstancesDBItem.setSupervisorTcpPort(4713); 
+            schedulerInstancesDBItem.setJettyHttpPort(4714); 
+            schedulerInstancesDBItem.setJettyHttpsPort(4715); 
+            schedulerInstancesDBItem.setDbName("myDbName"); 
+            schedulerInstancesDBItem.setDbHistoryTableName("myDbHistoryTableName"); 
+            schedulerInstancesDBItem.setDbOrderHistoryTableName("myDbOrderHistoryTableName"); 
+            schedulerInstancesDBItem.setDbOrdersTableName("myDbOrdersTableName"); 
+            schedulerInstancesDBItem.setDbTasksTableName("myDbTasksTableName"); 
+            schedulerInstancesDBItem.setDbVariablesTableName("myDbVariablesTableName"); 
+            schedulerInstancesDBItem.setWorkingDirectory("myWorkingDirectory"); 
+            schedulerInstancesDBItem.setLiveDirectory("myLiveDirectory"); 
+            schedulerInstancesDBItem.setLogDir("myLogDir"); 
+            schedulerInstancesDBItem.setIsService(false); 
+            schedulerInstancesDBItem.setIsRunning(false); 
+            schedulerInstancesDBItem.setIsPaused(false); 
+            schedulerInstancesDBItem.setIsCluster(false); 
+            schedulerInstancesDBItem.setIsAgent(false); 
+            schedulerInstancesDBItem.setIsSosCommandWebservice(true); 
+            schedulerInstancesDBItem.setParam("myParam"); 
+            schedulerInstancesDBItem.setSupervisorHostName("mySupervisorHostName"); 
+	        
+	       
+ 
+	        return schedulerInstancesDBItem;
+	        
+	        
+	    }
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -60,6 +108,8 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
+        configurationFile = new File(configurationFilename);
+        schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
 	}
 
 	@After
@@ -68,13 +118,46 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Test
 	public void testSchedulerInstancesDBLayer() {
-		fail("Not yet implemented");
-	}
+	    SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
+	    schedulerInstancesDBLayer.beginTransaction();
+	    schedulerInstancesDBLayer.commit();	}
 
 	@Test
 	public void testDelete() {
-		fail("Not yet implemented");
-	}
+	    // Test mit delete eines Bereiches       
+	    SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
+	    schedulerInstancesDBLayer.getFilter().setHostname(HOSTNAME_DELETE);
+        schedulerInstancesDBLayer.beginTransaction();
+  
+        schedulerInstancesDBLayer.delete();
+        schedulerInstancesDBLayer.commit();
+
+        
+        List <SchedulerInstancesDBItem>  schedulerInstancesList  = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        assertEquals(0, schedulerInstancesList.size());
+        
+// Test mit delete eines Eintrages      
+        SchedulerInstancesDBLayer d = new SchedulerInstancesDBLayer(configurationFile);
+        d.beginTransaction();
+        
+        SchedulerInstancesDBItem schedulerInstancesDBItem = getNewSchedulerInstancesDBItem();
+        schedulerInstancesDBItem.setHostName(HOSTNAME_DELETE);
+
+
+        d.save(schedulerInstancesDBItem);
+        d.delete(schedulerInstancesDBItem);
+        d.save(schedulerInstancesDBItem);  
+        d.delete(schedulerInstancesDBItem);
+
+        d.commit();
+          
+        d.beginTransaction(); 
+        Query query = schedulerInstancesDBLayer.createQuery("  from SchedulerInstancesDBItem where  hostname = :hostname");
+
+        query.setParameter("hostname", HOSTNAME_DELETE);
+ 
+        schedulerInstancesList = query.list();
+        assertEquals(0, schedulerInstancesList.size());	}
 
 	@Test
 	public void testGetSchedulerInstancesList() {
