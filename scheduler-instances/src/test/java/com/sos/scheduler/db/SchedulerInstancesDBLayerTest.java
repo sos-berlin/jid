@@ -17,6 +17,8 @@ import org.junit.Test;
 
   
 
+
+
 import sos.spooler.Spooler;
 
 /**
@@ -161,24 +163,43 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Test
 	public void testGetSchedulerInstancesList() {
-		fail("Not yet implemented");
+	    SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
+	    schedulerInstancesDBLayer.getFilter().setLimit(1);
+        schedulerInstancesDBLayer.beginTransaction();
+ 
+        List  transferList  = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        assertEquals("testGetSchedulerInstancesList", 1, transferList.size());
 	}
 
 	@Test
 	public void testGetInstanceById() {
-		fail("Not yet implemented");
-	}
+	    String schedulerId = "myScheduler";
+        String hostname = "myHost";
+        Integer port = 4711;
+        
+    
+        SchedulerInstancesDBItem schedulerInstancesDbItem = new SchedulerInstancesDBItem();
+        schedulerInstancesDbItem.setHostName(hostname);
+        schedulerInstancesDbItem.setTcpPort(port);
+        schedulerInstancesDbItem.setSchedulerId(schedulerId);
+         
+        //Test prepare
+        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
+        schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
+        schedulerInstancesDBLayer.getFilter().setHostname(hostname);
+        schedulerInstancesDBLayer.getFilter().setPort(port);
+        schedulerInstancesDBLayer.delete();
+        
+        //Test execute
+        schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDbItem);
+        schedulerInstancesDBLayer.commit();
+        SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getInstanceById("myScheduler");
+        assertEquals("testGetInstanceById",schedulerInstancesDBItem.getHostName(), hostname);
+        schedulerInstancesDBLayer.delete(schedulerInstancesDBItem);
 
-	@Test
-	public void testGetFilter() {
-		fail("Not yet implemented");
+        
 	}
-
-	@Test
-	public void testSetFilter() {
-		fail("Not yet implemented");
-	}
-
+ 
 	@Test
 	public void testInsertScheduler() {
  	    
