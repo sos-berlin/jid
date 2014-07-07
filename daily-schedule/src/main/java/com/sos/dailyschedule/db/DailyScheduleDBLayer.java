@@ -7,9 +7,11 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.joda.time.DateTime;
 
 import com.sos.dailyschedule.DailyScheduleFilter;
 import com.sos.hibernate.classes.DbItem;
+import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.hibernate.layer.SOSHibernateIntervalDBLayer;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
@@ -222,36 +224,62 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 	}
 
 	public void setWhereTo(final Date whereTo) {
+	    UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(whereTo));
 		filter.setPlannedTo(whereTo);
+  
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		whereToIso = formatter.format(whereTo);
 	}
 
-	public void setWhereFrom(final String whereFrom) throws ParseException {
-		if (whereFrom.equals("")) {
-			filter.setPlannedFrom("");
-		} else {
-			SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
-			Date d = formatter.parse(whereFrom);
-			setWhereFrom(d);
-		}
-	}
+	public void setWhereFromUtc(final String whereFrom) throws ParseException {
+        if (whereFrom.equals("")) {
+            filter.setPlannedFrom("");
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
+            Date d = formatter.parse(whereFrom);
+            d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
 
-	public void setWhereTo(final String whereTo) throws ParseException {
-		if (whereTo.equals("")) {
-			filter.setPlannedTo("");
-		} else {
-			SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
-			Date d = formatter.parse(whereTo);
-			setWhereTo(d);
-		}
-	}
+            setWhereFrom(d);
+        }
+    }
 
-	public Date getWhereFrom() {
+    public void setWhereToUtc(final String whereTo) throws ParseException {
+        if (whereTo.equals("")) {
+            filter.setPlannedTo("");
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
+            Date d = formatter.parse(whereTo);
+            d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
+            setWhereTo(d);
+        }
+    }
+
+    public void setWhereFrom(final String whereFrom) throws ParseException {
+        if (whereFrom.equals("")) {
+            filter.setPlannedFrom("");
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
+            Date d = formatter.parse(whereFrom);
+
+            setWhereFrom(d);
+        }
+    }
+
+    public void setWhereTo(final String whereTo) throws ParseException {
+        if (whereTo.equals("")) {
+            filter.setPlannedTo("");
+        } else {
+            SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
+            Date d = formatter.parse(whereTo);
+            setWhereTo(d);
+        }
+    }
+
+	public Date getWhereUtcFrom() {
 		return filter.getPlannedUtcFrom();
 	}
 
-	public Date getWhereTo() {
+	public Date getWhereUtcTo() {
 		return filter.getPlannedUtcTo();
 	}
 

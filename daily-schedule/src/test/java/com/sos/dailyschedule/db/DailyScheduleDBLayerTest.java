@@ -9,12 +9,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
  
@@ -53,7 +55,7 @@ public class DailyScheduleDBLayerTest {
 	private final String	conClassName	= "DailySchedulerDBLayerTest";
     private DailyScheduleDBLayer dailySheduleDBLayer;
 //    private String configurationFilename="c:/temp/hibernate_pgsql.cfg.xml";
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_pgsql.cfg.xml";
+    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
     private File configurationFile;
 
 	
@@ -127,8 +129,8 @@ public class DailyScheduleDBLayerTest {
 		DailyScheduleDBLayer dailyScheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
 		dailyScheduleDBLayer.beginTransaction();
 		dailyScheduleDBLayer.setDateFormat("yyyy-MM-dd hh:mm");
-		dailyScheduleDBLayer.setWhereFrom("2011-01-01 00:00");
-		dailyScheduleDBLayer.setWhereTo("2011-10-01 00:00");
+		dailyScheduleDBLayer.setWhereFromUtc("2011-01-01 00:00");
+		dailyScheduleDBLayer.setWhereToUtc("2011-10-01 00:00");
 		dailyScheduleDBLayer.delete();
 		dailyScheduleDBLayer.commit();
 
@@ -166,7 +168,7 @@ public class DailyScheduleDBLayerTest {
 		Date date = new Date();
 		dailySheduleDBLayer.setWhereFrom(date);
         String iso = dailySheduleDBLayer.getWhereFromIso();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	    String d = formatter.format(date);
 
 		formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
@@ -174,9 +176,10 @@ public class DailyScheduleDBLayerTest {
 	 
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		date = formatter.parse(df);
+        date = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(date));
 
-		assertEquals("testSetwhereFromDate failed: ",d,iso);	
-  	    assertEquals("testSetwhereFromDate failed: ",0,date.compareTo(dailySheduleDBLayer.getWhereFrom()));	
+ 		assertEquals("testSetwhereFromDate failed: ",d,iso);	
+  	    assertEquals("testSetwhereFromDate failed: ",0,date.compareTo(dailySheduleDBLayer.getWhereUtcFrom()));	
      }
 
 	@Test
@@ -184,7 +187,7 @@ public class DailyScheduleDBLayerTest {
 		Date date = new Date();
 		dailySheduleDBLayer.setWhereTo(date);
         String iso = dailySheduleDBLayer.getWhereToIso();
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	    String d = formatter.format(date);
 
 	    formatter = new SimpleDateFormat("yyyy-MM-dd 23:59:59");
@@ -192,19 +195,24 @@ public class DailyScheduleDBLayerTest {
 	 
 		formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		date = formatter.parse(df);
-		
+        date = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(date));
+
   	    assertEquals("testSetwhereToDate failed: ",d,iso);	
-  	    assertEquals("testSetwhereToDate failed: ",0,date.compareTo(dailySheduleDBLayer.getWhereTo()));	
+  	    assertEquals("testSetwhereToDate failed: ",0,date.compareTo(dailySheduleDBLayer.getWhereUtcTo()));	
 	}
 
 	@Test
 	public void testSetWhereFromString() throws ParseException {
 		  String myWhereFromDate = "01.01.2011 00:00:00";
-		  dailySheduleDBLayer.setDateFormat("dd.MM.yyyy HH:mm:ss");
+		  dailySheduleDBLayer.setDateFormat("dd.MM.yyyy 00:mm:ss");
 		  dailySheduleDBLayer.setWhereFrom(myWhereFromDate);
-	      Date whereFromDate = dailySheduleDBLayer.getWhereFrom();
+	      Date whereFromDate = dailySheduleDBLayer.getWhereUtcFrom();
 	  	  SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 		  Date d = formatter.parse(myWhereFromDate);
+          d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
+
+		  
+		  
 		 
 	      assertEquals("testSetwhereFromDate failed: ",0,d.compareTo(whereFromDate));	
 	}
@@ -215,7 +223,7 @@ public class DailyScheduleDBLayerTest {
 		  dailySheduleDBLayer.setDateFormat("dd.MM.yyyy HH:mm:ss");
 
 		  dailySheduleDBLayer.setWhereTo(myWhereToDate);
-	      Date whereToDate = dailySheduleDBLayer.getWhereTo();
+	      Date whereToDate = dailySheduleDBLayer.getWhereUtcTo();
 	  	  SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
 		  Date d = formatter.parse(myWhereToDate);
 		  
@@ -224,6 +232,8 @@ public class DailyScheduleDBLayerTest {
 		 
   		  formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		  d = formatter.parse(df);
+          d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
+
 		 
 	      assertEquals("testSetwhereFromDate failed: ",0,d.compareTo(whereToDate));
 	}
@@ -241,11 +251,12 @@ public class DailyScheduleDBLayerTest {
 		d.save(calendar2DBItem);
 		d.commit();
 		
-		List  transferList  = dailySheduleDBLayer.getDailyScheduleList(0);
+		List  transferList  = dailySheduleDBLayer.getDailyScheduleList(1);
 		assertEquals(1, transferList.size());      
    
 		dailySheduleDBLayer.setWhereSchedulerId(myid);
-        dailySheduleDBLayer.delete();
+        d.beginTransaction();
+		dailySheduleDBLayer.delete();
 		d.commit();
 		
 		transferList  = dailySheduleDBLayer.getDailyScheduleList(0);
@@ -258,10 +269,11 @@ public class DailyScheduleDBLayerTest {
 		  String newFormat = "yyyy-MM*dd";
 		  dailySheduleDBLayer.setDateFormat(newFormat);
 		  dailySheduleDBLayer.setWhereFrom(myWhereFromDate);
-	      Date whereFromDate = dailySheduleDBLayer.getWhereFrom();
+	      Date whereFromDate = dailySheduleDBLayer.getWhereUtcFrom();
 	  	  SimpleDateFormat formatter = new SimpleDateFormat(newFormat);
 		  Date d = formatter.parse(myWhereFromDate);
-		 
+	      d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
+
 	      assertEquals("testSetwhereFromDate failed: ",0,d.compareTo(whereFromDate));	
 	}
 	
@@ -272,8 +284,8 @@ public class DailyScheduleDBLayerTest {
 		DailyScheduleDBLayer dailyScheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
 		dailyScheduleDBLayer.beginTransaction();
 		dailyScheduleDBLayer.setDateFormat("yyyy-MM-dd hh:mm");
-		dailyScheduleDBLayer.setWhereFrom("2011-01-01 00:00");
-		dailyScheduleDBLayer.setWhereTo("2049-10-01 00:00");
+		dailyScheduleDBLayer.setWhereFromUtc("2011-01-01 00:00");
+		dailyScheduleDBLayer.setWhereToUtc("2049-10-01 00:00");
 		
 		List  transferList  = dailyScheduleDBLayer.getWaitingDailyScheduleList(1);
 		assertEquals("testGetWaitingDailyScheduleList", 1, transferList.size());
@@ -287,8 +299,8 @@ public class DailyScheduleDBLayerTest {
 		DailyScheduleDBLayer dailyScheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
 		dailyScheduleDBLayer.beginTransaction();
 		dailyScheduleDBLayer.setDateFormat("yyyy-MM-dd hh:mm");
-		dailyScheduleDBLayer.setWhereFrom("2011-01-01 00:00");
-		dailyScheduleDBLayer.setWhereTo("2049-10-01 00:00");
+		dailyScheduleDBLayer.setWhereFromUtc("2011-01-01 00:00");
+		dailyScheduleDBLayer.setWhereToUtc("2049-10-01 00:00");
 		
 		List  transferList  = dailyScheduleDBLayer.getDailyScheduleList(1);
 		assertEquals("testGetDailyScheduleList", 1, transferList.size());

@@ -185,7 +185,7 @@ public class DailyScheduleDBItemTest {
 		dailyScheduleDBItem.setSchedulePlanned(d1);
 		String today = dailyScheduleDBItem.getSchedulePlannedIso();
 
-		String testDateFormat = "yyyy-MM-dd hh:mm";
+		String testDateFormat = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat formatter = new SimpleDateFormat(testDateFormat);
 		String today2 =  formatter.format(d1);        
   	
@@ -201,7 +201,7 @@ public class DailyScheduleDBItemTest {
 		dailyScheduleDBItem.setScheduleExecuted(d1);
 		String today = dailyScheduleDBItem.getScheduleExecutedIso();
 
-		String testDateFormat = "yyyy-MM-dd hh:mm";
+		String testDateFormat = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat formatter = new SimpleDateFormat(testDateFormat);
 		String today2 =  formatter.format(d1);        
   	

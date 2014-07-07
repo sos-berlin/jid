@@ -114,7 +114,7 @@ public class DailyScheduleDateTest {
 		Date d1 = new Date();
 		d.setSchedule(d1);
 		String isoDateSchedule = d.getIsoDate();
-		String isoDateFormat = "yyyy-MM-dd hh:mm:ss";
+		String isoDateFormat = "yyyy-MM-dd HH:mm:ss";
 		SimpleDateFormat formatter = new SimpleDateFormat(isoDateFormat);
 		String isoDate =  formatter.format(d1);        
 		assertEquals("Test setScheduleString failed...",isoDateSchedule,isoDate);

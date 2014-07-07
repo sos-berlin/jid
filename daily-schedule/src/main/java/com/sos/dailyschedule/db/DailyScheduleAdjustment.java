@@ -139,12 +139,12 @@ public class DailyScheduleAdjustment {
 		//read scheduler history
 		schedulerTaskHistoryDBLayer.getFilter().setLimit(-1);
 		schedulerTaskHistoryDBLayer.getFilter().setExecutedFrom(from);
-		schedulerTaskHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereTo());
+		schedulerTaskHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
  		
 		//read scheduler Order history
 		schedulerOrderHistoryDBLayer.getFilter().setLimit(-1);
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom(from);
-		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereTo());
+		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
  		   
 		dailyScheduleDBLayer.beginTransaction();
 
