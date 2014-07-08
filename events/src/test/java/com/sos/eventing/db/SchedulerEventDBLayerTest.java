@@ -128,8 +128,8 @@ public class SchedulerEventDBLayerTest {
 		schedulerEventDBLayer.delete();
 		schedulerEventDBLayer.commit();
 	
-		List  transferList  = schedulerEventDBLayer.getScheduleEventList(0);
-		assertEquals(0, transferList.size());
+		List  eventsList  = schedulerEventDBLayer.getScheduleEventList(0);
+		assertEquals(0, eventsList.size());
 		
 // Test mit delete eines Eintrages		
 		SchedulerEventDBLayer d = new SchedulerEventDBLayer(configurationFile);
@@ -140,10 +140,11 @@ public class SchedulerEventDBLayerTest {
  
 		schedulerEventDBItem.setEventId(SchedulerEventDBLayerTest.MY_EVENT_ID);
 		d.save(schedulerEventDBItem);
-		Long a = schedulerEventDBItem.getId();
+		Long a = schedulerEventDBItem.getId() ;
  
 		d.delete(schedulerEventDBItem);
 		d.save(schedulerEventDBItem);  
+        a = schedulerEventDBItem.getId() ;
 		d.delete(schedulerEventDBItem);
  
 		d.commit();
@@ -154,8 +155,8 @@ public class SchedulerEventDBLayerTest {
  	    query.setParameter("eventId", SchedulerEventDBLayerTest.MY_EVENT_ID);
  	    query.setParameter("eventClass", SchedulerEventDBLayerTest.MY_CLASS);
  
-		transferList = query.list();
-		assertEquals(0, transferList.size());
+		eventsList = query.list();
+		assertEquals(0, eventsList.size());
 	}
 
   
@@ -192,11 +193,10 @@ public class SchedulerEventDBLayerTest {
 	@Test
 	public void testGetSchedulerEventList() throws ParseException {
 		
-// Test mit delete eines Bereiches		
-	    SchedulerEventDBLayer schedulerEventDBLayer = new SchedulerEventDBLayer(configurationFile);
+ 	    SchedulerEventDBLayer schedulerEventDBLayer = new SchedulerEventDBLayer(configurationFile);
 		schedulerEventDBLayer.beginTransaction();
-		List  transferList  = schedulerEventDBLayer.getScheduleEventList(1);
-		assertEquals("testGetSchedulerEventList", 1, transferList.size());
+		List<SchedulerEventDBItem> eventList  = schedulerEventDBLayer.getScheduleEventList(1);
+		assertEquals("testGetSchedulerEventList", 1, eventList.size());
 	}
  	 
 	 
@@ -209,10 +209,11 @@ public class SchedulerEventDBLayerTest {
 				
     	schedulerEventDBItem.setSchedulerId("Old");
 		schedulerEventDBLayer.save(schedulerEventDBItem);
+		long a = schedulerEventDBItem.getId()-1;
 		schedulerEventDBLayer.commit();
 		
 		schedulerEventDBLayer.beginTransaction();
-		SchedulerEventDBItem schedulerEventDBItem2 = (SchedulerEventDBItem) schedulerEventDBLayer.getSession().load(SchedulerEventDBItem.class,schedulerEventDBItem.getId() );
+		SchedulerEventDBItem schedulerEventDBItem2 =    schedulerEventDBLayer.getEvent(a  );
 		schedulerEventDBItem2.setSchedulerId("New");
 		schedulerEventDBLayer.update(schedulerEventDBItem2);
 		schedulerEventDBLayer.commit();
@@ -317,8 +318,23 @@ public class SchedulerEventDBLayerTest {
 	   @Test
        public void checkEventExistsCheckEventExistsId() {
            SchedulerEventDBLayer schedulerEventDBLayer = new SchedulerEventDBLayer(configurationFile);
+           
+           schedulerEventDBLayer.getFilter().setEventClass(SchedulerEventDBLayerTest.MY_CLASS);
+           schedulerEventDBLayer.getFilter().setEventId(SchedulerEventDBLayerTest.MY_EVENT_ID);
+
+           schedulerEventDBLayer.beginTransaction();
+           SchedulerEventDBItem schedulerEventDBItem = getNewSchedulerEventDBItem();   
+           schedulerEventDBItem.setSchedulerId(SchedulerEventDBLayerTest.MY_SCHEDULER_ID);
+           schedulerEventDBItem.setEventId(SchedulerEventDBLayerTest.MY_EVENT_ID);
+           schedulerEventDBItem.setEventClass(SchedulerEventDBLayerTest.MY_CLASS);
+           schedulerEventDBLayer.save(schedulerEventDBItem);
+           schedulerEventDBLayer.commit();
+
+    
+           
+           
            SchedulerEventFilter schedulerEventFilter = new SchedulerEventFilter();
-           schedulerEventFilter.setEventId("TEST_EVENT");
+           schedulerEventFilter.setEventId(SchedulerEventDBLayerTest.MY_EVENT_ID);
            assertEquals("testCheckEventExistsDBItem", true, schedulerEventDBLayer.checkEventExists(schedulerEventFilter));    
            
             
@@ -383,10 +399,7 @@ public class SchedulerEventDBLayerTest {
            assertEquals("testCheckEventExistsDBItem", false, schedulerEventDBLayer.checkEventExists("myClass.myEventId or a.b"));    
        }
        
-       @Test
-       public void checkEventExistsCheckEventExistsConditionExit() {
-           assertEquals("checkEventExistsCheckEventExistsConditionExit", true, schedulerEventDBLayer.checkEventExists("TEST_EVENT:4 and not xxx"));    
-       }       
+   
 	   
 /*	    
 	    public List<SchedulerEventDBItem>  getEventsFromDb() {

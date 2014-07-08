@@ -143,9 +143,8 @@ public class DashboardShowDialog extends FormBase {
         SOSUrl defaultUrl = null;
         if (objOptions != null && objOptions.getEnableJOC().isTrue()) {
             sosJocTabFolder = new SOSBrowserTabFolder(mainTabFolder,TABNAME_SCHEDULER_OPERATIONS_CENTER, Messages);
-            
-            
             String listOfScheduler = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(LIST_OF_SCHEDULERS, "");
+
             if (haveDb && listOfScheduler.equals("")) { // Den ersten aus den
                                                         // Instances öffnen.
                 schedulerInstancesDBLayer.initFilter();
@@ -171,15 +170,16 @@ public class DashboardShowDialog extends FormBase {
 
     private void showReports() {
          if (objOptions != null && objOptions.getEnableReports().isTrue()) {
-       
-            sosReportsTabFolder = new SOSBrowserTabFolder(mainTabFolder,TABNAME_REPORTS, Messages);
+             String webServicAddress = objOptions.securityServer.Value();
+             webServicAddress = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(DashBoardConstants.conSOSDashB_Report_Server,webServicAddress);
+             sosReportsTabFolder = new SOSBrowserTabFolder(mainTabFolder,TABNAME_REPORTS, Messages);
              
            
-            sosReportsTabFolder.setPrefKey(LIST_OF_REPORTS);
-            sosReportsTabFolder.setPrefs(prefs);
-            sosReportsTabFolder.addUrl(new SOSUrl("http://www.lego.com"));
-            sosReportsTabFolder.addUrl(new SOSUrl("http://www.google.com"));
-            sosReportsTabFolder.openUrls();
+             sosReportsTabFolder.setPrefKey(LIST_OF_REPORTS);
+             sosReportsTabFolder.setPrefs(prefs);
+             sosReportsTabFolder.addUrl(new SOSUrl("Report Overview:",webServicAddress+"/jobscheduler/operations_gui/scheduler_data/config/reports/report1.html"));
+             sosReportsTabFolder.addUrl(new SOSUrl("Report Top 10 Longest Running Process:",webServicAddress+"/jobscheduler/operations_gui/scheduler_data/config/reports/report2.html"));
+             sosReportsTabFolder.openUrls();
  
         }
 
@@ -423,6 +423,7 @@ public class DashboardShowDialog extends FormBase {
 		tableViewSchedulerInstances = new SOSDashboardTableViewSchedulerInstances(composite);
 		tableViewSchedulerInstances.setObjOptions(objOptions);
 		tableViewSchedulerInstances.setDBLayer(schedulerInstancesDBLayer.getConfigurationFile());
+		tableViewSchedulerInstances.setReportsBrowserTabFolder(sosReportsTabFolder);
 
 		tableViewSchedulerInstances.setLeftTabFolder(leftTabFolder);
 		tableViewSchedulerInstances.setPrefs(prefs);

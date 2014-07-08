@@ -21,7 +21,9 @@ import com.sos.localization.Messages;
 
 public class SOSBrowserTabFolder {
     private String listOfUrls="";
+    private String listOfUrlTitels="";
     private String prefKey;
+    private String prefKeyTitles;
     private Preferences prefs;
     private CTabFolder tabFolder;
     private CTabFolder parent;
@@ -29,6 +31,7 @@ public class SOSBrowserTabFolder {
     private SOSUrl defaultUrl=null;
     private Messages messages;
     private String openMenueItem=null;
+    private CTabItem tbTmUrls;
      
     public SOSBrowserTabFolder(CTabFolder parent_, String tabName_, Messages messages_) {
       parent = parent_;
@@ -39,15 +42,20 @@ public class SOSBrowserTabFolder {
     public void openUrls() {
         SOSUrl url=null;
         
-            listOfUrls = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(prefKey, "");
+        listOfUrls = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(prefKey, "");
+        listOfUrlTitels = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(prefKeyTitles, "");
            
             url = defaultUrl;
             
             Composite urlComposite = new Composite(parent, SWT.NONE);
             urlComposite.setLayout(new GridLayout());
 
-            CTabItem tbTmUrls = new CTabItem(parent, SWT.NONE);
-            tbTmUrls.setText(tabName);
+            if (tbTmUrls == null){
+                tbTmUrls = new CTabItem(parent, SWT.NONE);
+                tbTmUrls.setText(tabName);
+                
+            }
+
             tbTmUrls.setControl(urlComposite);
 
             tabFolder = new CTabFolder(urlComposite, SWT.NONE);
@@ -68,9 +76,14 @@ public class SOSBrowserTabFolder {
             }
             
             if (!listOfUrls.equals("")) { // Die weiteren öffnen
-                String[] hostPorts = listOfUrls.split(",");
-                for (int i = startIndex; i < hostPorts.length; i++) {
-                    this.openUrl(new SOSUrl(hostPorts[i]));
+                String[] urlList = listOfUrls.split(",");
+                String[] urlListTitle = listOfUrlTitels.split(",");
+                for (int i = startIndex; i < urlList.length; i++) {
+                    if (listOfUrlTitels.length() == 0) {
+                        this.openUrl(new SOSUrl(urlList[i]));
+                    }else {
+                        this.openUrl(new SOSUrl(urlListTitle[i],urlList[i]));
+                    }
                 }
             }
             tabFolder.setSelection(0); 
@@ -91,8 +104,18 @@ public class SOSBrowserTabFolder {
            listOfUrls = listOfUrls + "," + url.getUrlValue();
        }
        prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKey, listOfUrls);
+       
+       if (listOfUrlTitels.equals("")) {
+           listOfUrlTitels = url.getTitle();
+       } else {
+           listOfUrlTitels = listOfUrlTitels + "," + url.getTitle();
+       }
+       prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKeyTitles, listOfUrlTitels);
+
 
     }
+   
+  
  
     private void saveBrowserTabs() {
         listOfUrls = "";
@@ -111,6 +134,18 @@ public class SOSBrowserTabFolder {
     }
     
 
+    public void closeAllBrowserTabs() {
+        listOfUrls = "";
+        CTabItem[] tabs = tabFolder.getItems();
+        for (CTabItem tab : tabs) {
+            if (tab != null) {
+                tab.dispose();
+                }
+        }
+        saveBrowserTabs();
+        prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKey, listOfUrls);
+    }
+
     private void createContextMenuBrowserTabfolder(final CTabFolder cParent) {
         Menu contentMenu = new Menu(cParent);
         cParent.setMenu(contentMenu);
@@ -122,7 +157,7 @@ public class SOSBrowserTabFolder {
               
                 SosDialogGetHostPort s = new SosDialogGetHostPort(cParent.getShell());
                 if (!s.cancel()) {
-                    openUrl(new SOSUrl(s.getUrl()));
+                    openUrl(new SOSUrl(s.getTitle(),s.getUrl()));
                     for (int i = 0; i < parent.getTabList().length; i++) {
                         try {
                             if (parent.getItem(i).getText().equals(tabName)) {
@@ -163,6 +198,7 @@ public class SOSBrowserTabFolder {
     
     public void setPrefKey(String prefKey) {
         this.prefKey = prefKey;
+        this.prefKeyTitles = prefKey + "_titles";
     }
 
     public void setDefaultUrl(SOSUrl defaultUrl) {

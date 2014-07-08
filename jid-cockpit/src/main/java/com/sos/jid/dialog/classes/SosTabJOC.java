@@ -49,7 +49,7 @@ public class SosTabJOC extends CTabItem {
 		composite.setLayout(layout);
 		if (url != null) {
 		   BrowserViewForm b = new BrowserViewForm(composite, SWT.NONE, url);
-           setText(url.getUrlCaption());
+           setText(url.getTitle());
 		}
 		composite.layout();
 		this.setControl(composite);

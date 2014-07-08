@@ -117,6 +117,7 @@ public class DashBoardConstants {
     public final static String  conSOSDashB_SaveAsFile              = "SOSDashB_SaveAsFile";
     public final static String  conSOSDashB_Print                   = "SOSDashB_Print";
     public final static String  conSOSDashB_Export_To_Excel         = "SOSDashB_ExportToExcel";
+    public final static String  conSOSDashB_Report_Server           = "SOSDashB_ReportServer";
     
     public static final String  conSettingREFRESHDefault            = "60";
     public static final Integer conSettingLIMITDefault              = 500;

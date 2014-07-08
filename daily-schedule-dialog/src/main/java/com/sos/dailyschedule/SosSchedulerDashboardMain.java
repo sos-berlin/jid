@@ -72,12 +72,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
 
     protected SosSchedulerDashboardMain() {
         super(DashBoardConstants.conPropertiesFileName);
-        /*	try {
-        	 	AddAnnotation.addPersonneNameAnnotationToMethod("com.sos.scheduler.history.db.SchedulerHistoryLogDBItem", "getLog");
-        	} catch (Exception e) {
-        		e.printStackTrace();
-        	}
-        	*/
+        
     }
 
     private boolean doLogin() throws Exception {

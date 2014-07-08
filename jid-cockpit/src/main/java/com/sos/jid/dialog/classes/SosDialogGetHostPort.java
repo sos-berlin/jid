@@ -30,6 +30,7 @@ public class SosDialogGetHostPort {
     private String        hostValue;
     private String        urlValue;
     private int           portValue;
+    private Text edTitle;
 
   public SosDialogGetHostPort(Shell parentShell) {
     execute(parentShell);
@@ -79,6 +80,13 @@ public class SosDialogGetHostPort {
     
     edUrl = new Text(dialogShell, SWT.BORDER);
     edUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+    new Label(dialogShell, SWT.NONE);
+    
+    Label lblTitle = new Label(dialogShell, SWT.NONE);
+    lblTitle.setText("Title");
+    
+    edTitle = new Text(dialogShell, SWT.BORDER);
+    edTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
     new Label(dialogShell, SWT.NONE);
     btnOk = new Button(dialogShell, SWT.NONE);
     GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -155,15 +163,19 @@ public class SosDialogGetHostPort {
     }
   }
 
-    public String getUrl() {
-        if (urlValue != null && urlValue.length() > 0) {
-            return urlValue;
-        }else {
-            return String.format("%s://%s:%s", protocolValue, getHost(),getPort());
-        }
-    }
+  public String getUrl() {
+      if (urlValue != null && urlValue.length() > 0) {
+          return urlValue;
+      }else {
+          return String.format("%s://%s:%s", protocolValue, getHost(),getPort());
+      }
+  }
 
-    
+  public String getTitle() {
+       return edTitle.getText();
+  }
+
+  
     
     public boolean cancel() {
         return (protocolValue==null);
