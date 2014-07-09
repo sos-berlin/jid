@@ -98,15 +98,14 @@ public class SosSchedulerDashboardMain extends I18NBase {
                
                 SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
                 currentUser = new SOSJaxbSubject(sosPermissionShiro);
-                if (!currentUser.isAuthenticated()) {
+                if (currentUser==null) {
+                    sosLoginDialog.setMsg("error authenticating user/password");
+                }else if (!currentUser.isAuthenticated()) {
                     sosLoginDialog.setMsg("could not authenticate user/password");
                 }
-                if (currentUser!=null) {
-                    sosLoginDialog.setMsg("error authenticating user/password");
-                }
-                }else {
-                    sosLoginDialog.setMsg("login cancelled");
-                }
+            }else {
+                sosLoginDialog.setMsg("login cancelled");
+            }
           }catch (Exception e) {
               
            boolean enabled=getNextSecurityServer();
