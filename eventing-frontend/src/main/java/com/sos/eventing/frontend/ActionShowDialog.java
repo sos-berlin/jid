@@ -1,5 +1,27 @@
 package com.sos.eventing.frontend;
 
+import com.sos.JSHelper.Basics.JSToolBox;
+import com.sos.dashboard.globals.DashBoardConstants;
+import com.sos.dashboard.globals.SOSDashboardOptions;
+import com.swtdesigner.SWTResourceManager;
+import org.apache.log4j.Logger;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.*;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.*;
+import org.w3c.dom.DOMException;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import sos.ftp.profiles.FTPProfile;
+import sos.ftp.profiles.FTPProfilePicker;
+import sos.scheduler.consoleviews.events.*;
+import sos.settings.SOSProfileSettings;
+import sos.settings.SOSSettings;
+import sos.util.SOSFile;
+import sos.util.SOSLogger;
+import sos.util.SOSStandardLogger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
@@ -7,60 +29,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 import java.util.prefs.Preferences;
-
-import org.apache.log4j.Logger;
-import org.eclipse.swt.SWT;
-
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseMoveListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.ShellAdapter;
-import org.eclipse.swt.events.ShellEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
-
-import org.w3c.dom.DOMException;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
-import com.sos.JSHelper.Basics.JSToolBox;
-import com.sos.JSHelper.Logging.Log4JHelper;
-import com.sos.dashboard.globals.DashBoardConstants;
-import com.sos.dashboard.globals.SOSDashboardOptions;
-
-import com.swtdesigner.SWTResourceManager;
-
-import sos.ftp.profiles.FTPProfile;
-import sos.ftp.profiles.FTPProfilePicker;
-
-import sos.scheduler.consoleviews.events.SOSActions;
-import sos.scheduler.consoleviews.events.SOSEvaluateEvents;
-import sos.scheduler.consoleviews.events.SOSEventCommand;
-import sos.scheduler.consoleviews.events.SOSEventCommandElement;
-import sos.scheduler.consoleviews.events.SOSEventGroups;
-import sos.scheduler.consoleviews.events.SchedulerEvent;
-import sos.settings.SOSProfileSettings;
-import sos.settings.SOSSettings;
-import sos.util.SOSFile;
-import sos.util.SOSLogger;
-import sos.util.SOSStandardLogger;
 
 /*
  * Created on 23.06.2008
@@ -77,7 +45,6 @@ public class ActionShowDialog  extends JSToolBox {
 	private static final String conSectionPLUGIN_ACTION_SHOW_DIALOG = "plugin_action_show_dialog";
 
 	@SuppressWarnings("unused")
-	private static Log4JHelper objLogger = null;
 	private final static String conSVNVersion = "$Id: Editor.java 18748 2013-01-09 21:19:21Z kb $";
 
 	protected Composite composite = null;
@@ -729,8 +696,6 @@ public class ActionShowDialog  extends JSToolBox {
 	 */
 	public static void main(final String[] args) {
 		try {
-			objLogger = new Log4JHelper(null);
-
 			logger = Logger.getRootLogger();
 			logger.debug(conSVNVersion);
 
