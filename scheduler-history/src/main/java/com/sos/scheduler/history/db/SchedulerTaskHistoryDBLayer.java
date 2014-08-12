@@ -300,7 +300,7 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
         initSession();
         
 
-        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromTo() + " and id NOT IN (select schedulerHistoryId from DailyScheduleDBItem where not scheduler_history_id  is null and  status=1 and schedulerId=:schedulerId) "  + filter.getOrderCriteria() + filter.getSortMode());
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromTo() + " and id NOT IN (select schedulerHistoryId from DailyScheduleDBItem where not schedulerHistoryId is null and  status=1 and schedulerId=:schedulerId) "  + filter.getOrderCriteria() + filter.getSortMode());
         return executeQuery(query,limit);
 
     }

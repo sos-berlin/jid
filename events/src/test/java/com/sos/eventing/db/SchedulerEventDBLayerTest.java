@@ -16,6 +16,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
+
 
  
 
@@ -55,8 +58,7 @@ public class SchedulerEventDBLayerTest {
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerEventDBLayerTest";
     private SchedulerEventDBLayer schedulerEventDBLayer;
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
-    private File configurationFile;
+     private File configurationFile;
 
 	
 	
@@ -100,7 +102,7 @@ public class SchedulerEventDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = new File(configurationFilename);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
 		schedulerEventDBLayer = new SchedulerEventDBLayer(configurationFile);
 	}
 
@@ -193,6 +195,12 @@ public class SchedulerEventDBLayerTest {
 	@Test
 	public void testGetSchedulerEventList() throws ParseException {
 		
+	    schedulerEventDBLayer.beginTransaction();
+        SchedulerEventDBItem schedulerEventDBItem = getNewSchedulerEventDBItem();
+                
+        schedulerEventDBItem.setSchedulerId("new");
+        schedulerEventDBLayer.save(schedulerEventDBItem);
+        schedulerEventDBLayer.commit();
  	    SchedulerEventDBLayer schedulerEventDBLayer = new SchedulerEventDBLayer(configurationFile);
 		schedulerEventDBLayer.beginTransaction();
 		List<SchedulerEventDBItem> eventList  = schedulerEventDBLayer.getScheduleEventList(1);
@@ -209,7 +217,7 @@ public class SchedulerEventDBLayerTest {
 				
     	schedulerEventDBItem.setSchedulerId("Old");
 		schedulerEventDBLayer.save(schedulerEventDBItem);
-		long a = schedulerEventDBItem.getId()-1;
+		long a = schedulerEventDBItem.getId();
 		schedulerEventDBLayer.commit();
 		
 		schedulerEventDBLayer.beginTransaction();

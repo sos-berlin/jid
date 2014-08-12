@@ -65,8 +65,8 @@ public class SOSTabJade extends CTabItem {
 		mainTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
 		tbtmJadeCockpit = new SOSTabJadeCockpit(TABNAME_JADE_COCKPIT, mainTabFolder);
-        tbtmJadeJoc = new SosTabJOC(mainTabFolder, new SOSUrl("http://sos-berlin.com"));
-        tbtmJadeBackground = new SOSTabJadeBackground(TABNAME_JADE_BACKGROUND_SERVICE, mainTabFolder);
+        tbtmJadeJoc = new SosTabJOC(mainTabFolder, new SOSUrl("http://www.sos-berlin.com"));
+        tbtmJadeBackground = new SOSTabJadeBackground(objOptions,TABNAME_JADE_BACKGROUND_SERVICE, mainTabFolder);
 	 	
         mainTabFolder.setSelection(0);
   

@@ -96,20 +96,33 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
                                                                   " ", // DefaultValue
                                                                   false // isMandatory
                                                           );
-         
-    /**
-     * \var configurationFile : 
-     * 
-     *
-     */
-    @JSOptionDefinition(name = "scheduler_id", description = "", key = "scheduler_id", type = "SOSOptionString", mandatory = false)
-    public SOSOptionString schedulerId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
-                                                                  "scheduler_id that is assigned to this dashboard", // Titel
-                                                                  " ", // InitValue
-                                                                  " ", // DefaultValue
-                                                                  true // isMandatory
-                                                          );
-         
+    
+/**
+* \var schedulerId : 
+* 
+*
+*/
+@JSOptionDefinition(name = "scheduler_id", description = "", key = "scheduler_id", type = "SOSOptionString", mandatory = false)
+public SOSOptionString schedulerId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
+                                                             "scheduler_id that is assigned to this dashboard", // Titel
+                                                             " ", // InitValue
+                                                             " ", // DefaultValue
+                                                             true // isMandatory
+                                                     );
+
+/**
+* \var sessionId : 
+* 
+*
+*/
+@JSOptionDefinition(name = "scheduler_id", description = "", key = "session_id", type = "SOSOptionString", mandatory = false)
+public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
+                                                         "sessionId that is assigned to this dashboard", // Titel
+                                                         " ", // InitValue
+                                                         " ", // DefaultValue
+                                                         false // isMandatory
+                                                 );
+
     
     
     @JSOptionDefinition(name = "enableJobStart", description = "", key = "enableJobStart", type = "SOSOptionBoolean", mandatory = false)
@@ -130,6 +143,13 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
     @JSOptionDefinition(name = "enable_reports", description = "", key = "enable_reports", type = "SOSOptionBoolean", mandatory = false)
     public SOSOptionBoolean    enableReports                  = new SOSOptionBoolean(this, conClassName + ".enable_reports", // HashMap-Key
                                                                   "Show Reports", // Titel
+                                                                  "false", // InitValue
+                                                                  "false", // DefaultValue
+                                                                  false // isMandatory
+                                                          );
+    @JSOptionDefinition(name = "enable_jade", description = "", key = "enable_jade", type = "SOSOptionBoolean", mandatory = false)
+    public SOSOptionBoolean    enableJade                  = new SOSOptionBoolean(this, conClassName + ".enable_jade", // HashMap-Key
+                                                                  "Show Jade Tab", // Titel
                                                                   "false", // InitValue
                                                                   "false", // DefaultValue
                                                                   false // isMandatory
@@ -158,6 +178,11 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
                                                                   "false", // DefaultValue
                                                                   false // isMandatory
                                                           );
+
+    public SOSOptionBoolean getEnableJade() {
+        return enableJade;
+    }
+    
 
     public SOSOptionBoolean getEnableReports() {
         return enableReports;
@@ -191,8 +216,13 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
         enableJobStart = enableJobStart_;
     }
 
+    public void setSessionId(final SOSOptionString sessionId_) {
+        sessionId = sessionId_;
+    }
     
-    
+    public SOSOptionString getSessionId() {
+        return this.sessionId;
+    }    
     public SOSOptionString getSecurityServer() {
         return this.securityServer;
     }

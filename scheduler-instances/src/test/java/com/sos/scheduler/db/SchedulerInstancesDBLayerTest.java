@@ -19,6 +19,11 @@ import org.junit.Test;
 
 
 
+
+
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
+
 import sos.spooler.Spooler;
 
 /**
@@ -55,8 +60,7 @@ public class SchedulerInstancesDBLayerTest {
     @SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerInstancesDBLayerTest";
     private SchedulerInstancesDBLayer schedulerInstancesDBLayer;
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
-    private File configurationFile;
+     private File configurationFile;
 
 	public SchedulerInstancesDBLayerTest() {
 		//
@@ -110,7 +114,7 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = new File(configurationFilename);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
         schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
 	}
 

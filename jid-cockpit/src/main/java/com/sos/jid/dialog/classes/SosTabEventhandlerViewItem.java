@@ -56,19 +56,18 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.sos.dialog.components.SOSTableColumn;
+import com.sos.dialog.swtdesigner.SWTResourceManager;
 import com.sos.eventing.eventhandler.SOSActions;
 import com.sos.eventing.eventhandler.SOSEvaluateEvents;
 import com.sos.eventing.eventhandler.SOSEventCommand;
 import com.sos.eventing.eventhandler.SOSEventCommandElement;
 import com.sos.eventing.eventhandler.SOSEventGroups;
 import com.sos.eventing.eventhandler.SchedulerEvent;
-import com.swtdesigner.SWTResourceManager;
 
 import sos.ftp.profiles.FTPProfile;
 import sos.ftp.profiles.FTPProfilePicker;

@@ -17,6 +17,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sos.hibernate.classes.UtcTimeHelper;
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
  
@@ -54,8 +56,6 @@ public class DailyScheduleDBLayerTest {
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "DailySchedulerDBLayerTest";
     private DailyScheduleDBLayer dailySheduleDBLayer;
-//    private String configurationFilename="c:/temp/hibernate_pgsql.cfg.xml";
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
     private File configurationFile;
 
 	
@@ -106,8 +106,8 @@ public class DailyScheduleDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = new File(configurationFilename);
-		dailySheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
+        dailySheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
 	}
 
 	@After

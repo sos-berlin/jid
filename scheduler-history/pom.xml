@@ -140,6 +140,16 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
+        
+        		
+        <dependency>
+            <groupId>com.sos-berlin.commons</groupId>
+            <artifactId>common-resources</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
 
     </dependencies>
 

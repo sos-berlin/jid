@@ -153,6 +153,14 @@
             <scope>compile</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.sos-berlin.commons</groupId>
+            <artifactId>common-resources</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 </project>

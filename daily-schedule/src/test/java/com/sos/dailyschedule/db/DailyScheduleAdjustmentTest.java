@@ -11,6 +11,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sos.dailyschedule.job.CheckDailyScheduleOptions;
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
 
 /**
 * \class DaysScheduleAdjustmentTest 
@@ -44,7 +46,6 @@ public class DailyScheduleAdjustmentTest {
 
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "DaysScheduleAdjustmentTest";
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate.cfg.xml";
     private File configurationFile;
 
 
@@ -62,7 +63,7 @@ public class DailyScheduleAdjustmentTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = new File(configurationFilename);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
 
 	}
 

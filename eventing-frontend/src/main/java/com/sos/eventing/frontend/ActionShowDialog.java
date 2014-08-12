@@ -13,6 +13,13 @@ import org.eclipse.swt.widgets.*;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
+import com.sos.JSHelper.Basics.JSToolBox;
+import com.sos.dashboard.globals.DashBoardConstants;
+import com.sos.dashboard.globals.SOSDashboardOptions;
+
+import com.sos.dialog.swtdesigner.SWTResourceManager;
+
 import sos.ftp.profiles.FTPProfile;
 import sos.ftp.profiles.FTPProfilePicker;
 import sos.scheduler.consoleviews.events.*;

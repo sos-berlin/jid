@@ -13,6 +13,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.sos.dailyschedule.job.CreateDailyScheduleOptions;
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
 
 /**
 * \class Calendar2DBTest 
@@ -48,7 +50,6 @@ public class Calendar2DBTest {
 	private final String	conClassName	= "Calendar2DBTest";
     private CreateDailyScheduleOptions objOptions; 
     
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate.cfg.xml";
     private File configurationFile;
 
 	public Calendar2DBTest() {
@@ -65,7 +66,8 @@ public class Calendar2DBTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = new File(configurationFilename);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
+
         System.out.println(configurationFile.getCanonicalPath());
 		objOptions = new CreateDailyScheduleOptions();
 		objOptions.scheduler_port.value(4210);

@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
+
 /**
 * \class SchedulerHistoryDBLayerTest 
 * 
@@ -63,7 +66,7 @@ public class SchedulerTaskHistoryDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		 configurationFile = new File(configurationFilename);
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
 		 schedulerTaskHistoryDBLayer = new SchedulerTaskHistoryDBLayer(configurationFile); 
 	}
 
