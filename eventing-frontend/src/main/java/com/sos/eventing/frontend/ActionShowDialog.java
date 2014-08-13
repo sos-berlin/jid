@@ -3,7 +3,6 @@ package com.sos.eventing.frontend;
 import com.sos.JSHelper.Basics.JSToolBox;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
-import com.swtdesigner.SWTResourceManager;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
