@@ -95,7 +95,7 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
   		 this.setForeground(black);  //SingleStart
 
 
-		if (schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
+		if (schedulerInstancesDBItem != null && schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
             this.setBackground(0,gray);  
             this.setBackground(STATUS_COLUMN_NUMBER,gray);   
 		}else {

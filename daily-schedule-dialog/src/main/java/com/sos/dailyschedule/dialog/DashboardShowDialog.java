@@ -85,12 +85,11 @@ public class DashboardShowDialog extends FormBase {
     private CTabFolder rightTabFolder = null;
 	private CTabFolder logTabFolder = null;
 	private Composite joeComposite;
-	private Composite eventsComposite;
 	private Composite dashboardComposite;
 
     private SOSTabEVENTS tbtmEvents;
     private SOSTabJOBNET tbtmJobnet;
-    // private SOSTabJade tbtmJade;
+    private SOSTabJade tbtmJade;
 
 	private SOSDashboardTableViewExecuted tableViewExecuted;
     private SOSDashboardTableViewPlanned tableViewPlanned;
@@ -267,9 +266,9 @@ public class DashboardShowDialog extends FormBase {
     }
 
     private void showJade() {
-       // if (objOptions != null && objOptions.getEnableJade().isTrue()) {
-       // tbtmJade = new SOSTabJade(objOptions, TABNAME_SCHEDULER_JADE, mainTabFolder);
-       // }
+        if (objOptions != null && objOptions.getEnableJade().isTrue()) {
+            tbtmJade = new SOSTabJade(objOptions, TABNAME_SCHEDULER_JADE, mainTabFolder);
+         }
     }
 
 	
@@ -451,13 +450,12 @@ public class DashboardShowDialog extends FormBase {
         tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmHistory.setControl(tableViewExecuted.getTableComposite());
  
-        if (currentUser == null || currentUser.isPermitted("sos:products:jid:instances:show")) {
+            
+        if (objOptions != null && objOptions.getEnableSchedulerInstances().isTrue()) {
             CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
             tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES));
             tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());            
         }
-
-        
 		leftTabFolder.setSelection(0);
 		
 		
@@ -633,30 +631,12 @@ public class DashboardShowDialog extends FormBase {
 		executedHistoryDataProvider.setTo(new Date());
  				
 		schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(dataProvider_.getConfigurationFile());
-   
-     
-
-		
+   	
 		haveDb = true;
 
 	}
 
 	 
-	private void showLog(final Table table) {
-		this.showWaitCursor();
-		if (table.getSelectionIndex() >= 0 && table.getSelectionIndex() >= 0) {
-			SosTabLogItem logItem = (SosTabLogItem) logTabFolder.getSelection();
-			if (logItem == null) {
-				logTabFolder.setSelection(0);
-				logItem = (SosTabLogItem) logTabFolder.getSelection();
-			}
-			TableItem t = table.getItem(table.getSelectionIndex());
-			DbItem d = (DbItem) t.getData();
-			logItem.addLog(table, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
-		}
-		this.RestoreCursor();
-	}
-
 	public void setObjOptions(final SOSDashboardOptions objOptions) {
 		this.objOptions = objOptions;
 	}

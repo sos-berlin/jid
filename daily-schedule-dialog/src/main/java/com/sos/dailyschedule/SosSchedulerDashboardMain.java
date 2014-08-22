@@ -190,6 +190,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     objOptions.enableReports.value(currentUser.hasRole("reports") || currentUser.isPermitted("sos:products:jid:reportstab:show"));
                     objOptions.enableJOE.value(currentUser.hasRole("joe") || currentUser.isPermitted("sos:products:jid:joetab:show"));
                     objOptions.enableEvents.value(currentUser.hasRole("events") || currentUser.isPermitted("sos:products:jid:eventtab:show"));
+                    objOptions.enableSchedulerInstances.value(currentUser.isPermitted("sos:products:jid:instances:show"));
                     //objOptions.enableJobnet.value(currentUser.hasRole("jobnet") || currentUser.isPermitted("sos:products:jid:jobnettab:show"));
                     objOptions.enableJobStart.value(currentUser.isPermitted("sos:products:jid:jobstart"));
                 }

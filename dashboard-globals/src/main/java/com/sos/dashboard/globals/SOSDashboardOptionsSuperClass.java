@@ -179,6 +179,14 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
                                                                   false // isMandatory
                                                           );
 
+    @JSOptionDefinition(name = "enable_scheduler_instances", description = "", key = "enable_scheduler_instances", type = "SOSOptionBoolean", mandatory = false)
+    public SOSOptionBoolean    enableSchedulerInstances               = new SOSOptionBoolean(this, conClassName + ".enable_scheduler_instances", // HashMap-Key
+                                                                  "Show Scheduler Instances", // Titel
+                                                                  "false", // InitValue
+                                                                  "false", // DefaultValue
+                                                                  false // isMandatory
+                                                          );
+
     public SOSOptionBoolean getEnableJade() {
         return enableJade;
     }
@@ -202,6 +210,10 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
 
     public SOSOptionBoolean getEnableJobnet() {
         return enableJobnet;
+    }
+
+    public SOSOptionBoolean getEnableSchedulerInstances() {
+        return enableSchedulerInstances;
     }
 
     public void setEnableJOC(final SOSOptionBoolean enableJOC_) {
