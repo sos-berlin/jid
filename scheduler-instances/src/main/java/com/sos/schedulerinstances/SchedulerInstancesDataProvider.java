@@ -91,15 +91,17 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
         Iterator<SchedulerInstancesDBItem> dailyScheduleEntries = listOfSchedulerInstancesDBItems.iterator();
         while (dailyScheduleEntries.hasNext()) {
             DbItem h = dailyScheduleEntries.next();
-            if (schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
-            }
-            else {
-                final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
-                newItemTableItem.setDBItem(h);
-                newItemTableItem.setData(h);
-                newItemTableItem.setColor();
-                newItemTableItem.setColumns();
-            }
+            if (h != null) {
+	            if (schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
+	            }
+	            else {
+	                final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
+	                newItemTableItem.setDBItem(h);
+	                newItemTableItem.setData(h);
+	                newItemTableItem.setColor();
+	                newItemTableItem.setColumns();
+	            }
+	        }
         }
     }
 

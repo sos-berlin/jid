@@ -85,25 +85,26 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	    }
 
 	public void setColor() {
-         org.eclipse.swt.graphics.Color magenta = Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA);
-         org.eclipse.swt.graphics.Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
- 	     org.eclipse.swt.graphics.Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
-		 org.eclipse.swt.graphics.Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		 org.eclipse.swt.graphics.Color gray = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-		 org.eclipse.swt.graphics.Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-		 org.eclipse.swt.graphics.Color yellow = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
-
-  		 this.setForeground(black);  //SingleStart
-
-
-		if (schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
-            this.setBackground(0,gray);  //Ausführung in der Zukunft
-            this.setBackground(STATUS_COLUMN_NUMBER,gray);  //Ausführung in der Zukunft
-		}else {
- 			this.setBackground(white);
-		 
-            }
-		colorSave();  
+	         org.eclipse.swt.graphics.Color magenta = Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA);
+	         org.eclipse.swt.graphics.Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	 	     org.eclipse.swt.graphics.Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
+			 org.eclipse.swt.graphics.Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+			 org.eclipse.swt.graphics.Color gray = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+			 org.eclipse.swt.graphics.Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+			 org.eclipse.swt.graphics.Color yellow = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+	
+	  		 this.setForeground(black);  //SingleStart
+	
+	
+	 		if (schedulerInstancesDBItem != null && schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
+	            this.setBackground(0,gray);  //Ausführung in der Zukunft
+	            this.setBackground(STATUS_COLUMN_NUMBER,gray);  //Ausführung in der Zukunft
+			}else {
+	 			this.setBackground(white);
+			 
+	            }
+			colorSave();  
+	
 	}
 
 	public void setColumns() {
