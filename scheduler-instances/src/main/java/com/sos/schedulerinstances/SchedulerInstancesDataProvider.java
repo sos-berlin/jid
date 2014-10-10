@@ -23,7 +23,7 @@ import com.sos.schedulerinstances.classes.SosSchedulerInstancesTableItem;
 
 /**
  * \class SchedulerInstancesDataProvider
- * 
+ *  
  * \brief SchedulerInstancesDataProvider -
  * 
  * \details
