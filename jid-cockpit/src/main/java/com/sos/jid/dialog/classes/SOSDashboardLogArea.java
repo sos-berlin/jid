@@ -422,7 +422,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
   
       
     public void saveFileAs() throws IOException {
-        FileDialog dlg = new FileDialog(this.getShell());
+        FileDialog dlg = new FileDialog(this.getShell(),SWT.SAVE );
         String filename = dlg.open();
         if (filename != null) {
           File outputFile = new File(filename);
