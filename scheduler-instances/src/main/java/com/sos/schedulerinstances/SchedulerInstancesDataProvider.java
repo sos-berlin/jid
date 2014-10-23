@@ -23,7 +23,7 @@ import com.sos.schedulerinstances.classes.SosSchedulerInstancesTableItem;
 
 /**
  * \class SchedulerInstancesDataProvider
- * 
+ *  
  * \brief SchedulerInstancesDataProvider -
  * 
  * \details
@@ -50,7 +50,7 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     private List<SchedulerInstancesDBItem>   listOfSchedulerInstancesDBItems   = null;
     private SchedulerInstancesDBLayer        schedulerInstancesDBLayer         = null;
     private static Logger                    logger                            = Logger.getLogger(SchedulerInstancesDataProvider.class);
-    private Table                            tableSchedulerInstances           = null;
+    private String                           timeZone                          = "";
 
     public SchedulerInstancesDataProvider(File configurationFile) {
         this.schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
@@ -87,22 +87,21 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
   
 
     public void fillTable(Table table) {
-        this.tableSchedulerInstances = table;
         Iterator<SchedulerInstancesDBItem> dailyScheduleEntries = listOfSchedulerInstancesDBItems.iterator();
         while (dailyScheduleEntries.hasNext()) {
             DbItem h = dailyScheduleEntries.next();
             if (h != null) {
-
-                if (schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
-                }
-                else {
-                    final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
-                    newItemTableItem.setDBItem(h);
-                    newItemTableItem.setData(h);
-                    newItemTableItem.setColor();
-                    newItemTableItem.setColumns();
-                }
-            }
+	            if (schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
+	            }
+	            else {
+	                final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
+	                h.setDateTimeZone4Getters(timeZone);
+	                newItemTableItem.setDBItem(h);
+	                newItemTableItem.setData(h);
+	                newItemTableItem.setColor();
+	                newItemTableItem.setColumns();
+	            }
+	        }
         }
     }
 
@@ -186,6 +185,14 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
 
     @Override
     public void setShowRunning(boolean b) {}
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
      
 

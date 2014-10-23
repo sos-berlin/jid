@@ -128,7 +128,7 @@ public class SchedulerInstancesFilter extends SOSHibernateFilter implements ISOS
 		   return this.getSchedulerId() + ":" + this.getHostname() + String.valueOf(this.getPort());
 	    }
 	}
-
+	
 	public Integer getPort() {
 		return port;
 	}
