@@ -70,12 +70,13 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	}
 
 
-	  private void setImage(int column, Boolean checked) {
+	  private void setImage(int column, boolean checked) {
 	       
 	        
 	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
-	        Image uncheckedImage = ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");	        
-	        if (checked != null && checked) {
+	        Image uncheckedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/thin_close_view.gif");
+	        
+	        if (checked) {
 	            this.setImage(column, checkedImage);
 	        }else {
 	            this.setImage(column, uncheckedImage);
@@ -84,25 +85,25 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	    }
 
 	public void setColor() {
-         org.eclipse.swt.graphics.Color magenta = Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA);
-         org.eclipse.swt.graphics.Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
- 	     org.eclipse.swt.graphics.Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
-		 org.eclipse.swt.graphics.Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
-		 org.eclipse.swt.graphics.Color gray = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
-		 org.eclipse.swt.graphics.Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
-		 org.eclipse.swt.graphics.Color yellow = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
-
-  		 this.setForeground(black);  //SingleStart
-
-
-		if (schedulerInstancesDBItem != null && schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
-            this.setBackground(0,gray);  
-            this.setBackground(STATUS_COLUMN_NUMBER,gray);   
-		}else {
- 			this.setBackground(white);
-		 
-            }
-		colorSave();  
+	         org.eclipse.swt.graphics.Color magenta = Display.getDefault().getSystemColor(SWT.COLOR_DARK_MAGENTA);
+	         org.eclipse.swt.graphics.Color red = Display.getDefault().getSystemColor(SWT.COLOR_RED);
+	 	     org.eclipse.swt.graphics.Color blue = Display.getDefault().getSystemColor(SWT.COLOR_BLUE);
+			 org.eclipse.swt.graphics.Color white = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
+			 org.eclipse.swt.graphics.Color gray = Display.getDefault().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW);
+			 org.eclipse.swt.graphics.Color black = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
+			 org.eclipse.swt.graphics.Color yellow = Display.getDefault().getSystemColor(SWT.COLOR_YELLOW);
+	
+	  		 this.setForeground(black);  //SingleStart
+	
+	 		if (schedulerInstancesDBItem != null && schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
+	            this.setBackground(0,gray);  //Ausführung in der Zukunft
+	            this.setBackground(STATUS_COLUMN_NUMBER,gray);  //Ausführung in der Zukunft
+			}else {
+	 			this.setBackground(white);
+			 
+	            }
+			colorSave();  
+	
 	}
 
 	public void setColumns() {
@@ -113,7 +114,7 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 		textBuffer = new String[] { d.getSchedulerId(),
 		                            d.getHostname(),
 				                    d.getTcpPortValue(),
-				                    d.getUdpPortValue(),
+				                    d.getUdpPortValue(), 
 				                    //d.getStartTimeFormated(),
 				                    //d.getStopTimeFormated(),
 				                    d.getDbName(),

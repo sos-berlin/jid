@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SOSHibernateFilter;
+import com.sos.hibernate.classes.SOSHibernateIntervalFilter;
 import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
 
 /**
@@ -36,7 +37,7 @@ import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
 * Created on 14.12.2011 13:53:37
  */
 
-public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implements com.sos.hibernate.interfaces.ISOSHibernateFilter {
+public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter implements com.sos.hibernate.interfaces.ISOSHibernateFilter {
 
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerHistoryFilter";
@@ -82,8 +83,8 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implemen
 		this.dateFormat = dateFormat;
 	}
 
-	public Date getExecutedFrom() {
-		return executedFrom;
+	public Date getExecutedFromUtc() {
+		return convertFromTimeZoneToUtc(executedFrom);
 	}
 
 	public void setExecutedFrom(String executedFrom) throws ParseException {
@@ -97,8 +98,8 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implemen
 		}
 	}
 
-	public Date getExecutedTo() {
-		return executedTo;
+	public Date getExecutedToUtc() {
+		return convertFromTimeZoneToUtc(executedTo);
 	}
 
 	public void setExecutedTo(String executedTo) throws ParseException {
@@ -178,7 +179,26 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateFilter implemen
     public void setHistoryId(long historyId) {
         this.historyId = historyId;
     }
-	
+
+    @Override
+    public void setIntervalFromDate(Date d) {
+        this.executedFrom = d;
+    }
+
+    @Override
+    public void setIntervalToDate(Date d) {
+        this.executedTo = d;
+    }
+
+    @Override
+    public void setIntervalFromDateIso(String s) {
+        this.executedFromIso = s;
+    }
+
+    @Override
+    public void setIntervalToDateIso(String s) {
+        this.executedToIso = s;
+    }
 	
 
 }

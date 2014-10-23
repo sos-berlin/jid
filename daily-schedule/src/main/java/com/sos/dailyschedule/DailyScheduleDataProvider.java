@@ -55,6 +55,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 	private DailyScheduleDBLayer		dailySchedulerDBLayer		= null;
 	private static Logger				logger						= Logger.getLogger(DailyScheduleDataProvider.class);
 	private Table						tableDailySchedule			= null;
+	private String                      timeZone                    = "";
 
 	public DailyScheduleDataProvider(File configurationFile) {
 		this.dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
@@ -121,6 +122,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 			}
 			else {
 				final SosDailyScheduleTableItem newItemTableItem = new SosDailyScheduleTableItem(table, SWT.BORDER);
+				h.setDateTimeZone4Getters(this.getTimeZone());
 				newItemTableItem.setDBItem(h);
 				newItemTableItem.setData(h);
 				newItemTableItem.setColor();
@@ -214,6 +216,15 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 
 	@Override
 	public void setShowRunning(boolean b) {}
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+        this.getFilter().setTimeZone(timeZone);
+    }
 
      
 

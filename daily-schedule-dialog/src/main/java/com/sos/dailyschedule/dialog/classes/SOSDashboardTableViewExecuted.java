@@ -26,8 +26,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class SOSDashboardTableViewExecuted extends SOSDashboardTableView implements ITableView {
     private final String className="SOSDashboardTableViewExecuted";
-	private static final int	NUMBER_OF_COLUMNS_IN_GRID	= 9;
- 
+  
 	private boolean				ignoreListEnabled			= true;
 
 	public SOSDashboardTableViewExecuted(Composite composite_) {
@@ -391,7 +390,7 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
 
 	public void createTable() {
 		mainViewComposite = new Composite(leftTabFolder, SWT.NONE);
-		GridLayout layout = new GridLayout(NUMBER_OF_COLUMNS_IN_GRID, false);
+		GridLayout layout = new GridLayout(DashBoardConstants.NUMBER_OF_COLUMNS_IN_GRID, false);
 		mainViewComposite.setLayout(layout);
 		sosDashboardHeader = new SosDashboardHeader(mainViewComposite, this);
         sosDashboardHeader.setPrefs(prefs);

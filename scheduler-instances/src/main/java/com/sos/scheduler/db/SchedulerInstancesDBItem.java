@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.*;
 import com.sos.hibernate.classes.DbItem;
-
+ 
 @Entity
 @Table(name="SCHEDULER_INSTANCES")
 public class SchedulerInstancesDBItem extends DbItem {
@@ -43,7 +43,6 @@ public class SchedulerInstancesDBItem extends DbItem {
 	 private String hostName;
      private Integer tcpPort;
 	 private Integer udpPort;
-     private Integer supervisorTcpPort;
      private Integer jettyHttpPort;
      private Integer jettyHttpsPort;
 	 private Date startTime;
@@ -67,7 +66,8 @@ public class SchedulerInstancesDBItem extends DbItem {
      private Boolean isSosCommandWebservice=false;
      private String param;
      
-      private String supervisorHostName;
+     private Integer supervisorTcpPort;
+     private String supervisorHostName;
      
 	 	 
   	 private String dateFormat="yyyy-MM-dd hh:mm";
@@ -138,15 +138,20 @@ public class SchedulerInstancesDBItem extends DbItem {
     }
 
     @Column(name = "`TCP_PORT`", nullable = true)
-    public void setTcpPort(Integer tcpPort) {
-        this.tcpPort = tcpPort;
+	public void setTcpPort(Integer tcpPort) {
+		this.tcpPort = tcpPort;
+	}
+
+	@Column(name = "`TCP_PORT`", nullable = true)
+	public Integer getTcpPort() {
+		return tcpPort;
+	}
+	
+	@Transient
+    public String getTcpPortValue() {
+        return String.valueOf(tcpPort);
     }
 
-    @Column(name = "`TCP_PORT`", nullable = true)
-    public Integer getTcpPort() {
-        return tcpPort;
-    }
-    
     @Column(name = "`SUPERVISOR_TCP_PORT`", nullable = true)
     public void setSupervisorTcpPort(Integer supervisorTcpPort) {
         this.supervisorTcpPort = supervisorTcpPort;
@@ -156,13 +161,6 @@ public class SchedulerInstancesDBItem extends DbItem {
     public Integer getSupervisorTcpPort() {
         return supervisorTcpPort;
     }
-    
-	@Transient
-    public String getTcpPortValue() {
-        return String.valueOf(tcpPort);
-    }
-
-   
     
     @Transient
     public String getSupervisorTcpPortValue() {
@@ -201,14 +199,18 @@ public class SchedulerInstancesDBItem extends DbItem {
     }
     
     
-    @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = false)
+    @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
     public void setIsSosCommandWebservice(Boolean isSosCommandWebservice) {
         this.isSosCommandWebservice = isSosCommandWebservice;
     }
 
-    @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = false)
+    @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
     public Boolean getIsSosCommandWebservice() {
-        return isSosCommandWebservice;
+    	if (isSosCommandWebservice == null){
+    		return false;
+    	}else{
+           return isSosCommandWebservice;
+    	}
     }
     
 	
@@ -399,55 +401,75 @@ public class SchedulerInstancesDBItem extends DbItem {
 		}
 
 	    
-	    @Column(name = "`IS_SERVICE`", nullable = false)
-		public void setIsService(Boolean isService ) {
+	    @Column(name = "`IS_SERVICE`", nullable = true)
+		public void setIsService(Boolean isService ) { 
 			this.isService = isService;
 		}
-
-	    @Column(name = "`IS_SERVICE`", nullable = false)
+  
+	    @Column(name = "`IS_SERVICE`", nullable = true)
 		public Boolean getIsService() {
-			return isService;
+	    	if (isService == null){
+	    		return false;
+	    	}else{
+			    return isService;
+	    	}
 		}
 	    
 	    
-	    @Column(name = "`IS_RUNNING`", nullable = false)
+	    @Column(name = "`IS_RUNNING`", nullable = true)
 		public void setIsRunning(Boolean isRunning ) {
 			this.isRunning = isRunning;
 		}
 
-	    @Column(name = "`IS_RUNNING`", nullable = false)
+	    @Column(name = "`IS_RUNNING`", nullable = true)
 		public Boolean getIsRunning() {
-			return isRunning;
+	    	if (isRunning == null){
+	    		return false;
+	    	}else{
+		        return isRunning;
+	    	}
 		}	    
 	    
-	    @Column(name = "`IS_PAUSED`", nullable = false)
+	    @Column(name = "`IS_PAUSED`", nullable = true)
 		public void setIsPaused(Boolean isPaused ) {
 			this.isPaused = isPaused;
 		}
 
-	    @Column(name = "`IS_PAUSED`", nullable = false)
+	    @Column(name = "`IS_PAUSED`", nullable = true)
 		public Boolean getIsPaused() {
-	        return (isPaused != null) && isPaused;
+	    	if (isPaused == null){
+	    	   return false;
+ 	        }else{
+               return isPaused;
+ 	        }
 		}	    
 	    
-	    @Column(name = "`IS_CLUSTER`", nullable = false)
+	    @Column(name = "`IS_CLUSTER`", nullable = true)
 		public void setIsCluster(Boolean isCluster ) {
 			this.isCluster = isCluster;
 		}
 
-	    @Column(name = "`IS_CLUSTER`", nullable = false)
+	    @Column(name = "`IS_CLUSTER`", nullable = true)
 		public Boolean getIsCluster() {
-			return isCluster;
+	    	if (isCluster == null){
+	    		return false;
+	    	}else{
+			   return isCluster;
+	    	}
 		}	    
 
-	    @Column(name = "`IS_AGENT`", nullable = false)
+	    @Column(name = "`IS_AGENT`", nullable = true)
 		public void setIsAgent(Boolean isAgent ) {
 			this.isAgent = isAgent;
 		}
 
-	    @Column(name = "`IS_AGENT`", nullable = false)
+	    @Column(name = "`IS_AGENT`", nullable = true)
 		public Boolean getIsAgent() {
-			return isAgent;
+	    	if (isAgent == null){
+	    		return false;
+	    	}else{
+			   return isAgent;
+	    	}
 		}	    
 	    
 	    @Column(name = "`PARAM`", nullable = true)

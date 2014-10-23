@@ -72,12 +72,12 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer{
 		String where = "";
 		String and = "";
  	
-		if (filter.getExecutedFrom() != null ) {
+		if (filter.getExecutedFromUtc() != null ) {
 			where += and + " startTime>= :startTimeFrom";
 			and = " and ";
 		}
 
-		if (filter.getExecutedTo() != null ) {
+		if (filter.getExecutedToUtc() != null ) {
 			where += and + " startTime <= :startTimeTo ";
 			and = " and ";
 		}
@@ -128,8 +128,8 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer{
 		String hql = "delete from SchedulerOrderStepHistoryDBItem " + getWhereFromTo();
 
 		Query query = session.createQuery(hql);
-		query.setTimestamp("startTimeFrom", filter.getExecutedFrom());
-		query.setTimestamp("startTimeTo", filter.getExecutedTo());
+		query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
+		query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
 
 		int row = query.executeUpdate();
 
@@ -150,11 +150,11 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer{
 
  		Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
 
-		if (filter.getExecutedFrom() != null && !filter.getExecutedFrom().equals("")) {
-			query.setTimestamp("startTimeFrom", filter.getExecutedFrom());
+		if (filter.getExecutedFromUtc() != null && !filter.getExecutedFromUtc().equals("")) {
+			query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
 		}
-		if (filter.getExecutedTo() != null && !filter.getExecutedTo().equals("")) {
-			query.setTimestamp("startTimeTo", filter.getExecutedTo());
+		if (filter.getExecutedToUtc() != null && !filter.getExecutedToUtc().equals("")) {
+			query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
 		}
 
 		if (limit > 0) {

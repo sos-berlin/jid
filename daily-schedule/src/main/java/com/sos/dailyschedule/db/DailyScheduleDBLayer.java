@@ -154,11 +154,11 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 
 		Query query = session.createQuery("from DailyScheduleDBItem " + getWhere()	+ filter.getOrderCriteria() + filter.getSortMode());
 
-		if (filter.getPlannedUtcFrom() != null && !filter.getPlannedUtcFrom().equals("")) {
-			query.setTimestamp("schedulePlannedFrom", filter.getPlannedUtcFrom());
+		if (filter.getPlannedFrom() != null && !filter.getPlannedFrom().equals("")) {
+			query.setTimestamp("schedulePlannedFrom", filter.getPlannedFrom());  
 		}
-		if (filter.getPlannedUtcTo() != null && !filter.getPlannedUtcTo().equals("")) {
-			query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
+		if (filter.getPlannedTo() != null && !filter.getPlannedTo().equals("")) {
+			query.setTimestamp("schedulePlannedTo", filter.getPlannedTo());
 		}
 		if (filter.getSchedulerId() != null	&& !filter.getSchedulerId().equals("")) {
 			query.setParameter("schedulerId", filter.getSchedulerId());

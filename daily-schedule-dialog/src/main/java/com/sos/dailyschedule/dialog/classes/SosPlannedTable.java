@@ -51,7 +51,7 @@ public class SosPlannedTable extends SOSTable implements ISOSTable {
 
     @Override
 	public void createTable() {
-		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 9, 2));
+		this.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, DashBoardConstants.NUMBER_OF_COLUMNS_IN_GRID, 2));
 		this.setSortDirection(SWT.UP);
 		this.setLinesVisible(true);
 		this.setHeaderVisible(true);

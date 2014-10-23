@@ -59,6 +59,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 	private SchedulerOrderHistoryDBLayer		schedulerOrderHistoryDBLayer		= null;
 	private static Logger						logger								= Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
 	private ArrayList							ignoreList							= null;
+	private String                              timeZone;
 
 	public SchedulerOrderHistoryDataProvider(final File configurationFile) {
 		schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
@@ -133,6 +134,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 				}
 				else {
 					final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
+					h.setDateTimeZone4Getters(timeZone);
 					newItemTableItem.setDBItem(h);
 
 					logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
@@ -155,7 +157,9 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 				if (schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
 				}
 				else {
-					final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
+     				final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
+	                h.setDateTimeZone4Getters(timeZone);
+
 					newItemTableItem.setDBItem(h);
 
 					logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
@@ -190,6 +194,11 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 	public void commit() {
 		schedulerOrderHistoryDBLayer.commit();
 	}
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+        this.getFilter().setTimeZone(timeZone);
+    }
 
 
 

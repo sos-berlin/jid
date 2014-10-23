@@ -2,12 +2,16 @@ package com.sos.jid.dialog.classes;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 
 import com.sos.JSHelper.Basics.JSToolBox;
 
@@ -22,11 +26,13 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
+import org.joda.time.DateTimeZone;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.dialog.interfaces.ITableView;
 import com.sos.hibernate.classes.SOSSearchFilterData;
+import com.sos.hibernate.classes.UtcTimeHelper;
 
 /**
 * \class SosDashboardHeader 
@@ -66,7 +72,8 @@ public class SosDashboardHeader extends JSToolBox {
 	public Timer				inputTimer;
 	private DateTime			fromDate		= null;
 	private DateTime			toDate			= null;
-	private CCombo				cbSchedulerId	= null;
+    private CCombo              cbSchedulerId   = null;
+    private CCombo              cbTimeZone   = null;
 	private ITableView			main			= null;
 	private Text				searchField		= null;
 	private int					refresh			= 0;
@@ -174,17 +181,18 @@ public class SosDashboardHeader extends JSToolBox {
 		refreshButton.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Refresh));
 		refreshInterval = new Text(parent, SWT.RIGHT | SWT.BORDER);
 		refresh = getIntValue(refreshInterval.getText(), 60);
-		final GridData gd_refreshInterval = new GridData(35, SWT.DEFAULT);
-		gd_refreshInterval.minimumWidth = 50;
-		refreshInterval.setLayoutData(gd_refreshInterval);
+		final GridData gdRefreshInterval = new GridData(35, SWT.DEFAULT);
+		gdRefreshInterval.minimumWidth = 50;
+		refreshInterval.setLayoutData(gdRefreshInterval);
 		lbSchedulerID = new Label(parent, SWT.NONE);
 		lbSchedulerID.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID));
 		
 		cbSchedulerId = new CCombo(parent, SWT.BORDER);
-		GridData gd_combo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_combo.widthHint = 120;
-		gd_combo.minimumWidth = 120;
-		cbSchedulerId.setLayoutData(gd_combo);
+		GridData gdCombo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gdCombo.widthHint = 120;
+		gdCombo.minimumWidth = 120;
+		cbSchedulerId.setLayoutData(gdCombo);
+		
 		lblVon = new Label(parent, SWT.NONE);
 		lblVon.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblVon.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM));
@@ -194,12 +202,33 @@ public class SosDashboardHeader extends JSToolBox {
 		lblBis.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TO));
 		toDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
 		 
+
+        cbTimeZone = new CCombo(parent, SWT.BORDER);
+        GridData gdTimeZone = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
+        gdTimeZone.widthHint = 100;
+        gdTimeZone.minimumWidth = 100;
+        cbTimeZone.setLayoutData(gdTimeZone);
+        fillTimeZones();
+        
 		searchField = new Text(parent, SWT.BORDER);
 		searchField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		searchField.setVisible(true);
 		 
 	}
 
+    public String getTimeZone() {
+        String t = cbTimeZone.getText();
+        if (t.trim().length() == 0){
+            t = UtcTimeHelper.localTimeZoneString();
+        }
+        return t;
+    }
+    
+	private void fillTimeZones() {
+	    Set<String> setOfTimeZones = DateTimeZone.getAvailableIDs();
+	    cbTimeZone.setItems(setOfTimeZones.toArray(new String[setOfTimeZones.size()]));
+	}
+	
 	  private Listener getSearchListener() {
 
 	        return new Listener() {
@@ -344,5 +373,13 @@ public class SosDashboardHeader extends JSToolBox {
 
     public SOSSearchFilterData getSosSearchFilterData() {
         return sosSearchFilterData;
+    }
+
+    public CCombo getCbTimeZone() {
+        return cbTimeZone;
+    }
+
+    public void setRefreshInterval(Text refreshInterval) {
+        this.refreshInterval = refreshInterval;
     }
 }

@@ -1,9 +1,15 @@
 package com.sos.jid.dialog.classes;
 
 import java.io.File;
+import java.util.Date;
 import java.util.prefs.Preferences;
  
 
+
+
+
+
+import javax.persistence.Transient;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -15,6 +21,7 @@ import com.sos.dialog.components.SOSTableColumn.ColumnType;
 import com.sos.dialog.interfaces.ITableView;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SosSortTableItem;
+import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
@@ -28,6 +35,9 @@ import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
  
+
+
+
 
 
 import org.apache.log4j.Logger;
@@ -51,6 +61,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Listener;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
      
@@ -93,12 +105,14 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		if (tableList != null) {
 		    tableList.setRedraw(false);
 			if (tableDataProvider.getFilter() != null && left != null) {
-			    String s = tableDataProvider.getFilter().getTitle();
+				String s = tableDataProvider.getFilter().getTitle();
 			    if (s != null) {
 	                left.setText(s);
 			    }
 			}
 			clearTable(tableList);
+			tableDataProvider.setTimeZone(this.getTimeZone());
+			
 			tableDataProvider.fillTable(tableList);
 			SosSortTableItem sosSortTableItem = null;
 			sosSortTableItem = null;
@@ -120,9 +134,11 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		this.resetCursor();
 	}
 
+	
 	@Override
 	public void createTable() {
 	    if (sosDashboardHeader != null) {
+
     		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
     			public void modifyText(ModifyEvent e) {
     				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
@@ -135,9 +151,11 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     				actualizeList();
     			}
     		});
+    		
+    	
     		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
-    			public void widgetSelected(SelectionEvent e) {
-    				tableDataProvider.setFrom(sosDashboardHeader.getFrom());
+    			public void widgetSelected(SelectionEvent e) {    				
+    			    tableDataProvider.setFrom(sosDashboardHeader.getFrom());
     				actualizeList();
     			}
     		});
@@ -155,6 +173,19 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     sosDashboardHeader.resetInputTimer();
     			}
     		});
+    	 	
+    	 	
+            sosDashboardHeader.getCbTimeZone().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, DateTimeZone.getDefault().toString()));
+            tableDataProvider.setTimeZone(sosDashboardHeader.getCbTimeZone().getText());
+
+
+    	 	sosDashboardHeader.getCbTimeZone().addModifyListener(new ModifyListener() {
+                public void modifyText(ModifyEvent e) {
+                    prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingTIMEZONE, sosDashboardHeader.getCbTimeZone().getText());
+                    tableDataProvider.setTimeZone(sosDashboardHeader.getCbTimeZone().getText());
+                    actualizeList();
+                }
+            });
     		 
     		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
     			public void widgetSelected(final SelectionEvent e) {
@@ -203,6 +234,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             					detailHistoryDataProvider.setJobname(d.getJob());
             					detailHistoryDataProvider.setJobchain(d.getJobChain());
             					detailHistoryDataProvider.setOrderid(d.getOrderId());
+                                detailHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
             					detailHistoryDataProvider.getData(getHistoryLimit());
             					clearTable(tableHistoryDetail);
             					detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
@@ -210,6 +242,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                                     clearTable(tableStepHistory);
             					    schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer.getConfigurationFile(),d.getLogId());
             					    schedulerOrderStepHistoryDataProvider.getData(0);
+            					    schedulerOrderStepHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
             					    schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistory);
             					      
 			                    }
@@ -225,38 +258,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	}
 	
 
-
- /*	private void tableResize() {
-		mainViewComposite.addControlListener(new ControlAdapter() {
-			public void controlResized(ControlEvent e) {
-				Rectangle area = mainViewComposite.getClientArea();
-				Point size = tableList.computeSize(SWT.DEFAULT, SWT.DEFAULT);
-				TableColumn lastColumn = tableList.getColumns()[tableList.getColumnCount() - 1];
-				int colWidth = 0;
-				for (int i = 0; i < tableList.getColumns().length; i++) {
-					colWidth = colWidth + tableList.getColumns()[i].getWidth();
-				}
-				colWidth = colWidth - lastColumn.getWidth() - 5;
-				ScrollBar vBar = tableList.getVerticalBar();
-				int width = area.width - tableList.computeTrim(0, 0, 0, 0).width;
-				if (size.y > area.height + tableList.getHeaderHeight()) {
-					Point vBarSize = vBar.getSize();
-					if (vBar.isVisible()) {
-						width -= vBarSize.x;
-					}
-				}
-				Point oldSize = tableList.getSize();
-				if (oldSize.x > area.width) {
-					lastColumn.setWidth(width - colWidth);
-					tableList.setSize(area.width, area.height);
-				} else {
-					tableList.setSize(area.width, area.height);
-					lastColumn.setWidth(width - colWidth);
-				}
-			}
-		});
-	}
-*/
+ 
 	public void setColumnsListener() {
 		TableColumn[] columns = tableList.getColumns();
 		
@@ -455,6 +457,14 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             return  0;
         }
         
+    }
+    
+    private String getTimeZone() {
+        if (sosDashboardHeader != null){
+            return sosDashboardHeader.getTimeZone();
+         }else {
+             return  "";
+         }
     }
 
     public Integer getHistoryLimit() {

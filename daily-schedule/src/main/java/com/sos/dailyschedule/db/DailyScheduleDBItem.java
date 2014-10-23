@@ -42,8 +42,10 @@ import org.joda.time.DateTime;
 
   
 
+
 import com.sos.dailyschedule.ExecutionState;
 import com.sos.hibernate.classes.DbItem;
+import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 
@@ -500,9 +502,9 @@ public class DailyScheduleDBItem extends DbItem {
 	 
         String toTimeZoneString = TimeZone.getDefault().getID();
 	      
-        Date plannedLocal =  utcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePlannedInUtc);
-        Date executedLocal =  utcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimeExecutedInUtc);
-        Date periodBeginLocal =  utcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePeriodBeginInUtc);
+        Date plannedLocal =  UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePlannedInUtc);
+        Date executedLocal =  UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimeExecutedInUtc);
+        Date periodBeginLocal =  UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePeriodBeginInUtc);
 	    
 		this.executionState.setSchedulePlanned(plannedLocal);
 		this.executionState.setScheduleExecuted(executedLocal);

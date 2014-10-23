@@ -30,6 +30,8 @@ public class DashBoardConstants {
 	public static final int     STATUS_NOT_ASSIGNED                      = 0;
 	public static final int     STATUS_ASSIGNED                          = 1;
 	public static final int     STATUS_NOT_ASSIGNED_SUSPENDED            = 2;
+	public static final int     NUMBER_OF_COLUMNS_IN_GRID   = 10;
+
 
     
     public static final String conSOSJobnet_Jobnet_jobchain_name = "jobnet/creator/jobnet_plan_creator";
@@ -123,6 +125,7 @@ public class DashBoardConstants {
     public static final Integer conSettingLIMITDefault              = 500;
     public static final String  SOS_DASHBOARD_HEADER                = "sosDashboardHeader";
     public static final String  conSettingREFRESH                   = "refresh";
+    public static final String  conSettingTIMEZONE                  = "timezone";
     public static final String  conSettingLIMIT                     = "limit";
 
     public static final String  conSOSDashB_HOSTNAME                   = "SOSDashB_Hostname";

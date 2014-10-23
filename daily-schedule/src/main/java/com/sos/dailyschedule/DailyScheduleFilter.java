@@ -54,6 +54,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 	private boolean			late			= false;
 	private String			status			= "";
 	private String			schedulerId		= "";
+	
 	private SOSSearchFilterData	sosSearchFilterData;
  
 	public DailyScheduleFilter() {
@@ -69,6 +70,16 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 	    }
 	}
 
+	public Date getPlannedFrom() {
+        if (plannedFrom == null) {
+            return null;
+        }else {
+            return convertFromTimeZoneToUtc(plannedFrom);
+        }
+    }
+	
+	
+	
 	public void setPlannedFrom(Date plannedFrom) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
 		String d = formatter.format(plannedFrom);
@@ -141,6 +152,15 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 		    return UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(plannedTo));
 	    }
 	} 
+	
+  
+	public Date getPlannedTo() {
+        if (plannedTo == null) {
+            return null;
+        }else {
+            return convertFromTimeZoneToUtc(plannedTo);
+        }
+    }
 
 	public void setPlannedTo(Date plannedTo) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd 23:59:59");

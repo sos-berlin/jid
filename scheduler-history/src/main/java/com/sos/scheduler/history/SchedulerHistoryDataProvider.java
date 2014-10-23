@@ -61,6 +61,7 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 	private SchedulerTaskHistoryDataProvider schedulerTaskHistoryDataProvider;
     private SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider;
     private SchedulerInstancesDataProvider schedulerInstancesDataProvider;
+    private String timeZone;
     
     public void setJobName(String jobName) {
 		schedulerTaskHistoryDataProvider.getFilter().setJobname(jobName);
@@ -295,6 +296,18 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     public void setSearchField(SOSSearchFilterData s) {
         schedulerOrderHistoryDataProvider.getFilter().setSosSearchFilterData(s);
         schedulerTaskHistoryDataProvider.getFilter().setSosSearchFilterData(s);        
+    }
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+        schedulerTaskHistoryDataProvider.setTimeZone(timeZone);
+        schedulerOrderHistoryDataProvider.setTimeZone(timeZone);
+        schedulerInstancesDataProvider.setTimeZone(timeZone);
+
     }
 
   

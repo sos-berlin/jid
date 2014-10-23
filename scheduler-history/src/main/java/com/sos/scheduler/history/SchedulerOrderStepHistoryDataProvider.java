@@ -55,10 +55,11 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 	@SuppressWarnings("unused")
 	private final String						conClassName						= "SchedulerOrderStepHistoryDataProvider";
 
-    private List<SchedulerOrderStepHistoryDBItem>  listOfSchedulerOrderStepHistoryDBItems    = null;
+    private List<SchedulerOrderStepHistoryDBItem>  listOfSchedulerOrderStepHistoryDBItems   = null;
 	private SchedulerOrderStepHistoryDBLayer	   schedulerOrderStepHistoryDBLayer			= null;
- 	private static Logger						   logger								= Logger.getLogger(SchedulerOrderStepHistoryDataProvider.class);
+ 	private static Logger						   logger								    = Logger.getLogger(SchedulerOrderStepHistoryDataProvider.class);
     private long historyId;
+    private String timeZone                                                                 = "";
 	
     
     public SchedulerOrderStepHistoryDataProvider(File configurationFile,long historyId_) {
@@ -122,6 +123,7 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 				}
 				else {
 					final SchedulerOrderStepHistoryTableItem newItemTableItem = new SchedulerOrderStepHistoryTableItem(table, SWT.BORDER);
+					h.setDateTimeZone4Getters(timeZone);
 					newItemTableItem.setDBItem(h);
 
 					logger.debug("...creating tableItem: " + h.getTitle() + ":" + table.getItemCount());
@@ -135,10 +137,21 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 		}
 	}
 
-	@Override
-	public void commit() {
-	    schedulerOrderStepHistoryDBLayer.commit();		
-	}
+ 
+
+    public String getTimeZone() {
+        return timeZone;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    @Override
+    public void fillSchedulerIds(CCombo cbSchedulerId) {
+        // TODO Auto-generated method stub
+        
+    }
 
     @Override
     public void setSchedulerId(String schedulerId) {
@@ -237,16 +250,15 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
     }
 
     @Override
+    public void commit() {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
     public Session getSession() {
         // TODO Auto-generated method stub
         return null;
-    }
-
-
-    @Override
-    public void fillSchedulerIds(CCombo cbSchedulerId) {
-        // TODO Auto-generated method stub
-        
     }
 
      

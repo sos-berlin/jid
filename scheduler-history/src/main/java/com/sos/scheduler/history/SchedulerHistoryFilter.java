@@ -123,7 +123,8 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
             return null;
         }
         else {
-            return UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(executedFrom));
+            return convertFromTimeZoneToUtc(executedFrom);
+
         }
 
     }
@@ -144,7 +145,7 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
             return null;
         }
         else {
-            return UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(executedTo));
+            return convertFromTimeZoneToUtc(executedTo);
         }
 
     }

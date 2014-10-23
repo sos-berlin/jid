@@ -234,18 +234,21 @@ public class SchedulerOrderHistoryDBItem extends  SchedulerHistoryLogDBItem {
 		    return endTimeIso;
 		}
 	}
-	 @Override
+	 
+    @Override
 	@Transient
 	    public String getStartTimeFormated(){
 	        return getDateFormatted(this.getStartTime());
 	 	}
-	 @Override
+	
+    @Override
 	@Transient
 	    public String getEndTimeFormated(){
 	        return getDateFormatted(this.getEndTime());
 	 	}
 
-	 @Override
+	
+    @Override
 	@Transient
 	    public String getDurationFormated(){
 		 return this.getDateDiff(this.getStartTime(),this.getEndTime());
