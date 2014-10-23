@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.*;
 import com.sos.hibernate.classes.DbItem;
-
+ 
 @Entity
 @Table(name="SCHEDULER_INSTANCES")
 public class SchedulerInstancesDBItem extends DbItem {
@@ -206,7 +206,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 
     @Column(name = "`IS_SOS_COMMAND_WEBSERVICE`", nullable = true)
     public Boolean getIsSosCommandWebservice() {
-        return isSosCommandWebservice;
+    	if (isSosCommandWebservice == null){
+    		return false;
+    	}else{
+           return isSosCommandWebservice;
+    	}
     }
     
 	
@@ -398,13 +402,17 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    
 	    @Column(name = "`IS_SERVICE`", nullable = true)
-		public void setIsService(Boolean isService ) {
+		public void setIsService(Boolean isService ) { 
 			this.isService = isService;
 		}
-
+  
 	    @Column(name = "`IS_SERVICE`", nullable = true)
 		public Boolean getIsService() {
-			return isService;
+	    	if (isService == null){
+	    		return false;
+	    	}else{
+			    return isService;
+	    	}
 		}
 	    
 	    
@@ -415,7 +423,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    @Column(name = "`IS_RUNNING`", nullable = true)
 		public Boolean getIsRunning() {
-			return isRunning;
+	    	if (isRunning == null){
+	    		return false;
+	    	}else{
+		        return isRunning;
+	    	}
 		}	    
 	    
 	    @Column(name = "`IS_PAUSED`", nullable = true)
@@ -425,7 +437,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    @Column(name = "`IS_PAUSED`", nullable = true)
 		public Boolean getIsPaused() {
-			return isPaused;
+	    	if (isPaused == null){
+	    	   return false;
+ 	        }else{
+               return isPaused;
+ 	        }
 		}	    
 	    
 	    @Column(name = "`IS_CLUSTER`", nullable = true)
@@ -435,7 +451,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    @Column(name = "`IS_CLUSTER`", nullable = true)
 		public Boolean getIsCluster() {
-			return isCluster;
+	    	if (isCluster == null){
+	    		return false;
+	    	}else{
+			   return isCluster;
+	    	}
 		}	    
 
 	    @Column(name = "`IS_AGENT`", nullable = true)
@@ -445,7 +465,11 @@ public class SchedulerInstancesDBItem extends DbItem {
 
 	    @Column(name = "`IS_AGENT`", nullable = true)
 		public Boolean getIsAgent() {
-			return isAgent;
+	    	if (isAgent == null){
+	    		return false;
+	    	}else{
+			   return isAgent;
+	    	}
 		}	    
 	    
 	    @Column(name = "`PARAM`", nullable = true)

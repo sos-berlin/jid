@@ -70,7 +70,7 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	}
 
 
-	  private void setImage(int column, Boolean checked) {
+	  private void setImage(int column, boolean checked) {
 	       
 	        
 	        Image checkedImage =  ResourceManager.getImageFromResource("/sos/scheduler/editor/icons/config.gif");
@@ -95,7 +95,6 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 	
 	  		 this.setForeground(black);  //SingleStart
 	
-	
 	 		if (schedulerInstancesDBItem != null && schedulerInstancesDBItem.getIsPaused() ) {  //Keine Ausführung
 	            this.setBackground(0,gray);  //Ausführung in der Zukunft
 	            this.setBackground(STATUS_COLUMN_NUMBER,gray);  //Ausführung in der Zukunft
@@ -115,7 +114,7 @@ public class SosSchedulerInstancesTableItem extends SOSTableItem implements ISOS
 		textBuffer = new String[] { d.getSchedulerId(),
 		                            d.getHostname(),
 				                    d.getTcpPortValue(),
-				                    d.getUdpPortValue(),
+				                    d.getUdpPortValue(), 
 				                    //d.getStartTimeFormated(),
 				                    //d.getStopTimeFormated(),
 				                    d.getDbName(),
