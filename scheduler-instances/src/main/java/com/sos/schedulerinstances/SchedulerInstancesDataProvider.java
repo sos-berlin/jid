@@ -28,7 +28,7 @@ import com.sos.schedulerinstances.classes.SosSchedulerInstancesTableItem;
  * 
  * \details
  * 
- * 
+ *  
  * \code 
  *      .... code goes here ... 
  * \endcode
