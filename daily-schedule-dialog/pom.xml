@@ -67,6 +67,7 @@
             <groupId>com.sos-berlin.products.jobnet</groupId>
             <artifactId>jobnet-frontend</artifactId>
             <version>${project.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
