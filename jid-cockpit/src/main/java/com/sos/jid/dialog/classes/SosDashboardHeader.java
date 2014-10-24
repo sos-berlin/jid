@@ -74,7 +74,7 @@ public class SosDashboardHeader extends JSToolBox {
 	private DateTime			toDate			= null;
     private CCombo              cbSchedulerId   = null;
     private CCombo              cbTimeZone   = null;
-	private ITableView			main			= null;
+ 	private ITableView			main			= null;
 	private Text				searchField		= null;
 	private int					refresh			= 0;
  	private Composite			parent;
@@ -201,7 +201,8 @@ public class SosDashboardHeader extends JSToolBox {
 		lblBis.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblBis.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TO));
 		toDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
-		 
+	 
+		
 
         cbTimeZone = new CCombo(parent, SWT.BORDER);
         GridData gdTimeZone = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
