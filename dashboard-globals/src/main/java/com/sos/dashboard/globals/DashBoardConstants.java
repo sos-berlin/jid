@@ -116,6 +116,7 @@ public class DashBoardConstants {
     public final static String  conSOSDashB_SelectFont              = "SOSDashB_SelectFont";
     public final static String  conSOSDashB_Filter                  = "SOSDashB_Filter";
     public final static String  conSOSDashB_Search                  = "SOSDashB_Search";
+    public final static String  conSOSDashB_TimeZone                = "SOSDashB_TimeZone";
     public final static String  conSOSDashB_SaveAsFile              = "SOSDashB_SaveAsFile";
     public final static String  conSOSDashB_Print                   = "SOSDashB_Print";
     public final static String  conSOSDashB_Export_To_Excel         = "SOSDashB_ExportToExcel";
