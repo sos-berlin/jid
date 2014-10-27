@@ -68,7 +68,7 @@ public class DashboardShowDialog extends FormBase {
 	private Shell dashboardShell = null;
 	private Display display;
 	private Preferences prefs;
-	private Label lbShowTime;
+    private Label lbShowTime;
     private Timer showTimer;
 
     
@@ -516,6 +516,9 @@ public class DashboardShowDialog extends FormBase {
 		});
 		logTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 		SosTabLogItem tbtmLog = new SosTabLogItem(conTabLOG, logTabFolder, Messages);
+
+        
+
 		lbShowTime = new Label(dashboardShell, SWT.NONE);
  		lbShowTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
  		lbShowTime.setText("                    ");
