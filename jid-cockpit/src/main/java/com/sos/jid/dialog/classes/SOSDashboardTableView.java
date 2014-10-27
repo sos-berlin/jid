@@ -107,12 +107,11 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			if (tableDataProvider.getFilter() != null && left != null) {
 				String s = tableDataProvider.getFilter().getTitle();
 			    if (s != null) {
-	                left.setText(s);
+	                left.setText(String.format("Timezone: %s: %s",tableDataProvider.getTimeZone(),s));;
 			    }
 			}
 			clearTable(tableList);
-			tableDataProvider.setTimeZone(this.getTimeZone());
-			
+ 			
 			tableDataProvider.fillTable(tableList);
 			SosSortTableItem sosSortTableItem = null;
 			sosSortTableItem = null;
@@ -175,18 +174,9 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     		});
     	 	
     	 	
-            sosDashboardHeader.getCbTimeZone().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, DateTimeZone.getDefault().toString()));
-            tableDataProvider.setTimeZone(sosDashboardHeader.getCbTimeZone().getText());
-
-
-    	 	sosDashboardHeader.getCbTimeZone().addModifyListener(new ModifyListener() {
-                public void modifyText(ModifyEvent e) {
-                    prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingTIMEZONE, sosDashboardHeader.getCbTimeZone().getText());
-                    tableDataProvider.setTimeZone(sosDashboardHeader.getCbTimeZone().getText());
-                    actualizeList();
-                }
-            });
-    		 
+            sosDashboardHeader.setTimeZone(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, DateTimeZone.getDefault().toString()));
+            tableDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
+    	
     		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
     			public void widgetSelected(final SelectionEvent e) {
     				getList();
@@ -458,14 +448,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         }
         
     }
-    
-    private String getTimeZone() {
-        if (sosDashboardHeader != null){
-            return sosDashboardHeader.getTimeZone();
-         }else {
-             return  "";
-         }
-    }
+  
+  
 
     public Integer getHistoryLimit() {
         return historyLimit;
@@ -473,5 +457,12 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     public void setHistoryLimit(Integer historyLimit) {
         this.historyLimit = historyLimit;
+    }
+
+
+
+    @Override
+    public ISOSDashboardDataProvider getTableDataProvider() {
+        return this.tableDataProvider;
     }
 }

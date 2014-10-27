@@ -30,6 +30,7 @@ import org.joda.time.DateTimeZone;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.components.SOSSearchFilter;
+import com.sos.dialog.components.SOSTimeZoneSelector;
 import com.sos.dialog.interfaces.ITableView;
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.hibernate.classes.UtcTimeHelper;
@@ -73,7 +74,7 @@ public class SosDashboardHeader extends JSToolBox {
 	private DateTime			fromDate		= null;
 	private DateTime			toDate			= null;
     private CCombo              cbSchedulerId   = null;
-    private CCombo              cbTimeZone   = null;
+    private String              timeZone        = "";
  	private ITableView			main			= null;
 	private Text				searchField		= null;
 	private int					refresh			= 0;
@@ -201,16 +202,7 @@ public class SosDashboardHeader extends JSToolBox {
 		lblBis.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		lblBis.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TO));
 		toDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
-	 
-		
-
-        cbTimeZone = new CCombo(parent, SWT.BORDER);
-        GridData gdTimeZone = new GridData(SWT.LEFT, SWT.FILL, false, false, 1, 1);
-        gdTimeZone.widthHint = 100;
-        gdTimeZone.minimumWidth = 100;
-        cbTimeZone.setLayoutData(gdTimeZone);
-        fillTimeZones();
-        
+	  
 		searchField = new Text(parent, SWT.BORDER);
 		searchField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		searchField.setVisible(true);
@@ -218,41 +210,50 @@ public class SosDashboardHeader extends JSToolBox {
 	}
 
     public String getTimeZone() {
-        String t = cbTimeZone.getText();
-        if (t.trim().length() == 0){
+        String t = this.timeZone;
+        if (t == null || t.trim().length() == 0){
             t = UtcTimeHelper.localTimeZoneString();
         }
         return t;
     }
     
-	private void fillTimeZones() {
-	    Set<String> setOfTimeZones = DateTimeZone.getAvailableIDs();
-	    cbTimeZone.setItems(setOfTimeZones.toArray(new String[setOfTimeZones.size()]));
-	}
+	 
 	
-	  private Listener getSearchListener() {
+	 private Listener getSearchListener() {
 
-	        return new Listener() {
-	            public void handleEvent(Event e) {
-	               SOSSearchFilter sosSearchFilter = new SOSSearchFilter(parent.getShell());
-	               sosSearchFilter.setEnableFilterCheckbox(false);
-	               sosSearchFilterData = sosSearchFilter.execute(EMPTY_STRING);
-	                if (sosSearchFilter.getSosSearchFilterData() != null) {
-	                   if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-	                        try {
-	                            searchField.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
-	                        }
-	                         catch (Exception ee) {
-	                             ee.printStackTrace();
-	                         }
-	                   
-	                } 
-	              }
-	        }
-	        };
-	    }
-	  
-	  
+         return new Listener() {
+             public void handleEvent(Event e) {
+                SOSSearchFilter sosSearchFilter = new SOSSearchFilter(parent.getShell());
+                sosSearchFilter.setEnableFilterCheckbox(false);
+                sosSearchFilterData = sosSearchFilter.execute(EMPTY_STRING);
+                 if (sosSearchFilter.getSosSearchFilterData() != null) {
+                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                         try {
+                             searchField.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
+                         }
+                          catch (Exception ee) {
+                              ee.printStackTrace();
+                          }
+                    
+                 } 
+               }
+         }
+         };
+     }
+   
+	 private Listener getTimeZoneListener() {
+
+         return new Listener() {
+             public void handleEvent(Event e) {
+                SOSTimeZoneSelector sosTimeZoneSelector = new SOSTimeZoneSelector(parent.getShell());
+                setTimeZone(sosTimeZoneSelector.execute(getTimeZone()));
+                prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingTIMEZONE, getTimeZone());
+                main.getTableDataProvider().setTimeZone(getTimeZone());
+                main.actualizeList();
+                } 
+         };
+     }
+   
 	  
 	  
 	public void createMenue() {
@@ -262,6 +263,9 @@ public class SosDashboardHeader extends JSToolBox {
         lblBis.setMenu(contentMenu);
         lbSchedulerID.setMenu(contentMenu);
         lblVon.setMenu(contentMenu);
+        toDate.setMenu(contentMenu);
+        fromDate.setMenu(contentMenu);
+        
         // =============================================================================================
 
         
@@ -269,6 +273,12 @@ public class SosDashboardHeader extends JSToolBox {
         itemSearch.addListener(SWT.Selection, getSearchListener());
         itemSearch.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
        
+        // =============================================================================================
+        MenuItem itemTimeZone = new MenuItem(contentMenu, SWT.PUSH);
+        itemTimeZone.addListener(SWT.Selection, getTimeZoneListener());
+        itemTimeZone.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TimeZone));
+       
+        // =============================================================================================
         SOSMenuLimitItem setLimitItem = new SOSMenuLimitItem(contentMenu, SWT.PUSH,prefs,prefNode);
         setLimitItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -376,11 +386,13 @@ public class SosDashboardHeader extends JSToolBox {
         return sosSearchFilterData;
     }
 
-    public CCombo getCbTimeZone() {
-        return cbTimeZone;
-    }
+   
 
     public void setRefreshInterval(Text refreshInterval) {
         this.refreshInterval = refreshInterval;
+    }
+
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
     }
 }
