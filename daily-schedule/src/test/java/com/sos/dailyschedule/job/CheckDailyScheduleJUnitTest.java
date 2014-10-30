@@ -4,9 +4,13 @@ package com.sos.dailyschedule.job;
 
 import com.sos.JSHelper.Basics.JSToolBox;
 import com.sos.JSHelper.Listener.JSListenerClass;
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
+
 import org.apache.log4j.Logger;
 import org.junit.*;
 
+import java.io.File;
 import java.util.HashMap;
 
 import static org.junit.Assert.assertEquals;
@@ -69,7 +73,9 @@ public class CheckDailyScheduleJUnitTest extends JSToolBox {
 			HashMap pobjHM = new HashMap();
 			pobjHM.put("CheckDailyScheduleOptionsSuperClass.scheduler_id", "");
  			pobjHM.put("dayOffset",-1);
- 			pobjHM.put("configurationFile","R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml");
+ 			File configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);
+// 			pobjHM.put("configurationFile","R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml");
+ 			pobjHM.put("configurationFile", configurationFile.getAbsolutePath());
 
  			CheckDailySchedule objE = new CheckDailySchedule();
  			
