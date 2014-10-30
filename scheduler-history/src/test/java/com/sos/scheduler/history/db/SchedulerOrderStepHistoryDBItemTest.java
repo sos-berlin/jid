@@ -154,7 +154,7 @@ public class SchedulerOrderStepHistoryDBItemTest {
 		assertEquals("testSetStartTime failed: ", "", schedulerOrderStepHistoryDBItem.getStartTimeIso());
 
 		schedulerOrderStepHistoryDBItem.setStartTime(myStartTime);
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String startTimeIso = formatter.format(schedulerOrderStepHistoryDBItem.getStartTime());
 		assertEquals("testReadEndTimeIso failed: ", startTimeIso, schedulerOrderStepHistoryDBItem.getStartTimeIso());
 	}
@@ -166,7 +166,7 @@ public class SchedulerOrderStepHistoryDBItemTest {
 		assertEquals("testSetEndTime failed: ", "", schedulerOrderStepHistoryDBItem.getEndTimeIso());
 
 		schedulerOrderStepHistoryDBItem.setEndTime(myEndTime);
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		String endTimeIso = formatter.format(schedulerOrderStepHistoryDBItem.getEndTime());
 		assertEquals("testReadEndTimeIso failed: ", endTimeIso, schedulerOrderStepHistoryDBItem.getEndTimeIso());	}
 }

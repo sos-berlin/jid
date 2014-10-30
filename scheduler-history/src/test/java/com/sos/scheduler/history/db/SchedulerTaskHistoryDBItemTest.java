@@ -129,7 +129,7 @@ public class SchedulerTaskHistoryDBItemTest {
 	public void testGetStartTimeIso() {
 		  Date myStartTime = new Date();
 	      schedulerHistoryDBItem.setStartTime(myStartTime);
-	      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+	      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		  String startTimeIso = schedulerHistoryDBItem.getStartTimeIso();
  	      String startTime = formatter.format(myStartTime);
 	      assertEquals("testGetStartTimeIso failed: ",startTimeIso,startTime);
@@ -139,7 +139,7 @@ public class SchedulerTaskHistoryDBItemTest {
 	public void testGetEndTimeIso() {
 		  Date myEndTime = new Date();
 	      schedulerHistoryDBItem.setEndTime(myEndTime);
-	      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+	      SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		  String endTimeIso = schedulerHistoryDBItem.getEndTimeIso();
  	      String endTime = formatter.format(myEndTime);
 	      assertEquals("testGetEndTimeIso failed: ",endTimeIso,endTime);
