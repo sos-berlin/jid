@@ -67,7 +67,7 @@ public class SchedulerInstancesDBLayerTest {
 	}
 	
 	   private SchedulerInstancesDBItem getNewSchedulerInstancesDBItem() {
-	        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
+	        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy HH:mm");
 
 	        SchedulerInstancesDBItem schedulerInstancesDBItem = new SchedulerInstancesDBItem();
             schedulerInstancesDBItem.setSchedulerId("mySchedulerId");
@@ -188,7 +188,8 @@ public class SchedulerInstancesDBLayerTest {
         schedulerInstancesDbItem.setSchedulerId(schedulerId);
          
         //Test prepare
-        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
+//        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
+//        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
         schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
         schedulerInstancesDBLayer.getFilter().setHostname(hostname);
         schedulerInstancesDBLayer.getFilter().setPort(port);
@@ -234,7 +235,7 @@ public class SchedulerInstancesDBLayerTest {
 		
 		
 		//Test prepare
-		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
+//		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
 		schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
 		schedulerInstancesDBLayer.getFilter().setHostname(hostname);
 		schedulerInstancesDBLayer.getFilter().setPort(port);
