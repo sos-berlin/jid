@@ -14,6 +14,9 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.sos.resources.SOSResourceFactory;
+import com.sos.resources.SOSTestResource;
+
 /**
 * \class SchedulerHistoryDBLayerTest 
 * 
@@ -47,7 +50,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 	@SuppressWarnings("unused")
 	private final String	conClassName	= "SchedulerHistoryDBLayerTest";
     private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer;
-    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
+//    private final String configurationFilename="R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
     private File configurationFile;
 
     	
@@ -64,8 +67,9 @@ public class SchedulerOrderHistoryDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		 configurationFile = new File(configurationFilename);
-		 schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile); 
+//		 configurationFile = new File(configurationFilename);
+		configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);
+		schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile); 
 	}
 
 	@After
