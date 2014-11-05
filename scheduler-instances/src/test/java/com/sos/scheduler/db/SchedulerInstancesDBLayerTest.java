@@ -114,7 +114,7 @@ public class SchedulerInstancesDBLayerTest {
 
 	@Before
 	public void setUp() throws Exception {
-        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);;
+        configurationFile = SOSResourceFactory.asFile(SOSTestResource.HIBERNATE_CONFIGURATION_ORACLE);
         schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
 	}
 
@@ -189,7 +189,6 @@ public class SchedulerInstancesDBLayerTest {
          
         //Test prepare
 //        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File("R:/nobackup/sos/junit/" + "hibernate_oracle.cfg.xml"));
-//        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
         schedulerInstancesDBLayer.getFilter().setSchedulerId(schedulerId);
         schedulerInstancesDBLayer.getFilter().setHostname(hostname);
         schedulerInstancesDBLayer.getFilter().setPort(port);
