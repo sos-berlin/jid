@@ -16,7 +16,7 @@ import com.sos.dialog.classes.SOSUrl;
 import com.sos.eventing.dialog.classes.SOSTabEVENTS;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.jid.dialog.classes.*;
-import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
+//uncomment to reactive JobNet import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
@@ -88,7 +88,7 @@ public class DashboardShowDialog extends FormBase {
 	private Composite dashboardComposite;
 
     private SOSTabEVENTS tbtmEvents;
-    private SOSTabJOBNET tbtmJobnet;
+    //uncomment to reactive JobNet private SOSTabJOBNET tbtmJobnet;
     private SOSTabJade tbtmJade;
 
 	private SOSDashboardTableViewExecuted tableViewExecuted;
@@ -261,7 +261,7 @@ public class DashboardShowDialog extends FormBase {
 	
     private void showJobnet() {
         if (objOptions != null && objOptions.getEnableJobnet().isTrue()) {
-            tbtmJobnet = new SOSTabJOBNET(objOptions, TABNAME_SCHEDULER_JOBNET, mainTabFolder);
+        	//uncomment to reactive JobNet tbtmJobnet = new SOSTabJOBNET(objOptions, TABNAME_SCHEDULER_JOBNET, mainTabFolder);
         }
     }
 
@@ -319,9 +319,9 @@ public class DashboardShowDialog extends FormBase {
                         }
                     }
                     if (mainTabFolder.getSelection() == null || mainTabFolder.getSelection().getText().equals(TABNAME_SCHEDULER_JOBNET)) {
-                        if (tbtmJobnet != null) {
-                            tbtmJobnet.refresh();
-                        }
+                    	//uncomment to reactive JobNet if (tbtmJobnet != null) {
+                        //uncomment to reactive JobNet  tbtmJobnet.refresh();
+                    	//uncomment to reactive JobNet  }
                     }
                 }
 	           //     event.doit = false;
