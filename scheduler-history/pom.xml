@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,14 +13,7 @@
     <artifactId>scheduler-history</artifactId>
     <name>${project.artifactId}</name>
 
-    <!-- Bewirkt die Kopie in lib_release_unversioned_jar und lib_release_jar -->
-    <properties>
-        <setup.do.not.deploy>false</setup.do.not.deploy>
-        <setup.target.name>com.sos.schedulerhistory</setup.target.name>
-    </properties>
-
     <dependencies>
-        <!-- these are the dependencies for projects already moved to maven  -->
 
         <dependency>
             <groupId>com.sos-berlin.jobscheduler</groupId>
@@ -33,8 +27,8 @@
             <version>${project.version}</version>
         </dependency>
 
-    <dependency>
-		    <groupId>com.sos-berlin.jid</groupId>
+        <dependency>
+            <groupId>com.sos-berlin.jid</groupId>
             <artifactId>scheduler-instances</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -74,7 +68,7 @@
             <artifactId>virtual-file-system</artifactId>
             <version>${project.version}</version>
         </dependency>
-    
+
         <!-- These are the dependencies for third party libraries -->
         <dependency>
             <groupId>log4j</groupId>
@@ -136,8 +130,8 @@
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
         </dependency>
-        
-        		
+
+
         <dependency>
             <groupId>com.sos-berlin.commons</groupId>
             <artifactId>common-resources</artifactId>
@@ -145,19 +139,19 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-				<dependency>
-					<groupId>com.sos-berlin.products-test</groupId>
-					<artifactId>test-resources</artifactId>
-		      <version>${project.version}</version>
-		      <scope>test</scope>
-				</dependency>
+        <dependency>
+            <groupId>com.sos-berlin.products-test</groupId>
+            <artifactId>test-resources</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
-				<dependency>
-					<groupId>com.oracle</groupId>
-					<artifactId>ojdbc6</artifactId>
-					<scope>test</scope>
-				</dependency>
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>
