@@ -3,25 +3,19 @@ package com.sos.dailyschedule.dialog;
 import com.sos.JSHelper.Basics.VersionInfo;
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
-import com.sos.dailyschedule.dialog.classes.SOSBrowserTabFolder;
-import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewExecuted;
-import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewPlanned;
-import com.sos.dailyschedule.dialog.classes.SOSDashboardTableViewSchedulerInstances;
-import com.sos.dailyschedule.dialog.classes.SosHistoryTable;
-import com.sos.dailyschedule.dialog.classes.SosSchedulerOrderStepHistoryTable;
+import com.sos.dailyschedule.dialog.classes.*;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
 import com.sos.dialog.classes.FormBase;
 import com.sos.dialog.classes.SOSUrl;
 import com.sos.eventing.dialog.classes.SOSTabEVENTS;
-import com.sos.hibernate.classes.DbItem;
-import com.sos.jid.dialog.classes.*;
-//uncomment to reactive JobNet import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
+import com.sos.jid.dialog.classes.SOSTabJOE;
+import com.sos.jid.dialog.classes.SOSTabJade;
+import com.sos.jid.dialog.classes.SosTabLogItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
@@ -45,6 +39,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
 
+//uncomment to reactive JobNet import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
+
 /*
  *
  */
@@ -58,7 +54,7 @@ public class DashboardShowDialog extends FormBase {
     private static final String TABNAME_REPORTS = "Reports";
     private static final String TABNAME_SCHEDULER_JOE = "JOE";
 	private static final String TABNAME_SCHEDULER_EVENTS = "Events";
-    private static final String TABNAME_SCHEDULER_JOBNET = "Jobnet";
+    //uncomment to reactive JobNet private static final String TABNAME_SCHEDULER_JOBNET = "Jobnet";
     private static final String TABNAME_SCHEDULER_JADE = "Jade";
 	private static final String conJOB_SCHEDULER_DASHBOARD = "JobScheduler Information Dashboard";
 	private static final String conTabLOG = "Log";
@@ -258,12 +254,12 @@ public class DashboardShowDialog extends FormBase {
 			tbtmEvents = new SOSTabEVENTS(objOptions, TABNAME_SCHEDULER_EVENTS, mainTabFolder);
 		}
 	}
-	
-    private void showJobnet() {
-        if (objOptions != null && objOptions.getEnableJobnet().isTrue()) {
+
+    //uncomment to reactive JobNet private void showJobnet() {
+    //uncomment to reactive JobNet if (objOptions != null && objOptions.getEnableJobnet().isTrue()) {
         	//uncomment to reactive JobNet tbtmJobnet = new SOSTabJOBNET(objOptions, TABNAME_SCHEDULER_JOBNET, mainTabFolder);
-        }
-    }
+    //uncomment to reactive JobNet }
+    //uncomment to reactive JobNet }
 
     private void showJade() {
         if (objOptions != null && objOptions.getEnableJade().isTrue()) {
@@ -279,7 +275,7 @@ public class DashboardShowDialog extends FormBase {
 		showReports();
 		showEvents();
 		showJade();
-		showJobnet();
+        //uncomment to reactive JobNet showJobnet();
 
         showTimer = new Timer();
         showTimer.schedule(new ShowTimeTask(), 1 * 1000, 1 * 1000);
@@ -318,11 +314,11 @@ public class DashboardShowDialog extends FormBase {
                             tableViewExecuted.actualizeList();
                         }
                     }
-                    if (mainTabFolder.getSelection() == null || mainTabFolder.getSelection().getText().equals(TABNAME_SCHEDULER_JOBNET)) {
+                    //uncomment to reactive JobNet if (mainTabFolder.getSelection() == null || mainTabFolder.getSelection().getText().equals(TABNAME_SCHEDULER_JOBNET)) {
                     	//uncomment to reactive JobNet if (tbtmJobnet != null) {
                         //uncomment to reactive JobNet  tbtmJobnet.refresh();
                     	//uncomment to reactive JobNet  }
-                    }
+                    //uncomment to reactive JobNet }
                 }
 	           //     event.doit = false;
 	            }

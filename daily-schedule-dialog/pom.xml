@@ -64,13 +64,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.jobnet</groupId>
-            <artifactId>jobnet-frontend</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>com.sos-berlin.commons</groupId>
             <artifactId>sos-connection</artifactId>
             <version>${project.version}</version>
@@ -151,7 +144,7 @@
         </dependency>
 
         <dependency>
-            <groupId>javassist</groupId>
+            <groupId>org.javassist</groupId>
             <artifactId>javassist</artifactId>
         </dependency>
 
