@@ -12,6 +12,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.sos.resources.SOSResourceFactory;
@@ -82,6 +83,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 	}
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testDeleteString() throws ParseException {
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom("2011-01-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo("2011-10-01 00:00:00");
@@ -93,6 +95,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 	}
  
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testGetSchedulerOrderHistoryList() throws ParseException {
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom("2000-01-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(new Date());
@@ -102,6 +105,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 
  
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testGetOrderHistoryItems() throws Exception {
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom("2001-01-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(new Date());
@@ -111,6 +115,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 	}
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testGetOrderHistoryItem() throws Exception {
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom("2001-01-01 00:00:00");
 		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(new Date());
@@ -124,6 +129,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 
 	
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testSaveOrderHistory() {
 		schedulerOrderHistoryDBLayer.beginTransaction();
 		schedulerOrderHistoryDBLayer.getFilter().setSchedulerId("Hibernate_Spooler");
@@ -156,6 +162,7 @@ public class SchedulerOrderHistoryDBLayerTest {
 
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testDeleteInterval() throws ParseException {
 		schedulerOrderHistoryDBLayer.deleteInterval(30,100);
 		long i= schedulerOrderHistoryDBLayer.deleteInterval(3,100);

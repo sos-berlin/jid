@@ -68,6 +68,7 @@ public class CheckDailyScheduleJUnitTest extends JSToolBox {
 	}
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testExecute() throws Exception {
 
 			HashMap pobjHM = new HashMap();
