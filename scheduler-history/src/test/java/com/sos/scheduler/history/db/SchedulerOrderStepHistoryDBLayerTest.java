@@ -11,6 +11,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -89,6 +90,7 @@ public class SchedulerOrderStepHistoryDBLayerTest {
 
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testGetSchedulerOrderStepHistoryList() throws ParseException {
 		schedulerOrderStepHistoryDBLayer.filter.setExecutedFrom("2000-01-01 00:00:00");
 		schedulerOrderStepHistoryDBLayer.filter.setExecutedTo("2020-01-01 00:00:00");
@@ -99,6 +101,7 @@ public class SchedulerOrderStepHistoryDBLayerTest {
 	 
 
 	@Test
+  @Ignore("Test set to Ignore for later examination")
 	public void testGetOrderStepHistoryItems() throws Exception {
  		schedulerOrderStepHistoryDBLayer.filter.setExecutedFrom("2000-01-01 00:00:00");
 		schedulerOrderStepHistoryDBLayer.filter.setExecutedTo(new Date());
