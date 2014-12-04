@@ -131,7 +131,6 @@
             <artifactId>dom4j</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>com.sos-berlin.commons</groupId>
             <artifactId>common-resources</artifactId>
@@ -139,19 +138,19 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
+
         <dependency>
-            <groupId>com.sos-berlin.products-test</groupId>
+            <groupId>com.sos-berlin.sos-internal-test</groupId>
             <artifactId>test-resources</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
-
 
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>ojdbc6</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
 </project>

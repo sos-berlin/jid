@@ -91,9 +91,8 @@
         </dependency>
 
         <dependency>
-            <groupId>com.sos-berlin.products-test</groupId>
+            <groupId>com.sos-berlin.sos-internal-test</groupId>
             <artifactId>test-resources</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
 
