@@ -128,21 +128,25 @@ public class SosSchedulerDashboardMain extends I18NBase {
     
    private boolean getNextSecurityServer() {
        boolean enabled = false;
-       Iterator <SchedulerInstancesDBItem> schedulerInstancesIterator = schedulerInstances.iterator();
-       while (!enabled && schedulerInstancesIterator.hasNext()) {
-           SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstancesIterator.next();
-           String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
-           try {
-               enabled = schedulerInstancesDBItem.getIsSosCommandWebservice();
-               if (enabled) {
-                   schedulerInstancesDBItem.setIsSosCommandWebservice(false);
-                   objOptions.securityServer.Value(webServicAddress);
+       if (schedulerInstances == null) {
+           return false;
+       }else {
+           Iterator <SchedulerInstancesDBItem> schedulerInstancesIterator = schedulerInstances.iterator();
+           while (!enabled && schedulerInstancesIterator.hasNext()) {
+               SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstancesIterator.next();
+               String webServicAddress = String.format("http://%s:%s",schedulerInstancesDBItem.getHostname(),schedulerInstancesDBItem.getJettyHttpPort());
+               try {
+                   enabled = schedulerInstancesDBItem.getIsSosCommandWebservice();
+                   if (enabled) {
+                       schedulerInstancesDBItem.setIsSosCommandWebservice(false);
+                       objOptions.securityServer.Value(webServicAddress);
+                   }
+               }catch (Exception e) {
+                   enabled = true;
                }
-           }catch (Exception e) {
-               enabled = true;
-           }
-       }      
-       return enabled;     
+           }      
+           return enabled;
+       }
 
    }
     
@@ -166,24 +170,36 @@ public class SosSchedulerDashboardMain extends I18NBase {
             objOptions = new SOSDashboardOptions();
             objOptions.CommandLineArgs(pstrArgs);
             
-            boolean securityEnabled = getSecurityEnabled();
+            boolean securityEnabled = true;
+            try {
+              securityEnabled = getSecurityEnabled();
+            
+            
                   
             
-            if (securityEnabled) {
-                isAuthenticated = doLogin() &&  (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE)) ;
-               
-//              objOptions.enableJobnet.value(currentUser.hasRole("jobnet") ||  currentUser.isPermitted("sos:products:dashboard:jobnet"));
-            }else {
-                isAuthenticated = true;
-                if (pstrArgs.length > 0) {
-                    logger.debug("pstrArgs = " + pstrArgs[0].toString());
-                    logger.debug("user-dir = " + System.getProperty("user.dir"));
-                    objOptions.CommandLineArgs(pstrArgs);
+                if (securityEnabled) {
+                    isAuthenticated = doLogin() &&  (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE)) ;
+                   
+    //              objOptions.enableJobnet.value(currentUser.hasRole("jobnet") ||  currentUser.isPermitted("sos:products:dashboard:jobnet"));
+                }else {
+                    isAuthenticated = true;
+                    if (pstrArgs.length > 0) {
+                        logger.debug("pstrArgs = " + pstrArgs[0].toString());
+                        logger.debug("user-dir = " + System.getProperty("user.dir"));
+                        objOptions.CommandLineArgs(pstrArgs);
+                    }
                 }
+    
+              
+            }catch (Exception e) {
+                e.printStackTrace();
+                MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
+                messageBox.setMessage(Messages.getLabel(DashBoardConstants.conSOSDashB_CouldNotConnect) + "\nMessage: " + e.getMessage());
+                int rc = messageBox.open();
+                isAuthenticated = false;
+                objOptions.enableJobnet.value(false);
             }
-
-          
-
+            
             if (isAuthenticated) {
                 if (currentUser != null) {
                     objOptions.enableJOC.value(currentUser.hasRole("joc") || currentUser.isPermitted("sos:products:jid:joctab:show"));
