@@ -11,6 +11,12 @@
     <packaging>pom</packaging>
     <name>${project.artifactId}</name>
 
+    <scm>
+        <connection>scm:git:git@github.com:sos-berlin/jid.git</connection>
+        <developerConnection>scm:git:git@github.com:sos-berlin/jid.git</developerConnection>
+        <url>https://github.com/sos-berlin/jid</url>
+    </scm>
+
     <modules>
         <module>jid-cockpit</module>
         <module>dashboard-globals</module>
