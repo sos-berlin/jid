@@ -85,7 +85,7 @@ public class DashboardShowDialog extends FormBase {
 
     private SOSTabEVENTS tbtmEvents;
     //uncomment to reactive JobNet private SOSTabJOBNET tbtmJobnet;
-    private SOSTabJade tbtmJade;
+    // private SOSTabJade tbtmJade;
 
 	private SOSDashboardTableViewExecuted tableViewExecuted;
     private SOSDashboardTableViewPlanned tableViewPlanned;
@@ -262,9 +262,9 @@ public class DashboardShowDialog extends FormBase {
     //uncomment to reactive JobNet }
 
     private void showJade() {
-        if (objOptions != null && objOptions.getEnableJade().isTrue()) {
-            tbtmJade = new SOSTabJade(objOptions, TABNAME_SCHEDULER_JADE, mainTabFolder);
-         }
+    	//uncomment to reactive Jade    if (objOptions != null && objOptions.getEnableJade().isTrue()) {
+    	//uncomment to reactive Jade     tbtmJade = new SOSTabJade(objOptions, TABNAME_SCHEDULER_JADE, mainTabFolder);
+    	//uncomment to reactive Jade         }
     }
 
 	
