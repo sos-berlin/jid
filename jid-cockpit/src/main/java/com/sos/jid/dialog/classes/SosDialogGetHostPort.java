@@ -30,6 +30,7 @@ public class SosDialogGetHostPort {
     private String        hostValue;
     private String        urlValue;
     private int           portValue;
+    private String titleValue; 
     private Text edTitle;
 
   public SosDialogGetHostPort(Shell parentShell) {
@@ -98,6 +99,7 @@ public class SosDialogGetHostPort {
       public void widgetSelected(SelectionEvent e) {
                 urlValue = edUrl.getText();
                 hostValue = edHost.getText();
+                titleValue = edTitle.getText();
         protocolValue = cbProtocol.getItem(cbProtocol.getSelectionIndex());
         try {
           portValue = edPort.getIntegerValue(conDefaultPort);
@@ -121,6 +123,9 @@ public class SosDialogGetHostPort {
     btnCancel.addSelectionListener(new SelectionAdapter() {
             @Override
             public void widgetSelected(SelectionEvent e) {
+                urlValue = edUrl.getText();
+                hostValue = edHost.getText();
+                titleValue = edTitle.getText();
                 dialogShell.dispose();
             }
         });
@@ -172,7 +177,7 @@ public class SosDialogGetHostPort {
   }
 
   public String getTitle() {
-       return edTitle.getText();
+	return titleValue;
   }
 
   
