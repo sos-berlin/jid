@@ -1,6 +1,7 @@
 package com.sos.dailyschedule;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.joda.time.DateTime;
@@ -12,6 +13,7 @@ import com.sos.hibernate.classes.SOSHibernateIntervalFilter;
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.hibernate.interfaces.ISOSHibernateFilter;
+import com.sos.scheduler.history.classes.SOSIgnoreList;
 
 /**
 * \class DailyScheduleFilter 
@@ -54,12 +56,19 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 	private boolean			late			= false;
 	private String			status			= "";
 	private String			schedulerId		= "";
-	
+	private SOSIgnoreList   ignoreList		= null;
+
 	private SOSSearchFilterData	sosSearchFilterData;
  
 	public DailyScheduleFilter() {
 		super(DashBoardConstants.conPropertiesFileName);
         sosSearchFilterData = new SOSSearchFilterData();
+		ignoreList = new SOSIgnoreList();
+
+	}
+
+	public SOSIgnoreList getIgnoreList() {
+		return ignoreList;
 	}
 
 	public Date getPlannedUtcFrom() {
@@ -209,7 +218,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 		boolean show = this.isShowJobChains() && this.isShowJobs() ||
 		               this.isShowJobChains() && h.getJobChain() != null ||
 		               this.isShowJobs() && h.getJob() != null;
-		return (!show ||
+		return  (!show || this.getIgnoreList().contains(h) ||
                 this.isLate() && !h.getExecutionState().isLate()  || 
                 !this.getStatus().equals("") && !this.getStatus().equalsIgnoreCase(h.getExecutionState().getExecutionState()) || 
                 this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield()  != null && 
@@ -264,7 +273,12 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 	@Override
 	public String getTitle() {
 		
-	     
+		String ignoreCount = "";
+        int ignoreJobCount = getIgnoreList().size();
+        if (ignoreJobCount > 0 || ignoreJobCount > 0) {
+        	ignoreCount = String.format("%1s Entries ignored", ignoreJobCount);
+        }
+        
 		String s = "";
 		if (schedulerId != null && !schedulerId.equals("")) {
 			   s += String.format("Id: %s ",schedulerId);
@@ -278,13 +292,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 		if (plannedTo != null) {
 			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_TO) + ": %s ", date2Iso(plannedTo));
 		}
-	/*	if (executedFrom != null) {
-			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM) + ": %s ", date2Iso(executedFrom));
-		}
-		if (executedTo != null) {
-			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_TO) + ": %s ", date2Iso(executedTo));
-		}
-		*/
+	 
 		if (showJobs) {
 			s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBS));
 		}
@@ -295,7 +303,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 			s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_LATE));
 		}
 		
-		String title = String.format("%1s %2s %3s", s, status, getSosSearchFilterData().getSearchfield());
+		String title = String.format("%1s %2s %3s %3s", s, status, getSosSearchFilterData().getSearchfield(), ignoreCount);
 		return title;
 		 
 	}

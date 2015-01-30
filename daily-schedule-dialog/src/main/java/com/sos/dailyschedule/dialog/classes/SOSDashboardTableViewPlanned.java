@@ -3,6 +3,7 @@ package com.sos.dailyschedule.dialog.classes;
 import java.util.Date;
  
 
+
 import com.sos.scheduler.model.objects.Spooler;
 import com.sos.dailyschedule.db.DailyScheduleDBItem;
 import com.sos.dashboard.globals.DashBoardConstants;
@@ -182,8 +183,13 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
             }
         });
         
-        new MenuItem(contentMenu, SWT.SEPARATOR);
         
+		// =============================================================================================
+        new MenuItem(contentMenu, SWT.SEPARATOR);
+    	Menu ignoreSubmenu = new SOSHandleIgnoreSubmenuPlanned (contentMenu, this, Messages, prefs);
+ 		new MenuItem(contentMenu, SWT.SEPARATOR);
+        // =============================================================================================
+
         
         // =============================================================================================
         

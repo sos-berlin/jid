@@ -40,7 +40,7 @@ public class SOSDialogHandleIgnoreList {
     private static final String LIST_DEFAULT_IGNORE_ORDERS = "listDefaultIgnoreOrders";
     private static final String LIST_DEFAULT_IGNORE_JOBS = "listDefaultIgnoreJobs";
     private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
-    private static final String SOS_DASHBOARD_EXECUTED = "sosDashboardExecuted";
+    
 
     
     final int               conDefaultPort  = 4444;
@@ -53,10 +53,12 @@ public class SOSDialogHandleIgnoreList {
     public Timer            inputTimer;
     private Display         display         = null;
     Preferences prefs;
+    String context;
     Composite parent;
     
-	public SOSDialogHandleIgnoreList(Shell parentShell,Preferences prefs_) {
+	public SOSDialogHandleIgnoreList(Shell parentShell,Preferences prefs_, String context_) {
 	    this.prefs = prefs_;
+		context = context_;
 		execute(parentShell);
 	}
 
@@ -135,8 +137,8 @@ public class SOSDialogHandleIgnoreList {
 		btSaveDefault.addSelectionListener(new SelectionAdapter() {
 		    @Override
 		    public void widgetSelected(SelectionEvent e) {
-                prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_DEFAULT_IGNORE_JOBS, getIgnoreFromList(LIST_IGNORE_JOBS));
-                prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_DEFAULT_IGNORE_ORDERS, getIgnoreFromList(LIST_IGNORE_ORDERS));
+                prefs.node(context).put(LIST_DEFAULT_IGNORE_JOBS, getIgnoreFromList(LIST_IGNORE_JOBS));
+                prefs.node(context).put(LIST_DEFAULT_IGNORE_ORDERS, getIgnoreFromList(LIST_IGNORE_ORDERS));
 		    }
 		});
 		btSaveDefault.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -166,18 +168,18 @@ public class SOSDialogHandleIgnoreList {
 	}
 	
 	private void addStringToListWithSource(String l, String source) {
-        String listOfIgnores = prefs.node(SOS_DASHBOARD_EXECUTED).get(l, "");
-        String[] arrayOfIgnores = listOfIgnores.split(",");    
-        for (int i=0;i<arrayOfIgnores.length;i++) {
-            if (!arrayOfIgnores[i].trim().equals("")){
-                final TableItem newItemTableItem = new TableItem(ignoreTable, SWT.BORDER);
-                String [] textBuffer = new String[] { arrayOfIgnores[i]};
-                newItemTableItem.setText(textBuffer);
-                newItemTableItem.setChecked(true);
-                newItemTableItem.setData(source);
-            }
-        }
-	    
+ 	        String listOfIgnores = prefs.node(context).get(l, "");
+	        String[] arrayOfIgnores = listOfIgnores.split(",");    
+	        for (int i=0;i<arrayOfIgnores.length;i++) {
+	            if (!arrayOfIgnores[i].trim().equals("")){
+	                final TableItem newItemTableItem = new TableItem(ignoreTable, SWT.BORDER);
+	                String [] textBuffer = new String[] { arrayOfIgnores[i]};
+	                newItemTableItem.setText(textBuffer);
+	                newItemTableItem.setChecked(true);
+	                newItemTableItem.setData(source);
+	            }
+	        }
+     
 	}
     private void addStringToList(String l) {
         addStringToListWithSource(l,l);
@@ -261,8 +263,8 @@ public class SOSDialogHandleIgnoreList {
             btnOk.addSelectionListener(new SelectionAdapter() {
             	@Override
             	public void widgetSelected(SelectionEvent e) {
-                    prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_IGNORE_JOBS, getIgnoreFromList(LIST_IGNORE_JOBS));
-                    prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_IGNORE_ORDERS,  getIgnoreFromList(LIST_IGNORE_ORDERS));
+                    prefs.node(context).put(LIST_IGNORE_JOBS, getIgnoreFromList(LIST_IGNORE_JOBS));
+                    prefs.node(context).put(LIST_IGNORE_ORDERS,  getIgnoreFromList(LIST_IGNORE_ORDERS));
             		dialogShell.dispose();
             	}
             });
