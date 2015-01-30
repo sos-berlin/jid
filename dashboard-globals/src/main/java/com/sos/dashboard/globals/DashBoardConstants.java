@@ -59,7 +59,7 @@ public class DashBoardConstants {
     public static final String  conSOSDashB_addIgnore               = "SOSDashB_AddIgnore";               // "Add to ignore";
     public static final String  conSOSDashB_handleIgnore            = "SOSDashB_HandleIgnore";               // "Add to ignore";
     public static final String  conSOSDashB_setLimit                = "SOSDashB_SetLimit";                // "set limit";
- 	public static final String	conSOSDashB_addIgnoreJobChainOrder	= "SOSDashB_AddIgnoreJobChainOrder";  // "Add to ignore JobChain and Order";
+ 	public static final String	conSOSDashB_addIgnoreJobChainOrder	= "SOSDashB_AddIgnoreJobChainOrder";  // "Add to ignore JobChain without Order";
  	public static final String  conSOSDashB_show_with_error         = "SOSDashB_only_with_error";         // "Show with error";
  	public static final String  conSOSDashB_show_running            = "SOSDashB_only_running";            // "Show running";
  	public static final String  conSOSDashB_show_successfull        = "SOSDashB_only_successfull";        // "Show successfull";
