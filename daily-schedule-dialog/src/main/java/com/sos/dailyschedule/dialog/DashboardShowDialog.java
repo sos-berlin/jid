@@ -528,8 +528,6 @@ public class DashboardShowDialog extends FormBase {
 
 		if (haveDb) {
 			executedHistoryDataProvider.setIgnoreList(prefs);
-			dailyScheduleDataProvider.setIgnoreList(prefs);
-
 		}
 		dashboardShell = new Shell();
 		dashboardShell.setLayout(new GridLayout());

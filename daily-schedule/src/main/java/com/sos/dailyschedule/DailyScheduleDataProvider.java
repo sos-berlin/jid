@@ -3,7 +3,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 
 import org.apache.log4j.Logger;
@@ -23,8 +22,6 @@ import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
 import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.scheduler.history.SchedulerOrderHistoryDataProvider;
 import com.sos.scheduler.history.SchedulerTaskHistoryDataProvider;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 /**
@@ -59,11 +56,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 	private static Logger				logger						= Logger.getLogger(DailyScheduleDataProvider.class);
 	private Table						tableDailySchedule			= null;
 	private String                      timeZone                    = "";
-	private static final String SOS_DASHBOARD_PLANNED = "sosDashboardPlanned";
-    private static final String LIST_IGNORE_JOBS = "listIgnoreJobs";
-	private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
 
- 	
 	public DailyScheduleDataProvider(File configurationFile) {
 		this.dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
 	}
@@ -194,65 +187,18 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 	public void setShowJobChains(boolean b) {
 		this.getFilter().setShowJobChains(b);
 	}
-	
-	public void disableIgnoreList(Preferences prefs){
-        this.getFilter().getIgnoreList().reset();
-	}
 
 	@Override
-	public void addToIgnorelist(Preferences prefs,DbItem h){
-		
-		if (h.isStandalone()){
-			String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
-			if (!listOfJobs.contains(h.getJobName())) {
-    			listOfJobs = listOfJobs + "," + h.getJobName();
-    			prefs.node(SOS_DASHBOARD_PLANNED).put(LIST_IGNORE_JOBS, listOfJobs);
-			}
-		}else{
-			String listOfOrders = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_ORDERS, "");
-			if (!listOfOrders.contains(h.getIdentifier())) {
-    			listOfOrders = listOfOrders + "," + h.getIdentifier();
-    			prefs.node(SOS_DASHBOARD_PLANNED).put(LIST_IGNORE_ORDERS, listOfOrders);
-			}
-		}
-        this.getFilter().getIgnoreList().add(h);
-	}
+	public void setIgnoreList(Preferences prefs) {}
 
 	@Override
-	public void resetIgnoreList(Preferences prefs){
-		prefs.node(SOS_DASHBOARD_PLANNED).put(LIST_IGNORE_JOBS, "");
-        this.getFilter().getIgnoreList().reset();
-		}
-	
-	    
-	public void setIgnoreList(Preferences prefs) {
-		String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
-		String listOfOrders = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_ORDERS, "");
-		
-		StringTokenizer st = new StringTokenizer(listOfJobs,",");
-		while (st.hasMoreTokens()){
-			String jobname = st.nextToken();
-			DailyScheduleDBItem h = new DailyScheduleDBItem();
-			h.setJob(jobname);
-	        this.getFilter().getIgnoreList().add(h);
-		}
-		
-		st = new StringTokenizer(listOfOrders,",");
-		while (st.hasMoreTokens()){
-			String order = st.nextToken();
-			
-			File f = new File(order);
-			String jobChain = f.getParent();
-			jobChain = jobChain.replaceAll("\\\\", "/");
-			String orderId = f.getName();
-			
-			DailyScheduleDBItem h = new DailyScheduleDBItem();
-			h.setJobChain(jobChain);
-			h.setOrderId(orderId);
-	        this.getFilter().getIgnoreList().add(h);
-		}
-		 
-	}
+	public void addToIgnorelist(Preferences prefs, DbItem h) {}
+
+	@Override
+	public void disableIgnoreList(Preferences prefs) {}
+
+	@Override
+	public void resetIgnoreList(Preferences prefs) {}
 
 	@Override
 	public void setLate(boolean b) {
@@ -279,7 +225,6 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
         this.timeZone = timeZone;
         this.getFilter().setTimeZone(timeZone);
     }
-
 
      
 

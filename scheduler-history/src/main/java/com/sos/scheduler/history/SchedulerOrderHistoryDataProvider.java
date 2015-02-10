@@ -58,10 +58,12 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 	//    private List<SchedulerOrderHistoryDBItem>   listOfSchedulerOrderHistoryDBSchedulersItems  = null;
 	private SchedulerOrderHistoryDBLayer		schedulerOrderHistoryDBLayer		= null;
 	private static Logger						logger								= Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
+	private ArrayList							ignoreList							= null;
 	private String                              timeZone;
 
 	public SchedulerOrderHistoryDataProvider(final File configurationFile) {
 		schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
+		ignoreList = new ArrayList();
 
 	}
 

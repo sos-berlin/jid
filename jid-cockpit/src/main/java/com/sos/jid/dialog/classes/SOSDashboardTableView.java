@@ -88,7 +88,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	
 	@Override
 	public void getTableData() {
- 		logger.debug("...getTableData");
+		logger.debug("...getTableData");
         this.showWaitCursor();
 		if (tableList != null) {
 
