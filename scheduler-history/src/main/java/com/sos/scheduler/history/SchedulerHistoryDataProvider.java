@@ -279,6 +279,11 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     public Session getSession() {
         return null;
     }
+    
+    public void closeSession(){
+        schedulerTaskHistoryDataProvider.closeSession();
+        schedulerOrderHistoryDataProvider.closeSession();
+    }
 
 	@Override
 	public void setShowWithError(boolean b) {

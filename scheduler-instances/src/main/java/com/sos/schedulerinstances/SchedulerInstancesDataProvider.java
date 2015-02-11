@@ -122,6 +122,10 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     public void update(DbItem dbItem) {
         schedulerInstancesDBLayer.update(dbItem);
     }
+    
+    public void closeSession(){
+        schedulerInstancesDBLayer.closeSession();        
+    }
 
     public Session getSession() {
         return schedulerInstancesDBLayer.getSession();

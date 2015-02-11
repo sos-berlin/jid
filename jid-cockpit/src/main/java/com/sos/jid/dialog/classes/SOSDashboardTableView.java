@@ -421,6 +421,9 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
 	public void setTableDataProvider(ISOSDashboardDataProvider tableDataProvider) {
 		this.tableDataProvider = tableDataProvider;
+		if (sosDashboardHeader != null){
+		   this.tableDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
+		}
 	}
 
 	public SOSTable getTableList() {

@@ -160,6 +160,10 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 		return dailySchedulerDBLayer.getSession();
 	}
 
+	public void closeSession(){
+	    dailySchedulerDBLayer.closeSession();
+	}
+	
 	@Override
 	public void commit() {
 		dailySchedulerDBLayer.commit();

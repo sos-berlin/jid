@@ -3,6 +3,8 @@ package com.sos.dailyschedule.dialog;
 import com.sos.JSHelper.Basics.VersionInfo;
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.dailyschedule.DailyScheduleDataProvider;
+import com.sos.dailyschedule.classes.SOSDatabaseConfigurationFileMatcher;
+import com.sos.dailyschedule.classes.SOSDatabaseConfigurationFileMatcherEntry;
 import com.sos.dailyschedule.dialog.classes.*;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -16,7 +18,9 @@ import com.sos.scheduler.db.SchedulerInstancesDBItem;
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
@@ -30,9 +34,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.*;
 
+import java.io.File;
 import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
@@ -66,6 +72,7 @@ public class DashboardShowDialog extends FormBase {
 	private Preferences prefs;
     private Label lbShowTime;
     private Timer showTimer;
+    private String lastDbname="";
 
     
     private SosHistoryTable tableHistoryDetail = null;
@@ -82,7 +89,7 @@ public class DashboardShowDialog extends FormBase {
 	private CTabFolder logTabFolder = null;
 	private Composite joeComposite;
 	private Composite dashboardComposite;
-
+	private CCombo cbDatabaseConnections;
     private SOSTabEVENTS tbtmEvents;
     //uncomment to reactive JobNet private SOSTabJOBNET tbtmJobnet;
     // private SOSTabJade tbtmJade;
@@ -103,6 +110,7 @@ public class DashboardShowDialog extends FormBase {
 	private boolean haveDb;
 	
     private SOSJaxbSubject currentUser=null;
+    SOSDatabaseConfigurationFileMatcher sosDatabaseConfigurationFileMatcher;
 
 
 	  public class ShowTimeTask extends TimerTask {
@@ -331,6 +339,9 @@ public class DashboardShowDialog extends FormBase {
 		final GridLayout gridLayout = new GridLayout();
 		gridLayout.numColumns = 9;
 		parent.setLayout(gridLayout);
+		
+	
+	        
 		dashboardShell.setText(conJOB_SCHEDULER_DASHBOARD + " (" + VersionInfo.VERSION_STRING + ")");
 		dashboardShell.setSize(1000, 550);
 		 
@@ -453,11 +464,66 @@ public class DashboardShowDialog extends FormBase {
             tbtmSchedulerInstances.setControl(tableViewSchedulerInstances.getTableComposite());            
         }
 		leftTabFolder.setSelection(0);
-		
-		
-
+		  
+		showDatabaseSelection();
 	}
 
+
+	private void showDatabaseSelection(){
+	    File f = this.dailyScheduleDataProvider.getConfigurationFile();
+	    
+	    
+	    sosDatabaseConfigurationFileMatcher = new SOSDatabaseConfigurationFileMatcher(f);
+        ArrayList<SOSDatabaseConfigurationFileMatcherEntry> hibernateConfigurationFiles = sosDatabaseConfigurationFileMatcher.scanForHibernateConfigurationFiles();
+
+        if (hibernateConfigurationFiles.size() > 1){
+    	    cbDatabaseConnections = new CCombo(parent, SWT.BORDER);
+    	    
+            for (int i = 0; i < hibernateConfigurationFiles.size(); i++) {
+                SOSDatabaseConfigurationFileMatcherEntry sosDatabaseConfigurationFileMatcherEntry = hibernateConfigurationFiles .get(i);
+                cbDatabaseConnections.add(sosDatabaseConfigurationFileMatcherEntry.getDbName());
+            }
+            
+    	    GridData gdCombo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+    	    gdCombo.widthHint = 120;
+    	    gdCombo.minimumWidth = 120;
+    	    cbDatabaseConnections.setLayoutData(gdCombo);
+    	    
+    	    cbDatabaseConnections.addSelectionListener(new SelectionAdapter() {
+                public void widgetSelected(SelectionEvent event) {
+                    try{
+                        String dbName = cbDatabaseConnections.getText();
+                        switchDatabaseConnection(dbName);
+                        lastDbname = dbName;
+                    }catch (Exception e){
+                        
+                        MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION |SWT.OK);
+                        
+                        messageBox.setMessage(e.getMessage());
+                        messageBox.open();
+                        switchDatabaseConnection(lastDbname);
+                        cbDatabaseConnections.setText(lastDbname);
+                    }
+                }
+            });
+        }
+	}
+	
+	private void switchDatabaseConnection(String dbName){
+	    if (dbName.equals("")){
+	        dbName = "default";
+	    }
+	    File hibernateConfigurationFile = sosDatabaseConfigurationFileMatcher.getFile(dbName);
+        DailyScheduleDataProvider sav = dailyScheduleDataProvider;  
+        DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(hibernateConfigurationFile);
+        setDataProvider(dataProvider);
+        tableViewPlanned.setTableDataProvider(dailyScheduleDataProvider);
+        tableViewSchedulerInstances.setTableDataProvider(schedulerInstancesDataProvider);
+        tableViewExecuted.setTableDataProvider(executedHistoryDataProvider);
+        tableViewPlanned.actualizeList();
+        tableViewExecuted.actualizeList();
+	}
+	
 	private void createRight() {
 	    
 	    final GridLayout gridLayout = new GridLayout();
@@ -620,6 +686,18 @@ public class DashboardShowDialog extends FormBase {
 
 	public void setDataProvider(final DailyScheduleDataProvider dataProvider_) {
 		haveDb = false;
+        if (dailyScheduleDataProvider != null){
+            dailyScheduleDataProvider.closeSession();
+         }
+        if (detailHistoryDataProvider != null){
+            detailHistoryDataProvider.closeSession();
+        }
+        if (executedHistoryDataProvider != null){
+            executedHistoryDataProvider.closeSession();
+        }
+        if (schedulerInstancesDataProvider != null){
+            schedulerInstancesDataProvider.closeSession();
+        }
 		schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(dataProvider_.getConfigurationFile());
 		detailHistoryDataProvider = new SchedulerHistoryDataProvider(dataProvider_.getConfigurationFile());
 		dailyScheduleDataProvider = dataProvider_;

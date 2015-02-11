@@ -175,7 +175,9 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
         this.getFilter().setTimeZone(timeZone);
     }
 	
-   
+   public void closeSession(){
+       schedulerTaskHistoryDBLayer.closeSession();
+   }
 	
 	 
 }

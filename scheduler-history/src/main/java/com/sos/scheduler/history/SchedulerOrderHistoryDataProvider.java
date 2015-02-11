@@ -197,6 +197,11 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
         this.timeZone = timeZone;
         this.getFilter().setTimeZone(timeZone);
     }
+    
+    public void closeSession(){
+        schedulerOrderHistoryDBLayer.closeSession();
+    }
+     
 
 
 
