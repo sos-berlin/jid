@@ -95,7 +95,9 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
 	            }
 	            else {
 	                final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
+
 	                h.setDateTimeZone4Getters(timeZone);
+
 	                newItemTableItem.setDBItem(h);
 	                newItemTableItem.setData(h);
 	                newItemTableItem.setColor();

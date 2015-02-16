@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: ur
+Build-Jdk: 1.7.0_15
+Implementation-Title: events
+Implementation-Version: 1.7.4-SNAPSHOT
+Implementation-Vendor-Id: com.sos-berlin.products.jid
+Implementation-Vendor: SOS Software GmbH, Berlin
+Created-By: Maven Integration for Eclipse
+CreatedAt: 
+
