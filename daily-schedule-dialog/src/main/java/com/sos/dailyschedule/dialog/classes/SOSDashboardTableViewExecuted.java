@@ -191,7 +191,7 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
                 if (t.length > 0) {
                     if (t[0].getData().getClass() == SchedulerOrderHistoryDBItem.class){
                     SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t[0].getData();
-                    SOSDialogOrderStepHistory s = new SOSDialogOrderStepHistory(getParentShell(),objOptions,h,logTabFolder,Messages);
+                    SOSDialogOrderStepHistory s = new SOSDialogOrderStepHistory(getParentShell(),objOptions,h,logTabFolder,Messages,tableDataProvider.getTimeZone());
         
                     }
                  }
