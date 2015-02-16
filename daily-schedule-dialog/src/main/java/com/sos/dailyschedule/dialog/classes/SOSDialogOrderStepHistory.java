@@ -31,11 +31,13 @@ public class SOSDialogOrderStepHistory {
     private SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem;
     private CTabFolder logTabFolder = null;
     private Messages messages;
+    private String timeZone; 
    
   
-  public SOSDialogOrderStepHistory(Shell parentShell, SOSDashboardOptions objOptions_, SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem_,CTabFolder logTabFolder_, Messages messages_) {
+  public SOSDialogOrderStepHistory(Shell parentShell, SOSDashboardOptions objOptions_, SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem_,CTabFolder logTabFolder_, Messages messages_, String timeZone_) {
     objOptions = objOptions_;
     messages = messages_;
+    timeZone=timeZone_;
     schedulerOrderHistoryDBItem = schedulerOrderHistoryDBItem_;
     logTabFolder = logTabFolder_;
     execute(parentShell);
@@ -57,12 +59,13 @@ public class SOSDialogOrderStepHistory {
     dialogShell.setLayout(new GridLayout(6, false));
 
     SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()));
-
+    historyDataProvider.setTimeZone(timeZone);
     
     SosSchedulerOrderStepHistoryTable tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(dialogShell, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, messages);    
     tableStepHistoryDetail.setLogTabFolder(logTabFolder);
     tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
     SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()),schedulerOrderHistoryDBItem.getHistoryId());
+    schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
     schedulerOrderStepHistoryDataProvider.getData(0);
     schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
    
