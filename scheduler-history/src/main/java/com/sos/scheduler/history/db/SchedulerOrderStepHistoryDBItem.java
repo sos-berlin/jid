@@ -8,6 +8,9 @@ import java.util.Date;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
+
 import com.sos.hibernate.classes.DbItem;
 
 /**
@@ -60,6 +63,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "`HISTORY_ID`", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
     public SchedulerOrderHistoryDBItem getSchedulerOrderHistoryDBItem() {
         return this.schedulerOrderHistoryDBItem;
     }
@@ -70,6 +74,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "`TASK_ID`", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
     public SchedulerTaskHistoryDBItem getSchedulerTaskHistoryDBItem() {
         return this.schedulerTaskHistoryDBItem;
     }
@@ -205,12 +210,20 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
 
     @Transient
     public String getExecResult() {
-        return String.valueOf(schedulerTaskHistoryDBItem.getExecResult());
+        if (schedulerTaskHistoryDBItem == null){
+            return "";
+        }else{
+            return String.valueOf(schedulerTaskHistoryDBItem.getExecResult());
+        }
     }
 
     @Transient
     public boolean haveError() {
-        return (schedulerTaskHistoryDBItem.haveError());
+        if (schedulerTaskHistoryDBItem == null){
+           return false;
+        }else{
+           return (schedulerTaskHistoryDBItem.haveError());
+        }
     }
 
     @Transient
@@ -227,7 +240,11 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
     @Override
     @Transient
     public String getTitle() {
-        return String.format("%s:%s (%s)",this.getState(),schedulerOrderHistoryDBItem.getJobChain(), schedulerOrderHistoryDBItem.getOrderId()) ;
+        if (schedulerOrderHistoryDBItem == null){
+            return String.format("%s:%s (%s)",this.getState(),"", "") ;
+        }else{
+            return String.format("%s:%s (%s)",this.getState(),schedulerOrderHistoryDBItem.getJobChain(), schedulerOrderHistoryDBItem.getOrderId()) ;
+        }
     }
 
     @Transient
