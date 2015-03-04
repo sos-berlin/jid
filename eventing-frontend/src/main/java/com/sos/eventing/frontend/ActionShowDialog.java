@@ -3,6 +3,7 @@ package com.sos.eventing.frontend;
 import com.sos.JSHelper.Basics.JSToolBox;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.*;
@@ -14,12 +15,13 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
 import com.sos.JSHelper.Basics.JSToolBox;
+import com.sos.VirtualFileSystem.common.SOSFileEntry;
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
-
 import com.sos.dialog.swtdesigner.SWTResourceManager;
 
 import sos.ftp.profiles.FTPProfile;
+import sos.ftp.profiles.FTPProfileJadeClient;
 import sos.ftp.profiles.FTPProfilePicker;
 import sos.scheduler.consoleviews.events.*;
 import sos.settings.SOSProfileSettings;
@@ -381,15 +383,15 @@ public class ActionShowDialog  extends JSToolBox {
 				try {
 					if (cboListOfFiles.getText().startsWith("ftp:")) {
 						FTPProfile profile = ftpProfilePicker.getSelectedFTPProfile();
-						profile.connect();
-
-						configuration_file = File.createTempFile("JobScheduler", ".xml");
-
-						String filename1 = cboListOfFiles.getText().substring(4);
-						String filename2 = configuration_file.getCanonicalPath();
-						filename2 = configuration_file.getAbsolutePath();
-
-						profile.getFile(filename1, filename2);
+						FTPProfileJadeClient fptProfileJadeClient = new FTPProfileJadeClient(profile);
+ 
+						SOSFileEntry sosFileEntry = new SOSFileEntry();
+						sosFileEntry.setDirectory(false);
+						sosFileEntry.setFilename(cboListOfFiles.getText().substring(4));
+						sosFileEntry.setParentPath(profile.getRoot());
+						
+						fptProfileJadeClient.copyRemoteFileToLocal(sosFileEntry);
+						configuration_file = new File(profile.getLocaldirectory(),sosFileEntry.getFilename());
 
 						fillTree();
 						configuration_file.delete();
@@ -440,39 +442,31 @@ public class ActionShowDialog  extends JSToolBox {
 				try {
 
 					FTPProfile profile = ftpProfilePicker.getSelectedFTPProfile();
+					FTPProfileJadeClient ftpProfileJadeClient = new FTPProfileJadeClient(profile); 
 					if (profile != null) {
 						sosLogger.info("user: " + profile.getUser());
 						sosLogger.info("root: " + profile.getRoot());
 
-						sosLogger.info("... connecting");
-						profile.connect();
-						sosLogger.info("... connected");
-
-						msg.setText("successfully connected..");
-
-						Iterator iter = null;
+					 
+						Iterator<String> iter = null;
 						sosLogger.debug6("get list of files");
-						Vector v = profile.getList();
+						Vector<String> v = ftpProfileJadeClient.getList(profile.getRoot());
 
 						iter = v.iterator();
 						cboListOfFiles.removeAll();
 
 						sosLogger.debug6("reading files");
 						while (iter != null && iter.hasNext()) {
-
-							String filename = (String) iter.next();
-							sosLogger.debug6("... reading " + filename);
-							if (filename.toLowerCase().endsWith(".actions.xml")) {
-								String entry = "ftp:" + filename;
+							File file = new File(iter.next());
+							sosLogger.debug6("... reading " + file.getName());
+							if (file.getName().toLowerCase().endsWith(".actions.xml")) {
+								String entry = "ftp:" + file.getName();
 								if (cboListOfFiles.indexOf(entry) < 0)
 									cboListOfFiles.add(entry);
 							}
-
 						}
 					} else {
-
 						getConfigurationFiles();
-
 					}
 
 				} catch (Exception ex) {
