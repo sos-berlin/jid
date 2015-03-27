@@ -189,15 +189,12 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
     }
      
 	
-	public int deleteInterval() {
+	public long deleteInterval() {
 
 		if (session == null) {
 			beginTransaction();
 		}
-		
- 
-		
-		
+		  
 		String hql = "delete from SchedulerTaskHistoryDBItem " + getWhereFromTo();
 
 		Query query = session.createQuery(hql);

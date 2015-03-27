@@ -97,7 +97,7 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 		return row;
 	}
 
-	public int deleteInterval() {
+	public long deleteInterval() {
 
 		if (session == null) {
 			beginTransaction();

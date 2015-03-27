@@ -429,7 +429,7 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
     }
 
     @Override
-    public int deleteInterval() {
+    public long deleteInterval() {
         return delete();
      }
 

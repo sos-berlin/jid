@@ -82,7 +82,7 @@ public class SchedulerTaskHistoryDBLayerTest {
     schedulerTaskHistoryDBLayer.getFilter()
         .setExecutedTo("2011-10-01 00:00:00");
     schedulerTaskHistoryDBLayer.deleteInterval();
-    int i = schedulerTaskHistoryDBLayer.deleteInterval();
+    long i = schedulerTaskHistoryDBLayer.deleteInterval();
     schedulerTaskHistoryDBLayer.commit();
     assertEquals("testDeleteString fails...:", 0, i);
   }
