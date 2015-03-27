@@ -77,8 +77,6 @@ public class Calendar2DB {
 		    dayOffset = options.getdayOffset().value();
             schedulerId = this.getSchedulerId();
 		}
-
-	 
 	}
 	
 	
@@ -220,24 +218,7 @@ public class Calendar2DB {
         dailySchedulerDBLayer.commit();
     }
 
-	/*public void setFrom(String from) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = formatter.parse(from);
-		String froms = formatter.format(d);
-		froms = froms + "T00:00:00";
-		formatter = new SimpleDateFormat(dateFormat);
-		this.from = formatter.parse(froms);
-	}
 	
-	public void setTo(String to) throws ParseException {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Date d = formatter.parse(to);
- 		String tos = formatter.format(d);
-		tos = tos + "T23:59:59";
-		formatter = new SimpleDateFormat(dateFormat);
-		this.to = formatter.parse(tos);
-	}
-	*/
 	private void setFrom() throws ParseException {
 		Date now = new Date();
 		if (dayOffset < 0) {

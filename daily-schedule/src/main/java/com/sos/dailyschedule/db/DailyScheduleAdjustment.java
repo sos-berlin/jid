@@ -133,7 +133,7 @@ public class DailyScheduleAdjustment {
 		dailyScheduleDBLayer.setWhereFrom(from);
 		dailyScheduleDBLayer.setWhereTo(to);
 
-		System.out.println("Optimized version....");
+		//System.out.println("Optimized version....");
 		List <DailyScheduleDBItem> dailyScheduleList = dailyScheduleDBLayer.getWaitingDailyScheduleList(-1);
 	 
 		//read scheduler history

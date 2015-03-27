@@ -212,6 +212,7 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 
 		String q = "delete from SchedulerOrderStepHistoryDBItem e where e.schedulerOrderHistoryDBItem.historyId IN (select historyId from SchedulerOrderHistoryDBItem "
 				+ getWhereFromTo() + ")";
+		
 		Query query = session.createQuery(q);
 		if (filter.getExecutedUtcFrom() != null) {
 			query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
@@ -220,9 +221,7 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 		if (filter.getExecutedUtcTo() != null) {
 			query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
 		}
-        if (filter.getExecutedUtcFrom() != null) {
-		query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-        }
+         
 		int row = query.executeUpdate();
 
 		String hql = "delete from SchedulerOrderHistoryDBItem "	+ getWhereFromTo();
