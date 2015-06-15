@@ -139,7 +139,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- this dependency is needed as long a tests in this artifact located in the main folder, not in test -->
+        <!-- this dependency is needed as long as tests in this artifact located in the main folder, not in test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -151,18 +151,6 @@
             <artifactId>common-resources</artifactId>
             <version>${project.version}</version>
             <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sos-berlin.sos-internal-test</groupId>
-            <artifactId>test-resources</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc6</artifactId>
             <scope>test</scope>
         </dependency>
 
