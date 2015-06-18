@@ -2,16 +2,12 @@ package com.sos.jid.dialog.classes;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
-import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.prefs.Preferences;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 
 import com.sos.JSHelper.Basics.JSToolBox;
 
@@ -26,8 +22,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
-import org.joda.time.DateTimeZone;
-
+ 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.dialog.components.SOSTimeZoneSelector;
