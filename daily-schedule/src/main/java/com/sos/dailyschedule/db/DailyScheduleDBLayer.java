@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.hibernate.Query;
 import org.joda.time.DateTime;
@@ -341,7 +342,8 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 
     @Override
     public List<DbItem> getListOfItemsToDelete() {
-       
+            TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+ 
             
             int limit = this.getFilter().getLimit();
             initSession();
