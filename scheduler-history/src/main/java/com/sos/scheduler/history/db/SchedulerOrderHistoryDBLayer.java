@@ -2,6 +2,7 @@ package com.sos.scheduler.history.db;
 
 import java.io.File;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
 import org.hibernate.ObjectNotFoundException;
@@ -400,7 +401,8 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 
     @Override      
     public List<DbItem> getListOfItemsToDelete() {
-            
+            TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+
             int limit = this.getFilter().getLimit();
             initSession();
             
