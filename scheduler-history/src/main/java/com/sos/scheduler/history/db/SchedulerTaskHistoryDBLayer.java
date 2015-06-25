@@ -3,6 +3,7 @@ package com.sos.scheduler.history.db;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.eclipse.swt.SWT;
 import org.hibernate.Query;
@@ -428,7 +429,8 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
 
     @Override
     public List<DbItem> getListOfItemsToDelete() {
-        
+        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+
         int limit = this.getFilter().getLimit();
         initSession();
         
