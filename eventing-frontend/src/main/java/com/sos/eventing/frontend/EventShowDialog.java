@@ -477,7 +477,8 @@ public class EventShowDialog  extends JSToolBox{
 									+ "<param name=\"created\"                value=\"" + t.getText(6) + "\"/>"
 									+ "<param name=\"expiration_date\"        value=\"" + t.getText(7) + "\"/>"
 									+ "<param name=\"remote_scheduler_host\"  value=\"" + t.getText(8) + "\"/>"
-									+ "<param name=\"remote_scheduler_port\"  value=\"" + t.getText(9) + "\"/>" + " </params></add_order>";
+							 		+ "<param name=\"remote_scheduler_port\"  value=\"" + t.getText(9) + "\"/>"
+						        	+ "<param name=\"scheduler_id\"           value=\"" + t.getText(10) + "\"/>" + " </params></add_order>";
 
 							sendCommand(s);
 						}
