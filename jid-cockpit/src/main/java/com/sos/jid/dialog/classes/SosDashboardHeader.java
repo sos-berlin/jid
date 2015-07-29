@@ -265,9 +265,10 @@ public class SosDashboardHeader extends JSToolBox {
         // =============================================================================================
 
         
-        MenuItem itemSearch = new MenuItem(contentMenu, SWT.PUSH);
+  /*      MenuItem itemSearch = new MenuItem(contentMenu, SWT.PUSH);
         itemSearch.addListener(SWT.Selection, getSearchListener());
         itemSearch.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
+        */
        
         // =============================================================================================
         MenuItem itemTimeZone = new MenuItem(contentMenu, SWT.PUSH);
