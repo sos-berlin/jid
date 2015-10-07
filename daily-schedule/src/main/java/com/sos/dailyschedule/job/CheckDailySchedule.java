@@ -56,7 +56,7 @@ public class CheckDailySchedule extends JSJobUtilitiesClass <CheckDailyScheduleO
 	 *
 	 */
 	@Override
-	public CheckDailyScheduleOptions Options() {
+	public CheckDailyScheduleOptions getOptions() {
 
 		@SuppressWarnings("unused")
 		final String conMethodName = conClassName + "::Options";  //$NON-NLS-1$
@@ -88,8 +88,8 @@ public class CheckDailySchedule extends JSJobUtilitiesClass <CheckDailyScheduleO
 		//logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName ) );
 
 		try {
-			Options().CheckMandatory();
-			logger.debug(Options().dirtyString());
+			getOptions().CheckMandatory();
+			logger.debug(getOptions().dirtyString());
 			DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(new File(objOptions.configuration_file.Value()));
 			dailyScheduleAdjustment.setOptions(objOptions);
 			//It is not neccessary to check into the future.

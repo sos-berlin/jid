@@ -52,7 +52,7 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 	public void setUp() throws Exception {
 		objE = new CreateDailySchedule();
 		objE.registerMessageListener(this);
-		objOptions = objE.Options();
+		objOptions = objE.getOptions();
 		//		objOptions.registerMessageListener(this);
 
 		JSListenerClass.bolLogDebugInformation = true;
@@ -75,7 +75,7 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 			pobjHM.put("configurationFile","R:/nobackup/junittests/hibernate/hibernate.cfg.xml");
 
 
-			objE.Options().setAllOptions(pobjHM);
+			objE.getOptions().setAllOptions(pobjHM);
 			assertEquals("", objOptions.scheduler_port.value(), 4210);
 
 			objE.Execute();

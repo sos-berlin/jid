@@ -75,7 +75,7 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 		final String conMethodName = conClassName + "::doProcessing"; //$NON-NLS-1$
 		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName ) );
 		CheckDailySchedule objR = new CheckDailySchedule();
-		CheckDailyScheduleOptions objO = objR.Options();
+		CheckDailyScheduleOptions objO = objR.getOptions();
 		
 		objO.setAllOptions(getSchedulerParameterAsProperties(getParameters()));
 

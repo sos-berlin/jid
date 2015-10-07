@@ -53,7 +53,7 @@ public class CreateDailySchedule extends JSJobUtilitiesClass <CreateDailySchedul
 	 *
 	 */
 	@Override
-	public CreateDailyScheduleOptions Options() {
+	public CreateDailyScheduleOptions getOptions() {
 
 		@SuppressWarnings("unused")
 		final String conMethodName = conClassName + "::Options"; //$NON-NLS-1$
@@ -84,8 +84,8 @@ public class CreateDailySchedule extends JSJobUtilitiesClass <CreateDailySchedul
 		final String conMethodName = conClassName + "::Execute"; //$NON-NLS-1$
 
 		try {
-			Options().CheckMandatory();
-			logger.debug(Options().dirtyString());
+			getOptions().CheckMandatory();
+			logger.debug(getOptions().dirtyString());
 
 			Calendar2DB calendar2Db = new Calendar2DB(new File(objOptions.getconfiguration_file().Value()));
 			calendar2Db.setOptions(objOptions);
