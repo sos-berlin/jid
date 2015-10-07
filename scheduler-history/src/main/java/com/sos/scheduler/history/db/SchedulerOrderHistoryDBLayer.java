@@ -317,7 +317,9 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 			query.setText("schedulerId", filter.getSchedulerId());
 		}
 
-		query.setMaxResults(filter.getLimit());
+		if (filter.getLimit() > 0){
+		   query.setMaxResults(filter.getLimit());
+		}
 
 		List<SchedulerOrderHistoryDBItem> historyList = query.list();
 		return historyList;

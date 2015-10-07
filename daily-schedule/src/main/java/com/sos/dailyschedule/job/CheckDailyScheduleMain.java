@@ -48,7 +48,7 @@ public class CheckDailyScheduleMain extends JSToolBox {
 
 		try {
 			CheckDailySchedule objM = new CheckDailySchedule();
-			CheckDailyScheduleOptions objO = objM.Options();
+			CheckDailyScheduleOptions objO = objM.getOptions();
 			
 			objO.CommandLineArgs(pstrArgs);
 			objM.Execute();

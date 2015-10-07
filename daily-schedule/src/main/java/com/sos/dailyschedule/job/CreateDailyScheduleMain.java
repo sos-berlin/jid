@@ -43,7 +43,7 @@ public class CreateDailyScheduleMain extends JSToolBox {
 
 		try {
 			CreateDailySchedule objM = new CreateDailySchedule();
-			CreateDailyScheduleOptions objO = objM.Options();
+			CreateDailyScheduleOptions objO = objM.getOptions();
 			
 			objO.CommandLineArgs(pstrArgs);
 			objM.Execute();
