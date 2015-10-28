@@ -1,7 +1,5 @@
 package com.sos.dailyschedule.classes;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.util.ArrayList;
 

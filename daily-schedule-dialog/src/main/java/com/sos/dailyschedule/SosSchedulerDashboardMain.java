@@ -151,7 +151,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
    }
     
     private boolean getSecurityEnabled() {
-        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.JSFile());
+        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.Value());
         schedulerInstancesDBLayer.getFilter().setSosCommandWebservice(true);
         schedulerInstances = schedulerInstancesDBLayer.getSchedulerInstancesList();
         return getNextSecurityServer();
@@ -216,7 +216,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     Composite composite = new Composite(shell, SWT.NONE);
                     objOptions.CheckMandatory();
                     logger.debug(objOptions.toString());
-                    DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.JSFile());
+                    DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.Value());
                     DashboardShowDialog window = new DashboardShowDialog(composite);
 
                     try {

@@ -139,11 +139,10 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- this dependency is needed as long as tests in this artifact located in the main folder, not in test -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>compile</scope>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -152,6 +151,12 @@
             <version>${project.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+			<groupId>com.oracle</groupId>
+			<artifactId>ojdbc6</artifactId>
+			<scope>test</scope>
         </dependency>
 
     </dependencies>

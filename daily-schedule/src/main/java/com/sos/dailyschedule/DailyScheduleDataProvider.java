@@ -20,11 +20,8 @@ import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
 import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
-import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.scheduler.history.SchedulerOrderHistoryDataProvider;
 import com.sos.scheduler.history.SchedulerTaskHistoryDataProvider;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 /**
@@ -51,8 +48,6 @@ import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
  * Created on 19.01.2012 09:31:01
  */
 public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISOSDashboardDataProvider {
-	@SuppressWarnings("unused")
-	private final String				conClassName				= "DailyScheduleDataProvider";
     private List<DailyScheduleDBItem>   listOfDaysScheduleDBItems   = null;
 // private List<DailyScheduleDBItem>   listOfDaysScheduleDBItemsDistinct = null;
 	private DailyScheduleDBLayer		dailySchedulerDBLayer		= null;
@@ -63,9 +58,8 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
     private static final String LIST_IGNORE_JOBS = "listIgnoreJobs";
 	private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
 
- 	
-	public DailyScheduleDataProvider(File configurationFile) {
-		this.dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
+	public DailyScheduleDataProvider(String configurationFilename) {
+		this.dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFilename);
 	}
 
 	public DailyScheduleFilter getFilter() {
@@ -77,15 +71,13 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 	}
 
 	public void getData(int limit) {
-           listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleList(limit);
+        listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleList(limit);
  	}
 
 	public void fillSchedulerIds(CCombo cbSchedulerId) {
-	    
-	    SchedulerInstancesDataProvider schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(this.getConfigurationFile());
+	    SchedulerInstancesDataProvider schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(this.getConfigurationFileName());
 	    schedulerInstancesDataProvider.getData(0);
 	    schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
-	    
 		if (listOfDaysScheduleDBItems != null) {
             //Es ist schneller, die vorhandenen Sätze zu verwenden.
 //	        listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleSchedulerList(0);
@@ -110,8 +102,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 				if (h.getSchedulerHistoryId() != null) {
 					log = schedulerTaskHistoryDataProvider.getLogAsString(h.getSchedulerHistoryId());
 				}
-			}
-			else {
+			} else {
 				if (h.getSchedulerOrderHistoryId() != null) {
 					log = schedulerOrderHistoryDataProvider.getLogAsString(h.getSchedulerOrderHistoryId());
 				}
@@ -126,8 +117,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 		while (dailyScheduleEntries.hasNext()) {
 			DbItem h = dailyScheduleEntries.next();
 			if (dailySchedulerDBLayer.getFilter().isFiltered(h)) {
-			}
-			else {
+			} else {
 				final SosDailyScheduleTableItem newItemTableItem = new SosDailyScheduleTableItem(table, SWT.BORDER);
 				h.setDateTimeZone4Getters(this.getTimeZone());
 				newItemTableItem.setDBItem(h);
@@ -138,35 +128,26 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 		}
 	}
 
-	public File getConfigurationFile() {
-		return dailySchedulerDBLayer.getConfigurationFile();
+	public String getConfigurationFileName() {
+		return dailySchedulerDBLayer.getConfigurationFileName();
 	}
 
 	@Override
+	@Deprecated
 	public void beginTransaction() {
-		dailySchedulerDBLayer.beginTransaction();
-	}
-
-	public void save(DailyScheduleDBItem dbItem) {
-		dailySchedulerDBLayer.save(dbItem);
+//		dailySchedulerDBLayer.beginTransaction();
 	}
 
 	@Override
+	@Deprecated
 	public void update(DbItem dbItem) {
-		dailySchedulerDBLayer.update(dbItem);
+//		dailySchedulerDBLayer.update(dbItem);
 	}
 
-	public Session getSession() {
-		return dailySchedulerDBLayer.getSession();
-	}
-
-	public void closeSession(){
-	    dailySchedulerDBLayer.closeSession();
-	}
-	
 	@Override
+	@Deprecated
 	public void commit() {
-		dailySchedulerDBLayer.commit();
+//		dailySchedulerDBLayer.commit();
 	}
 
 	@Override
@@ -205,7 +186,6 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 
 	@Override
 	public void addToIgnorelist(Preferences prefs,DbItem h){
-		
 		if (h.isStandalone()){
 			String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
 			if (!listOfJobs.contains(h.getJobName())) {
@@ -226,13 +206,11 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 	public void resetIgnoreList(Preferences prefs){
 		prefs.node(SOS_DASHBOARD_PLANNED).put(LIST_IGNORE_JOBS, "");
         this.getFilter().getIgnoreList().reset();
-		}
-	
+	}
 	    
 	public void setIgnoreList(Preferences prefs) {
 		String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
 		String listOfOrders = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_ORDERS, "");
-		
 		StringTokenizer st = new StringTokenizer(listOfJobs,",");
 		while (st.hasMoreTokens()){
 			String jobname = st.nextToken();
@@ -240,22 +218,18 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 			h.setJob(jobname);
 	        this.getFilter().getIgnoreList().add(h);
 		}
-		
 		st = new StringTokenizer(listOfOrders,",");
 		while (st.hasMoreTokens()){
 			String order = st.nextToken();
-			
 			File f = new File(order);
 			String jobChain = f.getParent();
 			jobChain = jobChain.replaceAll("\\\\", "/");
 			String orderId = f.getName();
-			
 			DailyScheduleDBItem h = new DailyScheduleDBItem();
 			h.setJobChain(jobChain);
 			h.setOrderId(orderId);
 	        this.getFilter().getIgnoreList().add(h);
 		}
-		 
 	}
 
 	@Override
@@ -263,17 +237,18 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 		this.getFilter().setLate(b);
 	}
     
-	
 	@Override
 	public void setStatus(String status) {
 		this.getFilter().setStatus(status);
 	}
 
     @Override
-    public void setShowWithError(boolean b) { }
+    public void setShowWithError(boolean b) {
+    }
 
 	@Override
-	public void setShowRunning(boolean b) {}
+	public void setShowRunning(boolean b) {
+	}
 
     public String getTimeZone() {
         return timeZone;
@@ -283,9 +258,14 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
         this.timeZone = timeZone;
         this.getFilter().setTimeZone(timeZone);
     }
+    
+    public DailyScheduleDBLayer getDailyScheduleDBLayer(){
+    	return this.dailySchedulerDBLayer;
+    }
 
-
-     
-
+	@Override
+	public Session getSession() {
+		return null;
+	}
     
 }

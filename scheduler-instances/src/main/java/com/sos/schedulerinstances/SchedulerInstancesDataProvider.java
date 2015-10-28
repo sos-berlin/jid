@@ -52,8 +52,8 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     private static Logger                    logger                            = Logger.getLogger(SchedulerInstancesDataProvider.class);
     private String                           timeZone                          = "";
 
-    public SchedulerInstancesDataProvider(File configurationFile) {
-        this.schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
+    public SchedulerInstancesDataProvider(String configurationFilename) {
+        this.schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFilename);
     }
 
     public SchedulerInstancesFilter getFilter() {
@@ -61,43 +61,35 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     }
 
     public void resetFilter() {
-        schedulerInstancesDBLayer.initFilter();
+    	schedulerInstancesDBLayer.initFilter();
     }
 
     public void getData(int limit) {
-           listOfSchedulerInstancesDBItems = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        listOfSchedulerInstancesDBItems = schedulerInstancesDBLayer.getSchedulerInstancesList();
     }
 
-    public void fillSchedulerIds(CCombo cbSchedulerId) {
-        
-        if (listOfSchedulerInstancesDBItems != null) {
-            //Es ist schneller, die vorhandenen Sätze zu verwenden.
-//          listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleSchedulerList(0);
-            Iterator <SchedulerInstancesDBItem> schedulerInstancesEntries = listOfSchedulerInstancesDBItems.iterator();
-            while (schedulerInstancesEntries.hasNext()) {
-                SchedulerInstancesDBItem h = (SchedulerInstancesDBItem) schedulerInstancesEntries.next();
-                if (cbSchedulerId.indexOf(h.getSchedulerId()) < 0) {
-                    logger.debug("... cbSchedulerId --> : " + h.getSchedulerId());
-                    cbSchedulerId.add(h.getSchedulerId());
-                }
-            }
-        }
-    }
-
-  
+	public void fillSchedulerIds(CCombo cbSchedulerId) {
+		if (listOfSchedulerInstancesDBItems != null) {
+			// Es ist schneller, die vorhandenen Sätze zu verwenden.
+			Iterator<SchedulerInstancesDBItem> schedulerInstancesEntries = listOfSchedulerInstancesDBItems.iterator();
+			while (schedulerInstancesEntries.hasNext()) {
+				SchedulerInstancesDBItem h = (SchedulerInstancesDBItem) schedulerInstancesEntries.next();
+				if (cbSchedulerId.indexOf(h.getSchedulerId()) < 0) {
+					logger.debug("... cbSchedulerId --> : " + h.getSchedulerId());
+					cbSchedulerId.add(h.getSchedulerId());
+				}
+			}
+		}
+	}
 
     public void fillTable(Table table) {
         Iterator<SchedulerInstancesDBItem> dailyScheduleEntries = listOfSchedulerInstancesDBItems.iterator();
         while (dailyScheduleEntries.hasNext()) {
             DbItem h = dailyScheduleEntries.next();
             if (h != null) {
-	            if (schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
-	            }
-	            else {
+	            if (!schedulerInstancesDBLayer.getFilter().isFiltered(h)) {
 	                final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
-
 	                h.setDateTimeZone4Getters(timeZone);
-
 	                newItemTableItem.setDBItem(h);
 	                newItemTableItem.setData(h);
 	                newItemTableItem.setColor();
@@ -107,35 +99,41 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
         }
     }
 
+    @Deprecated
     public File getConfigurationFile() {
-        return schedulerInstancesDBLayer.getConfigurationFile();
+    	return null;
+    }
+
+    public String getConfigurationFilename() {
+        return schedulerInstancesDBLayer.getConfigurationFileName();
     }
 
     @Override
+    @Deprecated
     public void beginTransaction() {
-        schedulerInstancesDBLayer.beginTransaction();
     }
 
+    @Deprecated
     public void save(SchedulerInstancesDBItem dbItem) {
-        schedulerInstancesDBLayer.save(dbItem);
     }
 
     @Override
+    @Deprecated
     public void update(DbItem dbItem) {
-        schedulerInstancesDBLayer.update(dbItem);
     }
     
+    @Deprecated
     public void closeSession(){
-        schedulerInstancesDBLayer.closeSession();        
     }
 
+    @Deprecated
     public Session getSession() {
-        return schedulerInstancesDBLayer.getSession();
+        return null;
     }
 
     @Override
+    @Deprecated
     public void commit() {
-        schedulerInstancesDBLayer.commit();
     }
 
     @Override
@@ -145,52 +143,55 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
 
     @Override
     public void setFrom(Date d) {
-        
     }
 
     @Override
     public void setTo(Date d) {
-     }
+    }
 
     @Override
     public void setSearchField(SOSSearchFilterData s) {
-     //   this.getFilter().setSosSearchFilterData(s);
     }
 
     @Override
     public void setShowJobs(boolean b) {
-     }
+    }
 
     @Override
     public void setShowJobChains(boolean b) {
-     }
+    }
 
     @Override
-    public void setIgnoreList(Preferences prefs) {}
+    public void setIgnoreList(Preferences prefs) {
+    }
 
     @Override
-    public void addToIgnorelist(Preferences prefs, DbItem h) {}
+    public void addToIgnorelist(Preferences prefs, DbItem h) {
+    }
 
     @Override
-    public void disableIgnoreList(Preferences prefs) {}
+    public void disableIgnoreList(Preferences prefs) {
+    }
 
     @Override
-    public void resetIgnoreList(Preferences prefs) {}
+    public void resetIgnoreList(Preferences prefs) {
+    }
 
     @Override
     public void setLate(boolean b) {
-     }
-    
+    }
     
     @Override
     public void setStatus(String status) {
-     }
+    }
 
     @Override
-    public void setShowWithError(boolean b) { }
+    public void setShowWithError(boolean b) {
+    }
 
     @Override
-    public void setShowRunning(boolean b) {}
+    public void setShowRunning(boolean b) {
+    }
 
     public String getTimeZone() {
         return timeZone;
@@ -199,8 +200,5 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
-
-     
-
     
 }

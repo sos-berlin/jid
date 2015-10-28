@@ -8,6 +8,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.joda.time.DateTime;
 
 import com.sos.JSHelper.Exceptions.JobSchedulerException;
@@ -40,31 +41,37 @@ import com.sos.hibernate.layer.SOSHibernateDBLayer;
  */
 
 public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
-
 	private final static Logger logger = Logger.getLogger(SchedulerEventDBLayer.class);
-
 	private final static String EVENT_ID = "eventId";
 	private final static String EVENT_CLASS = "eventClass";	
-	
-	@SuppressWarnings("unused")
-	private final String conClassName = "SchedulerEventDBLayer";
 	private SchedulerEventFilter filter = null;
 
-	public SchedulerEventDBLayer(final File configurationFile_) {
+	public SchedulerEventDBLayer(final String configurationFilename) {
 		super();
-		this.setConfigurationFile(configurationFile_);
+		this.setConfigurationFileName(configurationFilename);
+        this.initConnection(this.getConfigurationFileName());
 		resetFilter();
 	}
 
-	public SchedulerEventDBLayer(File configurationFile, SchedulerEventFilter filter_) {
+	public SchedulerEventDBLayer(String configurationFilename, SchedulerEventFilter filter_) {
         super();
-        this.setConfigurationFile(configurationFile);
+        this.setConfigurationFileName(configurationFilename);
+        this.initConnection(this.getConfigurationFileName());
         filter = filter_;
 	}
 	
 	public SchedulerEventDBItem getEvent(final Long id) {
-		return (SchedulerEventDBItem) this.getSession().get(
-				SchedulerEventDBItem.class, id);
+		if(connection == null){
+			initConnection(getConfigurationFileName());
+		}
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			return (SchedulerEventDBItem) ((Session)connection.getCurrentSession()).get(SchedulerEventDBItem.class, id);
+		} catch (Exception e) {
+			logger.error("Error occurred receiving event: ", e);
+		}
+		return null;
 	}
 
 	public void resetFilter() {
@@ -81,160 +88,138 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
 	
 	private Query getQuery(String hql){
 		Query query = null;
-		query = session.createQuery(hql);
-		
-		if (filter.hasEvents()) {
-	        query.setParameterList(EVENT_ID, filter.getEventList());
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-		
-		if (filter.getSchedulerId() != null
-				&& !filter.getSchedulerId().equals("")) {
-			query.setParameter("schedulerId", filter.getSchedulerId());
-		}
-		
-		if (filter.getRemoteSchedulerHost() != null
-				&& !filter.getRemoteSchedulerHost().equals("")) {
-			query.setParameter("remoteSchedulerHost", filter.getRemoteSchedulerHost());
-		}
-		
-		if (filter.getRemoteSchedulerPort() != null
-				&& !filter.getRemoteSchedulerPort().equals("")) {
-			query.setParameter("remoteSchedulerPort", filter.getRemoteSchedulerPort());
-		}
-		
-		if (filter.getJobChain() != null
-				&& !filter.getJobChain().equals("")) {
-			query.setParameter("jobChain", filter.getJobChain());
-		}
-		
-		if (filter.getJobName() != null
-				&& !filter.getJobName().equals("")) {
-			query.setParameter("jobName", filter.getJobName());
-		}
-		
-		if (filter.getEventClass() != null
-				&& !filter.getEventClass().equals("")) {
-			query.setParameter("eventClass", filter.getEventClass());
-		}
-		
-		if (filter.getEventId() != null
-				&& !filter.getEventId().equals("")) {
-			query.setParameter("eventId", filter.getEventId());
-		}
-		
-		if (filter.getOrderId() != null
-				&& !filter.getOrderId().equals("")) {
-			query.setParameter("orderId", filter.getOrderId());
-		}
- 
-		if (filter.getExitCode() != null
-				&& !filter.getExitCode().equals("")) {
-			query.setParameter("exitCode", filter.getExitCode());
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery(hql);
+			if (filter.hasEvents()) {
+			    query.setParameterList(EVENT_ID, filter.getEventList());
+			}
+			if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+				query.setParameter("schedulerId", filter.getSchedulerId());
+			}
+			if (filter.getRemoteSchedulerHost() != null && !filter.getRemoteSchedulerHost().equals("")) {
+				query.setParameter("remoteSchedulerHost", filter.getRemoteSchedulerHost());
+			}
+			if (filter.getRemoteSchedulerPort() != null && !filter.getRemoteSchedulerPort().equals("")) {
+				query.setParameter("remoteSchedulerPort", filter.getRemoteSchedulerPort());
+			}
+			if (filter.getJobChain() != null && !filter.getJobChain().equals("")) {
+				query.setParameter("jobChain", filter.getJobChain());
+			}
+			if (filter.getJobName() != null && !filter.getJobName().equals("")) {
+				query.setParameter("jobName", filter.getJobName());
+			}
+			if (filter.getEventClass() != null && !filter.getEventClass().equals("")) {
+				query.setParameter("eventClass", filter.getEventClass());
+			}
+			if (filter.getEventId() != null && !filter.getEventId().equals("")) {
+				query.setParameter("eventId", filter.getEventId());
+			}
+			if (filter.getOrderId() != null && !filter.getOrderId().equals("")) {
+				query.setParameter("orderId", filter.getOrderId());
+			}
+			if (filter.getExitCode() != null && !filter.getExitCode().equals("")) {
+				query.setParameter("exitCode", filter.getExitCode());
+			}
+		} catch (Exception e) {
+			logger.error("Error occured creating query: ", e);
 		}		
-		
 		return query;
-				
 	}
 	
     private Query setQueryParams(String hql) {
-		try {
-			Query query = getQuery(hql);
-			return query;
-
-		} catch(HibernateException e) {
-			throw new JobSchedulerException("Error creating Query",e);
-		}
+    	return getQuery(hql);
 	}
 
 	public int delete() {
-
-		if (session == null) {
-			beginTransaction();
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-
 		String hql = "delete from SchedulerEventDBItem " + getWhere();
-		Query query = setQueryParams(hql);
-
-		int row = query.executeUpdate();
-
+		Query query = null;
+		int row = 0;
+		query = setQueryParams(hql);
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			row = query.executeUpdate();
+		} catch (Exception e) {
+			logger.error("Error occurred trying to delete Items: ", e);
+		}
 		return row;
 	}
 
 	private String getWhere() {
 		String where = "";
 		String and = "";
-		 
-		 if (filter.hasEvents()) {
-	            where += and + " eventId in ( :eventId )";
-	            and = " and ";
-	     }
-		 
-	     if (filter.getRemoteSchedulerPort() != null	&& !filter.getRemoteSchedulerPort().equals("")) {
+		if (filter.hasEvents()) {
+			where += and + " eventId in ( :eventId )";
+			and = " and ";
+	    }
+		if (filter.getRemoteSchedulerPort() != null	&& !filter.getRemoteSchedulerPort().equals("")) {
 			where += and + " remoteSchedulerPort = :remoteSchedulerPort";
 			and = " and ";
 		}
-
 		if (filter.getRemoteSchedulerHost() != null	&& !filter.getRemoteSchedulerHost().equals("")) {
 			where += and + " remoteSchedulerHost = :remoteSchedulerHost";
 			and = " and ";
 		}
-
 		if (filter.getSchedulerId() != null	&& !filter.getSchedulerId().equals("")) {
 			where += and + " schedulerId = :schedulerId";
 			and = " and ";
 		}
-
 		if (filter.getJobChain() != null	&& !filter.getJobChain().equals("")) {
 			where += and + " jobChain = :jobChain";
 			and = " and ";
 		}
-
 		if (filter.getJobName() != null	&& !filter.getJobName().equals("")) {
 			where += and + " jobName = :jobName";
 			and = " and ";
 		}
-		
 		if (filter.getOrderId() != null	&& !filter.getOrderId().equals("")) {
 			where += and + " orderId = :orderId";
 			and = " and ";
 		}
-		
 		if (filter.getEventId() != null	&& !filter.getEventId().equals("")) {
 			where += and + " eventId = :eventId";
 			and = " and ";
 		}
-		
-		if (filter.getEventClass() != null	&& !filter.getEventClass().equals("")) {
+		if (filter.getEventClass() != null && !filter.getEventClass().equals("")) {
 			where += and + " eventClass = :eventClass";
 			and = " and ";
 		}
-		
-		if (filter.getExitCode() != null	&& !filter.getExitCode().equals("")) {
+		if (filter.getExitCode() != null && !filter.getExitCode().equals("")) {
 			where += and + " exitCode = :exitCode";
 			and = " and ";
 		}
-		
-		if (where.trim().equals("")) {
-
-		} else {
+		if (!where.trim().equals("")) {
 			where = "where " + where;
 		}
 		return where;
-
 	}
 
 	public List<SchedulerEventDBItem> getScheduleEventList(final int limit) {
-		initSession();
-
-		String hql = "from SchedulerEventDBItem " + getWhere()	+ filter.getOrderCriteria() + filter.getSortMode();
-		Query query = setQueryParams(hql);
-		
-		if (limit > 0) {
-			query.setMaxResults(limit);
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-
-		@SuppressWarnings("unchecked")
-		List<SchedulerEventDBItem> scheduleEventList = query.list();
+		String hql = "from SchedulerEventDBItem " + getWhere()	+ filter.getOrderCriteria() + filter.getSortMode();
+		Query query = null;
+		List<SchedulerEventDBItem> scheduleEventList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = setQueryParams(hql);
+			if (limit > 0) {
+				query.setMaxResults(limit);
+			}
+			scheduleEventList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred receiving event list: ", e);
+		}
 		return scheduleEventList;
 	}
 
@@ -262,9 +247,7 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
         resetFilter();
         List<SchedulerEventDBItem> listOfActiveEvents = getEventsFromDb();
         boolean result = false;
-       
         Iterator <SchedulerEventDBItem> iExit = listOfActiveEvents.iterator();
-
         BooleanExp exp = new BooleanExp(condition);
         while (iExit.hasNext()) {
             SchedulerEventDBItem e =  iExit.next();
@@ -272,14 +255,12 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
             exp.replace(e.getEventId()+":"+e.getExitCode(), "true");
             logger.debug(exp.getBoolExp());
         }
-        
         Iterator <SchedulerEventDBItem> iClass = listOfActiveEvents.iterator();
         while (iClass.hasNext()) {
             SchedulerEventDBItem e =  iClass.next();
             exp.replace(e.getEventName(), "true");
             logger.debug(exp.getBoolExp());
         }
-         
         //Alles, was noch nicht ersetzt wurde, mit evt. vorhandenen Event IDs ersetzen.
         Iterator <SchedulerEventDBItem> iEventId = listOfActiveEvents.iterator();
         while (iEventId.hasNext()) {
@@ -287,47 +268,49 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
             exp.replace(e.getEventId(), "true");
             logger.debug(exp.getBoolExp());
         }
-        
         logger.debug("--------->" + exp.getBoolExp());
         result = exp.evaluateExpression();
         return result;
     }
-
 
     public boolean checkEventExists(String condition, String eventClass) {
         resetFilter();
         filter.setEventClass(eventClass);
         logger.debug("eventClass:" + eventClass);
         boolean result = false;
-
         List<SchedulerEventDBItem> listOfActiveEvents = getEventsFromDb();
         Iterator <SchedulerEventDBItem> iExit = listOfActiveEvents.iterator();
-
         BooleanExp exp = new BooleanExp(condition);
         while (iExit.hasNext()) {
             SchedulerEventDBItem e =  iExit.next();
             exp.replace(e.getEventId()+":"+e.getExitCode(), "true");
         }
-        
         Iterator <SchedulerEventDBItem> iEventId = listOfActiveEvents.iterator();
         while (iEventId.hasNext()) {
             SchedulerEventDBItem e =  iEventId.next();
             exp.replace(e.getEventId(), "true");
         }
-        
         result = exp.evaluateExpression();
         return result;
     }
-
     
 	public List<SchedulerEventDBItem>  getEventsFromDb() {
-       if (!getSession().isOpen()) initSession();
-       String getWhere = getWhere();
-       Query query = setQueryParams("from SchedulerEventDBItem  " + getWhere);
-       logger.debug("where:" + getWhere);
-       @SuppressWarnings("unchecked")
-       List<SchedulerEventDBItem> resultList = query.list();
-       return resultList;
+		if(connection == null){
+			initConnection(getConfigurationFileName());
+		}
+		String getWhere = getWhere();
+		Query query = null;
+		List<SchedulerEventDBItem> resultList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = setQueryParams("from SchedulerEventDBItem  " + getWhere);
+			logger.debug("where:" + getWhere);
+			resultList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred receiving events: ", e);
+		}
+        return resultList;
 	}
 	
 	/**
@@ -337,13 +320,11 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
 	 */
 	public SchedulerEventsCollection getMissingEvents(List <SchedulerEventDBItem> eventList) {
 	    resetFilter();
-
         SchedulerEventsCollection missingEvents = new SchedulerEventsCollection();
 		filter.setEventList(eventList);
 		if(filter.getEventList().isEmpty()) {
 			logger.info("no events to check - eventList is empty.");
 		} else {
-	    	 
 			List<SchedulerEventDBItem> resultList = getEventsFromDb();
 			missingEvents.addAll(eventList);
 			for(SchedulerEventDBItem item : resultList) {
@@ -354,17 +335,22 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
 		return missingEvents;
 	} 
 	
-	
-	
     public void createEvent(SchedulerEventDBItem event) {
+    	if(connection == null){
+    		initConnection(getConfigurationFileName());
+    	}
         if(!checkEventExists(event)) {
             DateTime now = new DateTime();
             DateTime expired = now.plusDays(60);
-            beginTransaction();
-            event.setCreated( new DateTime() );
-            event.setExpires(expired);
-            saveOrUpdate(event);
-            commit();
+            try {
+    			connection.connect();
+				connection.beginTransaction();
+				event.setCreated( new DateTime() );
+				event.setExpires(expired);
+				connection.saveOrUpdate(event);
+			} catch (Exception e) {
+				logger.error("Error occurred saving or updating created event: ", e);
+			}
         }
 	}
 	
@@ -375,15 +361,12 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
 		delete();
 	}	
 	
-	
 	public SchedulerEventFilter getFilter() {
 		return filter;
 	}
-
   
 	public void setFilter(final SchedulerEventFilter filter) {
 		this.filter = filter;
 	}
-
   
 }

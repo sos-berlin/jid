@@ -97,7 +97,8 @@ public class SchedulerEventDBItemTest {
 		String myId = "myId";
 		schedulerEventDBItem.setOrderId(myId);
 		String id = schedulerEventDBItem.getOrderId();
-		assertEquals("testSetOrderId faild: ",myId,id);		}
+		assertEquals("testSetOrderId faild: ",myId,id);
+	}
 
 	 
 	@Test

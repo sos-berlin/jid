@@ -1,15 +1,24 @@
 package com.sos.jid.dialog.classes;
 
-import java.io.File;
-import java.util.Date;
 import java.util.prefs.Preferences;
- 
 
-
-
-
-
-import javax.persistence.Transient;
+import org.apache.log4j.Logger;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.joda.time.DateTimeZone;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -21,7 +30,6 @@ import com.sos.dialog.components.SOSTableColumn.ColumnType;
 import com.sos.dialog.interfaces.ITableView;
 import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SosSortTableItem;
-import com.sos.hibernate.classes.UtcTimeHelper;
 import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
 import com.sos.hibernate.interfaces.ISOSTableItem;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
@@ -34,69 +42,31 @@ import com.sos.scheduler.model.SchedulerObjectFactory;
 import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
- 
-
-
-
-
-
-import org.apache.log4j.Logger;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.events.ControlAdapter;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.ScrollBar;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Listener;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
-     
- 
 	private static Logger logger = Logger.getLogger(SOSDashboardTableView.class);
 	protected SOSTable tableList                          = null;
 	protected ISOSDashboardDataProvider tableDataProvider = null;
 	private   SortBaseComparator[][] comparables          = null;
 	private   String answer                               = "";
 	private   Integer historyLimit                        = 0;
-
-
 	protected SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
 	protected SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer = null;
 	protected SchedulerInstancesDBLayer schedulerInstancesDBLayer;
-    
 
 	public SOSDashboardTableView(Composite composite_) {
 		super(composite_);
 	}
-
-	
 	
 	@Override
 	public void getTableData() {
  		logger.debug("...getTableData");
         this.showWaitCursor();
 		if (tableList != null) {
-
 			tableDataProvider.getData(getLimit());
 			buildTable();
 		}
         this.resetCursor();
-
 	}
 
 	@Override
@@ -111,7 +81,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			    }
 			}
 			clearTable(tableList);
- 			
 			tableDataProvider.fillTable(tableList);
 			SosSortTableItem sosSortTableItem = null;
 			sosSortTableItem = null;
@@ -132,12 +101,10 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		}
 		this.resetCursor();
 	}
-
 	
 	@Override
 	public void createTable() {
 	    if (sosDashboardHeader != null) {
-
     		sosDashboardHeader.getCbSchedulerId().addModifyListener(new ModifyListener() {
     			public void modifyText(ModifyEvent e) {
     				tableDataProvider.setSchedulerId(sosDashboardHeader.getCbSchedulerId().getText());
@@ -150,8 +117,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     				actualizeList();
     			}
     		});
-    		
-    	
     		sosDashboardHeader.getFromDate().addSelectionListener(new SelectionAdapter() {
     			public void widgetSelected(SelectionEvent e) {    				
     			    tableDataProvider.setFrom(sosDashboardHeader.getFrom());
@@ -172,11 +137,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     sosDashboardHeader.resetInputTimer();
     			}
     		});
-    	 	
-    	 	
             sosDashboardHeader.setTimeZone(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, DateTimeZone.getDefault().toString()));
             tableDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
-    	
     		sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
     			public void widgetSelected(final SelectionEvent e) {
     				getList();
@@ -195,7 +157,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                 }
             }
         });
-		
 		tableList.addKeyListener( new KeyListener() {
             public void keyPressed(final KeyEvent e) {
                 final int code = e.keyCode;
@@ -206,9 +167,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                  
             }
         });
-		
-		
-			tableList.addSelectionListener(new SelectionAdapter() {
+		tableList.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(final SelectionEvent e) {
 				if (!isRightMouseclick()) {
 				    if (tableList.getSelectionIndex() >= 0) {
@@ -230,11 +189,10 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             					detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
             					if (d.isOrderJob() && tableStepHistory != null && d.getLogId() != null){
                                     clearTable(tableStepHistory);
-            					    schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer.getConfigurationFile(),d.getLogId());
+            					    schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer.getConfigurationFileName(),d.getLogId());
             					    schedulerOrderStepHistoryDataProvider.getData(0);
             					    schedulerOrderStepHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
             					    schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistory);
-            					      
 			                    }
         					}
     					}
@@ -242,16 +200,12 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 				}
 			}
 		});
-
 		this.setColumnsListener();
 		//this.tableResize();
 	}
-	
-
  
 	public void setColumnsListener() {
 		TableColumn[] columns = tableList.getColumns();
-		
 		for (int i = 0; i < columns.length; i++) {
 			final int _i = i;
  			columns[i].addListener(SWT.Selection, new Listener() {
@@ -277,47 +231,44 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		}
 	}
    
-	   protected SchedulerInstancesDBItem start(DbItem dbItem) {
-	        this.showWaitCursor();
-  
-	        SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerInstancesDBLayer.getInstanceById(dbItem.getSchedulerId());
-	        if (schedulerInstanceDBItem != null) {
-	            SchedulerObjectFactory objSchedulerObjectFactory = new SchedulerObjectFactory(schedulerInstanceDBItem.getHostName(), schedulerInstanceDBItem.getTcpPort());
-	            objSchedulerObjectFactory.initMarshaller(Spooler.class);
-	            if (dbItem.isOrderJob()) {
-	                try {
-	                    JSCmdModifyOrder objOrder = objSchedulerObjectFactory.StartOrder(dbItem.getJobChain(), dbItem.getOrderId(), false);
-	                    if (objOrder.getAnswer().getOk() != null){
-	                        answer += String.format("Command: Start Order: %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),"OK") + "\n";
-	                    }else {
-	                        answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),objOrder.getAnswer().getERROR())+ "\n";
-	                   }
- 	                } catch (Exception ee) {
-   	                    answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),ee.getMessage())+ "\n";
- 	                    ee.printStackTrace();
-	                } finally {
-	                    this.RestoreCursor();
-	                }
-
-	            } else {
-	                try {
-	                    JSCmdStartJob objStartJob = objSchedulerObjectFactory.StartJob(dbItem.getJobName(), false);
-                        if (objStartJob.getAnswer().getOk() != null){
-                            answer += String.format("Command: Start Job: %s: %s", dbItem.getJobName(),"OK")+ "\n";
-                        }else {
-                            answer += String.format("Command: Start Job  %s: %s",dbItem.getJobName(),objStartJob.getAnswer().getERROR())+ "\n";
-                       }
-	                }
-	                catch (Exception ee) {
-                        answer += String.format("Command: Start Job  %s: %s --> Error: %s", dbItem.getJobName(), dbItem.getOrderId(),ee.getMessage())+ "\n";
-	                    ee.printStackTrace();
-	                } finally {
-	                    this.RestoreCursor();
-	                }
-	            }
-	        }
-	     return schedulerInstanceDBItem;
-	    }
+	protected SchedulerInstancesDBItem start(DbItem dbItem) {
+        this.showWaitCursor();
+        SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerInstancesDBLayer.getInstanceById(dbItem.getSchedulerId());
+        if (schedulerInstanceDBItem != null) {
+            SchedulerObjectFactory objSchedulerObjectFactory = new SchedulerObjectFactory(schedulerInstanceDBItem.getHostName(), schedulerInstanceDBItem.getTcpPort());
+            objSchedulerObjectFactory.initMarshaller(Spooler.class);
+            if (dbItem.isOrderJob()) {
+                try {
+                    JSCmdModifyOrder objOrder = objSchedulerObjectFactory.StartOrder(dbItem.getJobChain(), dbItem.getOrderId(), false);
+                    if (objOrder.getAnswer().getOk() != null){
+                        answer += String.format("Command: Start Order: %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),"OK") + "\n";
+                    }else {
+                        answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),objOrder.getAnswer().getERROR())+ "\n";
+                    }
+                } catch (Exception ee) {
+                    answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(),ee.getMessage())+ "\n";
+                    ee.printStackTrace();
+                } finally {
+                    this.RestoreCursor();
+                }
+            } else {
+                try {
+                    JSCmdStartJob objStartJob = objSchedulerObjectFactory.StartJob(dbItem.getJobName(), false);
+                    if (objStartJob.getAnswer().getOk() != null){
+                        answer += String.format("Command: Start Job: %s: %s", dbItem.getJobName(),"OK")+ "\n";
+                    } else {
+                        answer += String.format("Command: Start Job  %s: %s",dbItem.getJobName(),objStartJob.getAnswer().getERROR())+ "\n";
+                    }
+                } catch (Exception ee) {
+                    answer += String.format("Command: Start Job  %s: %s --> Error: %s", dbItem.getJobName(), dbItem.getOrderId(),ee.getMessage())+ "\n";
+                    ee.printStackTrace();
+                } finally {
+                    this.RestoreCursor();
+                }
+            }
+        }
+        return schedulerInstanceDBItem;
+    }
 	
 	protected void showLog(Table table) {
 		this.showWaitCursor();
@@ -330,7 +281,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 			TableItem t = table.getItem(table.getSelectionIndex());
 			DbItem d = (DbItem) t.getData();
 			logItem.addLog(table, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
-			 
 		}
 		this.RestoreCursor();
 	}
@@ -340,16 +290,13 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 		logger.debug("...getList");
 		if (tableList != null && tableDataProvider != null) {
 	        int i = tableList.getTopIndex();
-	        
 	        tableDataProvider.getData(getLimit());
-	        
 	        if (sosDashboardHeader != null && sosDashboardHeader.getSosSearchFilterData() != null) {
                tableDataProvider.setSearchField(sosDashboardHeader.getSosSearchFilterData());
             }
-	        
  			buildTable();
 			tableList.setTopIndex(i);		
-			}
+		}
 	}
 
 	public void getSchedulerIds() {
@@ -371,7 +318,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
 	public void setPrefs(Preferences prefs) {
 		this.prefs = prefs;
-
 	}
 
 	public void setDetailHistoryDataProvider(SchedulerHistoryDataProvider detailHistoryDataProvider) {
@@ -429,11 +375,12 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 	public SOSTable getTableList() {
 		return tableList;
 	}
-	   public void setDBLayer(File configurationFile)  {
-	        schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFile);
-	        schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
-	        schedulerTaskHistoryDBLayer = new SchedulerTaskHistoryDBLayer(configurationFile);
-	    }
+	
+	public void setDBLayer(String configurationFilename)  {
+        schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(configurationFilename);
+        schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFilename);
+        schedulerTaskHistoryDBLayer = new SchedulerTaskHistoryDBLayer(configurationFilename);
+    }
 
     public String getAnswer() {
         return answer;
@@ -446,13 +393,10 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     private int getLimit() {
         if (sosDashboardHeader != null){
            return sosDashboardHeader.getLimit();
-        }else {
-            return  0;
+        } else {
+           return  0;
         }
-        
     }
-  
-  
 
     public Integer getHistoryLimit() {
         return historyLimit;
@@ -461,8 +405,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     public void setHistoryLimit(Integer historyLimit) {
         this.historyLimit = historyLimit;
     }
-
-
 
     @Override
     public ISOSDashboardDataProvider getTableDataProvider() {

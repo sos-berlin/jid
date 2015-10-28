@@ -48,16 +48,10 @@ import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
  */
 
 public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
-
 	private static final String LIST_IGNORE_JOBS = "listIgnoreJobs";
 	private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
 	private static final String SOS_DASHBOARD_EXECUTED = "sosDashboardExecuted";
-	@SuppressWarnings("unused")
-
-	private final String	conClassName	= "SchedulerHistoryDataProvider";
-    
     private static Logger               logger                      = Logger.getLogger(SchedulerHistoryDataProvider.class);
-
 	private SchedulerTaskHistoryDataProvider schedulerTaskHistoryDataProvider;
     private SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider;
     private SchedulerInstancesDataProvider schedulerInstancesDataProvider;
@@ -80,24 +74,24 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 	    resetIgnoreList();
 	}
     
-	public SchedulerHistoryDataProvider(File configurationFile) {
-		schedulerTaskHistoryDataProvider = new SchedulerTaskHistoryDataProvider(configurationFile);
-        schedulerOrderHistoryDataProvider = new SchedulerOrderHistoryDataProvider(configurationFile);
-        schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(configurationFile);
+	public SchedulerHistoryDataProvider(String configurationFilename) {
+		schedulerTaskHistoryDataProvider = new SchedulerTaskHistoryDataProvider(configurationFilename);
+        schedulerOrderHistoryDataProvider = new SchedulerOrderHistoryDataProvider(configurationFilename);
+        schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(configurationFilename);
 	}
 	
 	public void setShowJobs(boolean showJobs) {
 		schedulerTaskHistoryDataProvider.getFilter().setShowJobs(showJobs);
 		schedulerOrderHistoryDataProvider.getFilter().setShowJobs(showJobs);
-		}
+	}
 
 	public boolean getShowJobs() {
 		  return schedulerTaskHistoryDataProvider.getFilter().isShowJobs();
-	 	}
+ 	}
 
 	public boolean getShowJobchains() {
 		  return schedulerOrderHistoryDataProvider.getFilter().isShowJobChains();
-	 	}
+ 	}
 
 	public void setShowJobChains(boolean showJobChains) {
 		schedulerTaskHistoryDataProvider.getFilter().setShowJobChains(showJobChains);
@@ -161,7 +155,6 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 		schedulerTaskHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
         schedulerOrderHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
 	}
-	
  
 	public String getLogAsString(DbItem dbItem) {
 		if (dbItem.isStandalone()) {
@@ -171,7 +164,6 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 		}
 		
 	}
-	
  
 	public void addToIgnorelist(Preferences prefs,DbItem h){
 		if (h.isStandalone()){
@@ -179,7 +171,6 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 			if (!listOfJobs.contains(h.getJobName())) {
     			listOfJobs = listOfJobs + "," + h.getJobName();
     			prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_IGNORE_JOBS, listOfJobs);
-    
     			addToTaskIgnorelist((SchedulerTaskHistoryDBItem)h);
 			}
 		}else{
@@ -190,39 +181,35 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     			addToOrderIgnorelist((SchedulerOrderHistoryDBItem)h);
 			}
 		}
-
 	}
 
 	public void resetIgnoreList(Preferences prefs){
 		prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_IGNORE_JOBS, "");
 		prefs.node(SOS_DASHBOARD_EXECUTED).put(LIST_IGNORE_ORDERS, "");
 		resetIgnoreList();
-			
-		}
+	}
 	
-	    public void addToTaskIgnorelist(SchedulerTaskHistoryDBItem h){
-	         schedulerTaskHistoryDataProvider.getFilter().getTaskIgnoreList().add(h);
-	         schedulerOrderHistoryDataProvider.getFilter().getTaskIgnoreList().add(h);
-	    }
+    public void addToTaskIgnorelist(SchedulerTaskHistoryDBItem h){
+         schedulerTaskHistoryDataProvider.getFilter().getTaskIgnoreList().add(h);
+         schedulerOrderHistoryDataProvider.getFilter().getTaskIgnoreList().add(h);
+    }
 	    
 	  	    
-	    public void addToOrderIgnorelist(SchedulerOrderHistoryDBItem h){
-            schedulerOrderHistoryDataProvider.getFilter().getOrderIgnoreList().add(h);
-            schedulerTaskHistoryDataProvider.getFilter().getOrderIgnoreList().add(h);
-	    }
-	  
-	    public void resetIgnoreList(){
-            schedulerTaskHistoryDataProvider.getFilter().getTaskIgnoreList().reset();
-            schedulerTaskHistoryDataProvider.getFilter().getOrderIgnoreList().reset();
-            schedulerOrderHistoryDataProvider.getFilter().getTaskIgnoreList().reset();
-            schedulerOrderHistoryDataProvider.getFilter().getOrderIgnoreList().reset();
-        }
-	  
-	    
+    public void addToOrderIgnorelist(SchedulerOrderHistoryDBItem h){
+        schedulerOrderHistoryDataProvider.getFilter().getOrderIgnoreList().add(h);
+        schedulerTaskHistoryDataProvider.getFilter().getOrderIgnoreList().add(h);
+    }
+  
+    public void resetIgnoreList(){
+        schedulerTaskHistoryDataProvider.getFilter().getTaskIgnoreList().reset();
+        schedulerTaskHistoryDataProvider.getFilter().getOrderIgnoreList().reset();
+        schedulerOrderHistoryDataProvider.getFilter().getTaskIgnoreList().reset();
+        schedulerOrderHistoryDataProvider.getFilter().getOrderIgnoreList().reset();
+    }
+  
 	public void setIgnoreList(Preferences prefs) {
 		String listOfJobs = prefs.node(SOS_DASHBOARD_EXECUTED).get(LIST_IGNORE_JOBS, "");
 		String listOfOrders = prefs.node(SOS_DASHBOARD_EXECUTED).get(LIST_IGNORE_ORDERS, "");
-		
 		StringTokenizer st = new StringTokenizer(listOfJobs,",");
 		while (st.hasMoreTokens()){
 			String jobname = st.nextToken();
@@ -230,23 +217,18 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
 			h.setJobName(jobname);
 			addToTaskIgnorelist(h);
 		}
-		
-		
 		st = new StringTokenizer(listOfOrders,",");
 		while (st.hasMoreTokens()){
 			String order = st.nextToken();
-			
 			File f = new File(order);
 			String jobChain = f.getParent();
 			jobChain = jobChain.replaceAll("\\\\", "/");
 			String orderId = f.getName();
-			
 			SchedulerOrderHistoryDBItem h = new SchedulerOrderHistoryDBItem();
 			h.setJobChain(jobChain);
 			h.setOrderId(orderId);
 			addToOrderIgnorelist(h);
 		}
-		
 	}
 
     @Override
@@ -263,26 +245,31 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     }
 
     @Override
+    @Deprecated
     public void beginTransaction() {
     }
 
     @Override
+    @Deprecated
     public void update(DbItem h) {
     }
 
     @Override
+    @Deprecated
     public void commit() {
-        schedulerTaskHistoryDataProvider.commit();
+//        schedulerTaskHistoryDataProvider.commit();
     }
 
     @Override
+    @Deprecated
     public Session getSession() {
         return null;
     }
     
+    @Deprecated
     public void closeSession(){
-        schedulerTaskHistoryDataProvider.closeSession();
-        schedulerOrderHistoryDataProvider.closeSession();
+//        schedulerTaskHistoryDataProvider.closeSession();
+//        schedulerOrderHistoryDataProvider.closeSession();
     }
 
 	@Override
@@ -312,8 +299,6 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
         schedulerTaskHistoryDataProvider.setTimeZone(timeZone);
         schedulerOrderHistoryDataProvider.setTimeZone(timeZone);
         schedulerInstancesDataProvider.setTimeZone(timeZone);
-
     }
-
   
 }

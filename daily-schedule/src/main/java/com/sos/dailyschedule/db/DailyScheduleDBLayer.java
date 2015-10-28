@@ -7,7 +7,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.joda.time.DateTime;
 
 import com.sos.dailyschedule.DailyScheduleFilter;
@@ -42,23 +44,30 @@ import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
  */
 
 public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
-
-	@SuppressWarnings("unused")
-	private final String conClassName = "DailySchedulerDBLayer";
-
 	private String whereFromIso = null;
 	private String whereToIso = null;
 	private DailyScheduleFilter filter = null;
+	private Logger logger = Logger.getLogger(DailyScheduleDBLayer.class);
 
-	public DailyScheduleDBLayer(final File configurationFile_) {
+	public DailyScheduleDBLayer(final String configurationFilename) {
 		super();
-		this.setConfigurationFile(configurationFile_);
+		this.setConfigurationFileName(configurationFilename);
+		this.initConnection(this.getConfigurationFileName());
 		resetFilter();
 	}
 
 	public DailyScheduleDBItem getHistory(final Long id) {
-		return (DailyScheduleDBItem) this.getSession().get(
-				DailyScheduleDBItem.class, id);
+		if(connection == null){
+			initConnection(getConfigurationFileName());
+		}
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			return (DailyScheduleDBItem) ((Session)connection.getCurrentSession()).get(DailyScheduleDBItem.class, id);
+		} catch (Exception e) {
+			logger.error("Error occured receiving data: ", e);
+		}
+		return null;
 	}
 
 	public void resetFilter() {
@@ -73,51 +82,55 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 	}
 
 	public int delete() {
-
-		if (session == null) {
-			beginTransaction();
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-
 		String hql = "delete from DailyScheduleDBItem " + getWhere();
-
-		Query query = session.createQuery(hql);
-
-		if (filter.getPlannedUtcFrom() != null
-				&& !filter.getPlannedUtcFrom().equals("")) {
-			query.setTimestamp("schedulePlannedFrom", filter.getPlannedUtcFrom());
+		Query query = null;
+		int row = 0;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery(hql);
+			if (filter.getPlannedUtcFrom() != null && !filter.getPlannedUtcFrom().equals("")) {
+				query.setTimestamp("schedulePlannedFrom", filter.getPlannedUtcFrom());
+			}
+			if (filter.getPlannedUtcTo() != null && !filter.getPlannedUtcTo().equals("")) {
+				query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
+			}
+			if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+				query.setParameter("schedulerId", filter.getSchedulerId());
+			}
+			row = query.executeUpdate();
+			connection.commit();
+		} catch (Exception e) {
+			logger.error("Error occurred trying to delete items: ", e);
 		}
-		if (filter.getPlannedUtcTo() != null && !filter.getPlannedUtcTo().equals("")) {
-			query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
-		}
-		if (filter.getSchedulerId() != null
-				&& !filter.getSchedulerId().equals("")) {
-			query.setParameter("schedulerId", filter.getSchedulerId());
-		}
-		int row = query.executeUpdate();
-
 		return row;
 	}
 
 	public long deleteInterval() {
-
-		if (session == null) {
-			beginTransaction();
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-
 		String hql = "delete from DailyScheduleDBItem " + getWhere();
-
-		Query query = session.createQuery(hql);
-		
-		if (filter.getPlannedUtcFrom()!= null ) {
-			query.setTimestamp("schedulePlannedFrom", filter.getPlannedUtcFrom());
+		Query query = null;
+		int row = 0;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery(hql);
+			if (filter.getPlannedUtcFrom()!= null ) {
+				query.setTimestamp("schedulePlannedFrom", filter.getPlannedUtcFrom());
+			}
+			if (filter.getPlannedUtcTo()!= null ) {
+				query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
+			}
+			row = query.executeUpdate();
+			connection.commit();
+		} catch (Exception e) {
+			logger.error("Error occurred trying to delete items for the given interval: ", e);
 		}
-		if (filter.getPlannedUtcTo()!= null ) {
-			query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
-		}
-
-
-		int row = query.executeUpdate();
-
 		return row;
 	}
 
@@ -125,54 +138,51 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 	private String getWhere() {
 		String where = "";
 		String and = "";
-
 		if (filter.getPlannedUtcFrom() != null	&& !filter.getPlannedUtcFrom().equals("")) {
 			where += and + " schedulePlanned>= :schedulePlannedFrom";
 			and = " and ";
 		}
-
 		if (filter.getPlannedUtcTo() != null && !filter.getPlannedUtcTo().equals("")) {
 			where += and + " schedulePlanned <= :schedulePlannedTo ";
 			and = " and ";
 		}
-
 		if (filter.getSchedulerId() != null	&& !filter.getSchedulerId().equals("")) {
 			where += and + " schedulerId = :schedulerId";
 			and = " and ";
 		}
-
-		if (where.trim().equals("")) {
-
-		} else {
+		if (!where.trim().equals("")) {
 			where = "where " + where;
 		}
 		return where;
-
 	}
 
 	public List<DailyScheduleDBItem> getDailyScheduleList(final int limit) {
-		initSession();
-
-		Query query = session.createQuery("from DailyScheduleDBItem " + getWhere()	+ filter.getOrderCriteria() + filter.getSortMode());
-
-		if (filter.getPlannedFrom() != null && !filter.getPlannedFrom().equals("")) {
-			query.setTimestamp("schedulePlannedFrom", filter.getPlannedFrom());  
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-		if (filter.getPlannedTo() != null && !filter.getPlannedTo().equals("")) {
-			query.setTimestamp("schedulePlannedTo", filter.getPlannedTo());
+		Query query = null;
+		List<DailyScheduleDBItem> daysScheduleList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery("from DailyScheduleDBItem " + getWhere()	+ filter.getOrderCriteria() + filter.getSortMode());
+			if (filter.getPlannedFrom() != null && !filter.getPlannedFrom().equals("")) {
+				query.setTimestamp("schedulePlannedFrom", filter.getPlannedFrom());  
+			}
+			if (filter.getPlannedTo() != null && !filter.getPlannedTo().equals("")) {
+				query.setTimestamp("schedulePlannedTo", filter.getPlannedTo());
+			}
+			if (filter.getSchedulerId() != null	&& !filter.getSchedulerId().equals("")) {
+				query.setParameter("schedulerId", filter.getSchedulerId());
+			}
+			if (limit > 0) {
+				query.setMaxResults(limit);
+			}
+			daysScheduleList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred receiving DailyScheduleList: ", e);
 		}
-		if (filter.getSchedulerId() != null	&& !filter.getSchedulerId().equals("")) {
-			query.setParameter("schedulerId", filter.getSchedulerId());
-		}
-
-		if (limit > 0) {
-			query.setMaxResults(limit);
-		}
-
-		@SuppressWarnings("unchecked")
-		List<DailyScheduleDBItem> daysScheduleList = query.list();
 		return daysScheduleList;
-
 	}
 
 	private List<DailyScheduleDBItem> executeQuery(Query query, int limit) {
@@ -186,32 +196,43 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 				&& !filter.getSchedulerId().equals("")) {
 			query.setParameter("schedulerId", filter.getSchedulerId());
 		}
-
 		if (limit > 0) {
 			query.setMaxResults(limit);
 		}
-
 		List<DailyScheduleDBItem> daysScheduleList = query.list();
 		return daysScheduleList;
-
 	}
 
 	public List<DailyScheduleDBItem> getDailyScheduleSchedulerList(int limit) {
-		initSession();
+		if (connection == null){
+			initConnection(getConfigurationFileName());
+		}
 		String q = "from DailyScheduleDBItem e where e.schedulerId IN (select DISTINCT schedulerId from DailyScheduleDBItem " + getWhere() + ")";
-
-		Query query = session.createQuery(q);
+		Query query = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery(q);
+		} catch (Exception e) {
+			logger.error("Error occurred creating query: ", e);
+		}
 		return executeQuery(query, limit);
 	}
 
 	public List<DailyScheduleDBItem> getWaitingDailyScheduleList(final int limit) {
-		initSession();
-
-		Query query = session.createQuery("from DailyScheduleDBItem " + getWhere()	+ "  and status = 0  "
-						+ filter.getOrderCriteria() + filter.getSortMode());
-
+		if (connection == null){
+			initConnection(getConfigurationFileName());
+		}
+		String q = "from DailyScheduleDBItem " + getWhere()	+ "  and status = 0  " + filter.getOrderCriteria() + filter.getSortMode();
+		Query query = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery(q);
+		} catch (Exception e) {
+			logger.error("Error occurred creating query: ", e);
+		}
 		return executeQuery(query, limit);
-
 	}
 
 	public DailyScheduleFilter getFilter() {
@@ -227,7 +248,6 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 	public void setWhereTo(final Date whereTo) {
 	    UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(whereTo));
 		filter.setPlannedTo(whereTo);
-  
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		whereToIso = formatter.format(whereTo);
 	}
@@ -239,7 +259,6 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
             SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
             Date d = formatter.parse(whereFrom);
             d = UtcTimeHelper.convertTimeZonesToDate(UtcTimeHelper.localTimeZoneString(), "UTC", new DateTime(d));
-
             setWhereFrom(d);
         }
     }
@@ -261,7 +280,6 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(filter.getDateFormat());
             Date d = formatter.parse(whereFrom);
-
             setWhereFrom(d);
         }
     }
@@ -304,72 +322,79 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 		this.filter = filter;
 	}
 
-	public boolean contains(
-		final SchedulerTaskHistoryDBItem schedulerHistoryDBItem) {
-		if (session == null) {
-			initSession();
-			transaction = session.beginTransaction();
+	public boolean contains(final SchedulerTaskHistoryDBItem schedulerHistoryDBItem) {
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-		Query query = session.createQuery("from DailyScheduleDBItem where schedulerId=:schedulerId and schedulerHistoryId=:schedulerHistoryId");
-		query.setParameter("schedulerId", schedulerHistoryDBItem.getSpoolerId());
-		query.setParameter("schedulerHistoryId", schedulerHistoryDBItem.getId());
-
-		@SuppressWarnings("unchecked")
-		List<DailyScheduleDBItem> daysScheduleList = query.list();
-		return daysScheduleList.size() > 0;
+		Query query = null;
+		List<DailyScheduleDBItem> daysScheduleList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery("from DailyScheduleDBItem where schedulerId=:schedulerId and schedulerHistoryId=:schedulerHistoryId");
+			query.setParameter("schedulerId", schedulerHistoryDBItem.getSpoolerId());
+			query.setParameter("schedulerHistoryId", schedulerHistoryDBItem.getId());
+			daysScheduleList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred trying to find specific history item: ", e);
+		}
+		return daysScheduleList != null ? daysScheduleList.size() > 0 : false;
 	}
 
-	public boolean contains(
-		final SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem) {
-		if (session == null) {
-			initSession();
-			transaction = session.beginTransaction();
+	public boolean contains(final SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem) {
+		if (connection == null){
+			initConnection(getConfigurationFileName());
 		}
-		Query query = session.createQuery("from DailyScheduleDBItem where schedulerId=:schedulerId and jobChain=:jobChain and schedulerOrderHistoryId=:schedulerOrderHistoryId");
-		query.setParameter("schedulerId",schedulerOrderHistoryDBItem.getSpoolerId());
-		query.setParameter("schedulerOrderHistoryId",schedulerOrderHistoryDBItem.getHistoryId());
-		query.setParameter("jobChain",schedulerOrderHistoryDBItem.getJobChain());
-		@SuppressWarnings("unchecked")
-		List<DailyScheduleDBItem> daysScheduleList = query.list();
-		return daysScheduleList.size() > 0;
+		Query query = null;
+		List<DailyScheduleDBItem> daysScheduleList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery("from DailyScheduleDBItem where schedulerId=:schedulerId and jobChain=:jobChain and schedulerOrderHistoryId=:schedulerOrderHistoryId");
+			query.setParameter("schedulerId",schedulerOrderHistoryDBItem.getSpoolerId());
+			query.setParameter("schedulerOrderHistoryId",schedulerOrderHistoryDBItem.getHistoryId());
+			query.setParameter("jobChain",schedulerOrderHistoryDBItem.getJobChain());
+			daysScheduleList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred trying to find specific order history item: ", e);
+		}
+		return daysScheduleList != null ? daysScheduleList.size() > 0 : false;
 	}
 
     @Override
     public void onAfterDeleting(DbItem h) {
-        // TODO Auto-generated method stub
-        
     }
 
     @Override
     public List<DbItem> getListOfItemsToDelete() {
-            TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
- 
-            
-            int limit = this.getFilter().getLimit();
-            initSession();
-            
-
-            Query query = session.createQuery("from DailyScheduleDBItem " + getWhere() + filter.getOrderCriteria() + filter.getSortMode());
-
-            if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
-                query.setText("schedulerId", filter.getSchedulerId());
-            }
-           
-            if (filter.getPlannedUtcFrom() != null) {
-                query.setTimestamp("schedulePlannedFrom", filter.getExecutedUtcFrom());
-            }
-            if (filter.getPlannedUtcTo() != null ) {
-                query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
-            }
-
-            if (limit > 0) {
-                query.setMaxResults(limit);
-            }
-
-            List<DbItem> schedulerPlannedList = query.list();
-            return schedulerPlannedList;
-                 
-         
+        TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
+        int limit = this.getFilter().getLimit();
+		if (connection == null){
+			initConnection(getConfigurationFileName());
+		}
+		Query query = null;
+		List<DbItem> schedulerPlannedList = null;
+		try {
+			connection.connect();
+			connection.beginTransaction();
+			query = connection.createQuery("from DailyScheduleDBItem " + getWhere() + filter.getOrderCriteria() + filter.getSortMode());
+	        if (filter.getSchedulerId() != null && !filter.getSchedulerId().equals("")) {
+	            query.setText("schedulerId", filter.getSchedulerId());
+	        }
+	        if (filter.getPlannedUtcFrom() != null) {
+	            query.setTimestamp("schedulePlannedFrom", filter.getExecutedUtcFrom());
+	        }
+	        if (filter.getPlannedUtcTo() != null ) {
+	            query.setTimestamp("schedulePlannedTo", filter.getPlannedUtcTo());
+	        }
+	        if (limit > 0) {
+	            query.setMaxResults(limit);
+	        }
+	        schedulerPlannedList = query.list();
+		} catch (Exception e) {
+			logger.error("Error occurred receiving list of items to delete: ", e);
+		}
+        return schedulerPlannedList;
     }
 
 }

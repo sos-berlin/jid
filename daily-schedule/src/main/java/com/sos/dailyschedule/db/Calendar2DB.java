@@ -10,6 +10,7 @@ import com.sos.scheduler.model.commands.JSCmdShowCalendar;
 import com.sos.scheduler.model.commands.JSCmdShowOrder;
 import com.sos.scheduler.model.commands.JSCmdShowState;
 import com.sos.scheduler.model.objects.Spooler;
+
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -49,24 +50,18 @@ import java.util.GregorianCalendar;
  */
 
 public class Calendar2DB {
-
-	@SuppressWarnings("unused")
-	private final String	conClassName	= "Calender2DB";
 	private static Logger					logger			= Logger.getLogger(Calendar2DB.class);
-	@SuppressWarnings("unused")
 	private static SchedulerObjectFactory	objFactory		= null;
-	 
 	private Date from;
 	private Date to;
 	private int dayOffset;
 	private String schedulerId="";
-	
 	private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
 	private DailyScheduleDBLayer dailySchedulerDBLayer;;
 	private CreateDailyScheduleOptions options=null;
 
-	public Calendar2DB(File configurationFile) {
-		dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
+	public Calendar2DB(String configurationFilename) {
+		dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFilename);
 	}
 	
 	private void initSchedulerConnection()   {
@@ -78,12 +73,9 @@ public class Calendar2DB {
             schedulerId = this.getSchedulerId();
 		}
 	}
-	
-	
 
 	private Calendar getCalender()  {
 		initSchedulerConnection();
-
 		JSCmdShowCalendar objSC = objFactory.createShowCalendar(); 
 		objSC.setWhat("orders");
 		objSC.setLimit(9999);
@@ -97,7 +89,6 @@ public class Calendar2DB {
 	
 	public void delete() {
 		initSchedulerConnection();
-
   		dailySchedulerDBLayer.setWhereFrom(from);
 		dailySchedulerDBLayer.setWhereTo(to);
 		dailySchedulerDBLayer.setWhereSchedulerId(schedulerId);
@@ -133,89 +124,67 @@ public class Calendar2DB {
 	}
 	
     public void store() throws ParseException {
-        dailySchedulerDBLayer.beginTransaction();
+        try {
+        	dailySchedulerDBLayer.getConnection().connect();
+			dailySchedulerDBLayer.getConnection().beginTransaction();
+			this.delete();
+			Calendar objCalendar = getCalender();
+			Order order=null;
+			for (Object objCalendarObject : objCalendar.getAtOrPeriod()) {
+			    DailyScheduleDBItem dailySchedulerDBItem = new DailyScheduleDBItem(this.dateFormat);
+			    dailySchedulerDBItem.setSchedulerId(schedulerId);
+			    if (objCalendarObject instanceof At) {
+			        At objAt = (At) objCalendarObject;
+			        String orderId = objAt.getOrder();
+			        String jobChain = objAt.getJobChain();
+			        String job = objAt.getJob();
+			        order = getOrder(jobChain, orderId);
+			        dailySchedulerDBItem.setJob(job);
+			        dailySchedulerDBItem.setJobChain(jobChain);
+			        dailySchedulerDBItem.setOrderId(orderId);
+			        if (orderId == null || !isSetback(order)) {
+			            dailySchedulerDBItem.setSchedulePlanned(objAt.getAt());
+			            logger.debug("Start at :" + objAt.getAt());
+			            logger.debug("Job Name :" + job);
+			            logger.debug("Job-Chain Name :" + jobChain);
+			            logger.debug("Order Name :" + orderId);
+			        } else {
+			            logger.debug("Job-Chain Name :" + jobChain + "/" + orderId + " ignored because order is in setback state");
+			        }
+			    } else {
+			        if (objCalendarObject instanceof Period) {
+			            Period objPeriod = (Period) objCalendarObject;
+			            String orderId = objPeriod.getOrder();
+			            String jobChain = objPeriod.getJobChain();
+			            String job = objPeriod.getJob();
+			            order = getOrder(jobChain, orderId);
+			            dailySchedulerDBItem.setJob(job);
+			            dailySchedulerDBItem.setJobChain(jobChain);
+			            dailySchedulerDBItem.setOrderId(orderId);
+			            dailySchedulerDBItem.setPeriodBegin(objPeriod.getBegin());
+			            dailySchedulerDBItem.setPeriodEnd(objPeriod.getEnd());
+			            dailySchedulerDBItem.setRepeat(objPeriod.getAbsoluteRepeat(), objPeriod.getRepeat());
+			            // logger.debug(objPeriod.toXMLString());
+			            logger.debug("Absolute Repeat Interval :" + objPeriod.getAbsoluteRepeat());
+			            logger.debug("Timerange start :" + objPeriod.getBegin());
+			            logger.debug("Timerange end :" + objPeriod.getEnd());
+			            logger.debug("Job-Name :" + objPeriod.getJob());
+			        }
+			    }
+			    dailySchedulerDBItem.setResult(0);
+			    dailySchedulerDBItem.setStatus(DashBoardConstants.STATUS_NOT_ASSIGNED);
+			    dailySchedulerDBItem.setModified(new Date());
+			    dailySchedulerDBItem.setCreated(new Date());
+			    if (dailySchedulerDBItem.getSchedulePlanned() != null) {
+			        if (dailySchedulerDBItem.getJob() == null || !dailySchedulerDBItem.getJob().equals("(Spooler)")) {
+			           dailySchedulerDBLayer.getConnection().save(dailySchedulerDBItem);
+			        }
+			    }
 
-        this.delete();
-
-        Calendar objCalendar = getCalender();
-
-        Order order=null;
-        for (Object objCalendarObject : objCalendar.getAtOrPeriod()) {
-            DailyScheduleDBItem dailySchedulerDBItem = new DailyScheduleDBItem(this.dateFormat);
-            dailySchedulerDBItem.setSchedulerId(schedulerId);
-            if (objCalendarObject instanceof At) {
-
-                At objAt = (At) objCalendarObject;
-                
-                String orderId = objAt.getOrder();
-                String jobChain = objAt.getJobChain();
-                String job = objAt.getJob();
-
-                order = getOrder(jobChain, orderId);
-
-                dailySchedulerDBItem.setJob(job);
-                dailySchedulerDBItem.setJobChain(jobChain);
-                dailySchedulerDBItem.setOrderId(orderId);
-
-                if (orderId == null || !isSetback(order)) {
-                    dailySchedulerDBItem.setSchedulePlanned(objAt.getAt());
-
-                    logger.debug("Start at :" + objAt.getAt());
-                    logger.debug("Job Name :" + job);
-                    logger.debug("Job-Chain Name :" + jobChain);
-                    logger.debug("Order Name :" + orderId);
-
-                }
-                else {
-                    logger.debug("Job-Chain Name :" + jobChain + "/" + orderId + " ignored because order is in setback state");
-                }
-
-            }
-            else {
-                if (objCalendarObject instanceof Period) {
-                    Period objPeriod = (Period) objCalendarObject;
-                    
-                    String orderId = objPeriod.getOrder();
-                    String jobChain = objPeriod.getJobChain();
-                    String job = objPeriod.getJob();
-
-                    order = getOrder(jobChain, orderId);
-                    
-                    dailySchedulerDBItem.setJob(job);
-                    dailySchedulerDBItem.setJobChain(jobChain);
-                    dailySchedulerDBItem.setOrderId(orderId);
-
-                    dailySchedulerDBItem.setPeriodBegin(objPeriod.getBegin());
-                    dailySchedulerDBItem.setPeriodEnd(objPeriod.getEnd());
-
-                    dailySchedulerDBItem.setRepeat(objPeriod.getAbsoluteRepeat(), objPeriod.getRepeat());
-                    // logger.debug(objPeriod.toXMLString());
-                    logger.debug("Absolute Repeat Interval :" + objPeriod.getAbsoluteRepeat());
-                    logger.debug("Timerange start :" + objPeriod.getBegin());
-                    logger.debug("Timerange end :" + objPeriod.getEnd());
-                    logger.debug("Job-Name :" + objPeriod.getJob());
-                }
-            }
-            dailySchedulerDBItem.setResult(0);
-            
- 
-           //if (order.getSuspended()){
-           // dailySchedulerDBItem.setStatus(DashBoardConstants.STATUS_NOT_ASSIGNED_SUSPENDED);
-           //}else{
-            
-            dailySchedulerDBItem.setStatus(DashBoardConstants.STATUS_NOT_ASSIGNED);
-            //}
-
-            dailySchedulerDBItem.setModified(new Date());
-            dailySchedulerDBItem.setCreated(new Date());
-            if (dailySchedulerDBItem.getSchedulePlanned() != null) {
-                if (dailySchedulerDBItem.getJob() == null || !dailySchedulerDBItem.getJob().equals("(Spooler)")) {
-                   dailySchedulerDBLayer.save(dailySchedulerDBItem);
-                }
-            }
-
-        }
-        dailySchedulerDBLayer.commit();
+			}
+		} catch (Exception e) {
+			logger.error("Error occurred storing items: ", e);
+		}
     }
 
 	
@@ -227,7 +196,6 @@ public class Calendar2DB {
 		   calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
 		   now = calendar.getTime();
 		}
-
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String froms = formatter.format(now);
     	froms = froms + "T00:00:00";
@@ -243,7 +211,6 @@ public class Calendar2DB {
 		   calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
 		   now = calendar.getTime();
 		}
-
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String tos = formatter.format(now);
     	tos = tos + "T23:59:59";

@@ -26,27 +26,13 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 	private final String					conClassName						= "CheckDailyScheduleJSAdapterClass";  //$NON-NLS-1$
 	private static Logger		logger			= Logger.getLogger(CheckDailyScheduleJSAdapterClass.class);
 
-	public void init() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::init"; //$NON-NLS-1$
-		doInitialize();
-	}
-
-	private void doInitialize() {
-	} // doInitialize
-
 	@Override
 	public boolean spooler_init() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_init"; //$NON-NLS-1$
 		return super.spooler_init();
 	}
 
 	@Override
 	public boolean spooler_process() throws Exception {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_process"; //$NON-NLS-1$
-
 		try {
 			super.spooler_process();
 			doProcessing();
@@ -54,8 +40,6 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 		catch (Exception e) {
 			return false;
 		}
-		finally {
-		} // finally
 		// return value for classic and order driven processing
 		// TODO create method in base-class for this functionality
 		return spooler_task.job().order_queue() != null;
@@ -64,14 +48,10 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 
 	@Override
 	public void spooler_exit() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_exit"; //$NON-NLS-1$
 		super.spooler_exit();
 	}
 
 	private void doProcessing() throws Exception {
-
-		@SuppressWarnings("unused")
 		final String conMethodName = conClassName + "::doProcessing"; //$NON-NLS-1$
 		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName ) );
 		CheckDailySchedule objR = new CheckDailySchedule();

@@ -51,19 +51,14 @@ import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBLayer;
  */
 
 public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataProvider {
-
-	@SuppressWarnings("unused")
-	private final String						conClassName						= "SchedulerOrderStepHistoryDataProvider";
-
     private List<SchedulerOrderStepHistoryDBItem>  listOfSchedulerOrderStepHistoryDBItems   = null;
 	private SchedulerOrderStepHistoryDBLayer	   schedulerOrderStepHistoryDBLayer			= null;
  	private static Logger						   logger								    = Logger.getLogger(SchedulerOrderStepHistoryDataProvider.class);
     private long historyId;
     private String timeZone                                                                 = "";
 	
-    
-    public SchedulerOrderStepHistoryDataProvider(File configurationFile,long historyId_) {
-		this.schedulerOrderStepHistoryDBLayer = new SchedulerOrderStepHistoryDBLayer(configurationFile);
+    public SchedulerOrderStepHistoryDataProvider(String configurationFilename,long historyId_) {
+		this.schedulerOrderStepHistoryDBLayer = new SchedulerOrderStepHistoryDBLayer(configurationFilename);
 		this.historyId = historyId_;
  	}
 
@@ -76,13 +71,11 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 	}
 
 	public void getData(int limit) {
-
 	    if (historyId >= 0) {
 	       schedulerOrderStepHistoryDBLayer.getFilter().setLimit(limit);
            listOfSchedulerOrderStepHistoryDBItems = schedulerOrderStepHistoryDBLayer.getOrderStepHistoryItems(0,historyId);
 	    }
 	}
-
  
 	public String getLogAsString(Table tableSchedulerOrderSteppHistory) {
 		String log = "";
@@ -103,41 +96,31 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
 			if (schedulerOrderStepHistoryDBItem != null && schedulerOrderStepHistoryDBItem.getSchedulerOrderHistoryDBItem().getLog() != null) {
 				log = schedulerOrderStepHistoryDBItem.getSchedulerOrderHistoryDBItem().getLogAsString();
 			}
-		}
-		catch (IOException e1) {
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		return log;
 	}
 
-	
-
 	public void fillTable(Table table) {
-
 		if (listOfSchedulerOrderStepHistoryDBItems != null) {
             table.setRedraw(false);
 			Iterator<SchedulerOrderStepHistoryDBItem> schedulerHistoryEntries = listOfSchedulerOrderStepHistoryDBItems.iterator();
 			while (schedulerHistoryEntries.hasNext()) {
 			    SchedulerOrderStepHistoryDBItem h = (SchedulerOrderStepHistoryDBItem) schedulerHistoryEntries.next();
-				if (schedulerOrderStepHistoryDBLayer.getFilter().isFiltered(h)) {
-				}
-				else {
+				if (!schedulerOrderStepHistoryDBLayer.getFilter().isFiltered(h)) {
 					final SchedulerOrderStepHistoryTableItem newItemTableItem = new SchedulerOrderStepHistoryTableItem(table, SWT.BORDER);
 					h.setDateTimeZone4Getters(timeZone);
 					newItemTableItem.setDBItem(h);
-
 					logger.debug("...creating tableItem: " + h.getTitle() + ":" + table.getItemCount());
 					newItemTableItem.setData(h);
 					newItemTableItem.setColor();
 					newItemTableItem.setColumns();
 				}
 			}
-         table.setRedraw(true);
-
+			table.setRedraw(true);
 		}
 	}
-
- 
 
     public String getTimeZone() {
         return timeZone;
@@ -150,120 +133,101 @@ public class SchedulerOrderStepHistoryDataProvider implements ISOSDashboardDataP
     @Override
     public void fillSchedulerIds(CCombo cbSchedulerId) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setSchedulerId(String schedulerId) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setFrom(Date d) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setTo(Date d) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setSearchField(SOSSearchFilterData s) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setShowJobs(boolean b) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setShowJobChains(boolean b) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setShowWithError(boolean b) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setShowRunning(boolean b) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setIgnoreList(Preferences prefs) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void addToIgnorelist(Preferences prefs, DbItem h) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void disableIgnoreList(Preferences prefs) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void resetIgnoreList(Preferences prefs) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setLate(boolean b) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void setStatus(String statusExecuted) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
+    @Deprecated
     public void beginTransaction() {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
+    @Deprecated
     public void update(DbItem h) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
+    @Deprecated
     public void commit() {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
+    @Deprecated
     public Session getSession() {
         // TODO Auto-generated method stub
         return null;
     }
-
-     
-	
-   
-	
 	 
 }
