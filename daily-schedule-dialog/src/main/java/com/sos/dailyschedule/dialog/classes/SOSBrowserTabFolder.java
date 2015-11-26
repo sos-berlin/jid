@@ -79,7 +79,7 @@ public class SOSBrowserTabFolder {
                 String[] urlList = listOfUrls.split(",");
                 String[] urlListTitle = listOfUrlTitels.split(",");
                 for (int i = startIndex; i < urlList.length; i++) {
-                    if (listOfUrlTitels.length() == 0) {
+                    if (listOfUrlTitels.length() == 0 || listOfUrlTitels.length() < i) {
                         this.openUrl(new SOSUrl(urlList[i]));
                     }else {
                         this.openUrl(new SOSUrl(urlListTitle[i],urlList[i]));
@@ -119,6 +119,7 @@ public class SOSBrowserTabFolder {
  
     private void saveBrowserTabs() {
         listOfUrls = "";
+        listOfUrlTitels = "";
         CTabItem[] tabs = tabFolder.getItems();
         for (CTabItem tab : tabs) {
             SOSUrl url = (SOSUrl)tab.getData();
@@ -128,9 +129,16 @@ public class SOSBrowserTabFolder {
                 } else {
                     listOfUrls = listOfUrls + "," + url.getUrlValue();
                 }
+                if (listOfUrlTitels.equals("")) {
+                	listOfUrlTitels = url.getTitle();
+                } else {
+                	listOfUrlTitels = listOfUrlTitels + "," + url.getTitle();
+                }
             }
         }
         prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKey, listOfUrls);
+        prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKeyTitles, listOfUrlTitels);
+        
     }
     
 
