@@ -79,7 +79,7 @@ public class SOSBrowserTabFolder {
                 String[] urlList = listOfUrls.split(",");
                 String[] urlListTitle = listOfUrlTitels.split(",");
                 for (int i = startIndex; i < urlList.length; i++) {
-                    if (listOfUrlTitels.length() == 0 || listOfUrlTitels.length() < i) {
+                    if (listOfUrlTitels.length() == 0 || urlListTitle.length < urlList.length) {
                         this.openUrl(new SOSUrl(urlList[i]));
                     }else {
                         this.openUrl(new SOSUrl(urlListTitle[i],urlList[i]));
