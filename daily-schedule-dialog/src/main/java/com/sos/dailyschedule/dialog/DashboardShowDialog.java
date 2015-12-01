@@ -151,9 +151,6 @@ public class DashboardShowDialog extends FormBase {
                     SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
                     defaultUrl = new SOSUrl (schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort()); 
                 }
-            } else {// Den ersten aus den Preferences öffnen
-                String hostPort = listOfScheduler.split(",")[0];
-                defaultUrl = new SOSUrl(hostPort);
             }
             sosJocTabFolder.setOpenMenueItem(Messages.getLabel(DashBoardConstants.conSOSDashB_open_scheduler));
             sosJocTabFolder.setDefaultUrl(defaultUrl);
