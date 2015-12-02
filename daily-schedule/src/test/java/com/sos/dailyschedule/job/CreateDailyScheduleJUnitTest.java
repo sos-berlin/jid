@@ -19,20 +19,7 @@ import com.sos.JSHelper.Listener.JSListenerClass;
 import com.sos.dailyschedule.db.DailyScheduleDBItem;
 import com.sos.dailyschedule.db.DailyScheduleDBLayer;
 
-/**
- * \class 		CreateDaysScheduleJUnitTest - JUnit-Test for "Creating a DaysSchedule depending on actual Runtimes"
- *
- * \brief MainClass to launch CreateDaysSchedule as an executable command-line program
- *
-
- *
- * see \see C:\Dokumente und Einstellungen\Uwe Risse\Lokale Einstellungen\Temp\scheduler_editor-2235912449518755069.html for (more) details.
- *
- * \verbatim ;
- * mechanicaly created by C:\Dokumente und Einstellungen\Uwe Risse\Eigene Dateien\sos-berlin.com\jobscheduler.1.3.9\scheduler_139\config\JOETemplates\java\xsl\JSJobDoc2JSJUnitClass.xsl from http://www.sos-berlin.com at 20111027105329
- * \endverbatim
- */
-@Ignore("To reactivate first a Jobscheduler has to be reconfigured to match a running test machine!")
+//@Ignore("To reactivate first a Jobscheduler has to be reconfigured to match a running test machine!")
 public class CreateDailyScheduleJUnitTest extends JSToolBox {
 	@SuppressWarnings("unused")
 	private final static String				conClassName	= "CreateDaysScheduleJUnitTest";						//$NON-NLS-1$
@@ -74,12 +61,12 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 	public void testExecute() throws Exception {
 		try {
 			HashMap pobjHM = new HashMap();
-			pobjHM.put("CreateDailyScheduleOptionsSuperClass.scheduler_port", 4210);
-			pobjHM.put("CreateDailyScheduleOptionsSuperClass.schedulerHostName", "8of9.sos");
+			pobjHM.put("CreateDailyScheduleOptionsSuperClass.scheduler_port", 4410);
+			pobjHM.put("CreateDailyScheduleOptionsSuperClass.schedulerHostName", "galadriel.sos");
 			pobjHM.put("CreateDailyScheduleOptionsSuperClass.dayOffset", 0);
 			pobjHM.put("configurationFile","R:/nobackup/junittests/hibernate/hibernate.cfg.xml");
 			objE.getOptions().setAllOptions(pobjHM);
-			assertEquals("", objOptions.scheduler_port.value(), 4210);
+			assertEquals("", objOptions.scheduler_port.value(), 4410);
 			objE.Execute();
 			DailyScheduleDBLayer d = new DailyScheduleDBLayer("R:/nobackup/junittests/hibernate/hibernate.cfg.xml");
 			d.getConnection().connect();

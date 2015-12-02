@@ -232,7 +232,6 @@ public class SchedulerInstancesDBLayer  extends SOSHibernateDBLayer{
 			connection.connect();
 			connection.beginTransaction();
 			connection.saveOrUpdate(schedulerDbItem);
-			connection.commit();
 		} catch (Exception e) {
 			logger.error("Error occured while saving or updating Item: ", e);
 		}
