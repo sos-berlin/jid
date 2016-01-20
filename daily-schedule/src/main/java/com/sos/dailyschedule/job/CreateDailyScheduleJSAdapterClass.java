@@ -9,22 +9,7 @@ import sos.spooler.Spooler;
 
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 
-/**
- * \class 		CreateDaysScheduleJSAdapterClass - JobScheduler Adapter for "Creating a DaysSchedule depending on actual Runtimes"
- *
- * \brief AdapterClass of CreateDaysSchedule for the SOSJobScheduler
- *
- * This Class CreateDaysScheduleJSAdapterClass works as an adapter-class between the SOS
- * JobScheduler and the worker-class CreateDaysSchedule.
- *
-
- *
- * see \see C:\Dokumente und Einstellungen\Uwe Risse\Lokale Einstellungen\Temp\scheduler_editor-2235912449518755069.html for more details.
- *
- * \verbatim ;
- * mechanicaly created by C:\Dokumente und Einstellungen\Uwe Risse\Eigene Dateien\sos-berlin.com\jobscheduler.1.3.9\scheduler_139\config\JOETemplates\java\xsl\JSJobDoc2JSAdapterClass.xsl from http://www.sos-berlin.com at 20111027105329
- * \endverbatim
- */
+ 
 public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 	private final String	conClassName	= "CreateDailyScheduleJSAdapterClass";							//$NON-NLS-1$
 	private static Logger	logger			= Logger.getLogger(CreateDailyScheduleJSAdapterClass.class);
@@ -58,15 +43,13 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 			doProcessing();
 		}
 		catch (Exception e) {
-			e.printStackTrace(System.err);
+			logger.error(e.getMessage(),e);
 			logger.debug("Exception:" + e.getMessage());
 
 			return false;
 		}
 		finally {
-		} // finally
-			// return value for classic and order driven processing
-			// TODO create method in base-class for this functionality
+		}  
 		return spooler_task.job().order_queue() != null;
 
 	} // spooler_process
@@ -79,8 +62,7 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 	}
 
 	private void doProcessing() throws Exception {
-		//		IJSCommands 	objJSCommands		= this;
-
+ 
 		@SuppressWarnings("unused")
 		final String conMethodName = conClassName + "::doProcessing";
 		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
