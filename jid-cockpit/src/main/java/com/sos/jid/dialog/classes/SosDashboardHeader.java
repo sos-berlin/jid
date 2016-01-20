@@ -23,11 +23,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
-<<<<<<< HEAD
- 
-=======
-
->>>>>>> origin/release/1.9
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.dialog.components.SOSTimeZoneSelector;
@@ -240,19 +235,10 @@ public class SosDashboardHeader extends JSToolBox {
 
         // =============================================================================================
 
-<<<<<<< HEAD
-        
-  /*      MenuItem itemSearch = new MenuItem(contentMenu, SWT.PUSH);
-        itemSearch.addListener(SWT.Selection, getSearchListener());
-        itemSearch.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
-        */
-       
-=======
         MenuItem itemSearch = new MenuItem(contentMenu, SWT.PUSH);
         itemSearch.addListener(SWT.Selection, getSearchListener());
         itemSearch.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
 
->>>>>>> origin/release/1.9
         // =============================================================================================
         MenuItem itemTimeZone = new MenuItem(contentMenu, SWT.PUSH);
         itemTimeZone.addListener(SWT.Selection, getTimeZoneListener());

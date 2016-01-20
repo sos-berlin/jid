@@ -19,7 +19,7 @@ public class CheckDailyScheduleMain extends JSToolBox {
 
         try {
             CheckDailySchedule objM = new CheckDailySchedule();
-            CheckDailyScheduleOptions objO = objM.Options();
+            CheckDailyScheduleOptions objO = objM.getOptions();
 
             objO.CommandLineArgs(pstrArgs);
             objM.Execute();
@@ -32,28 +32,8 @@ public class CheckDailyScheduleMain extends JSToolBox {
             logger.error(String.format("JSJ-E-105: %1$s - terminated with exit-code %2$d", conMethodName, intExitCode), e);
         }
 
-<<<<<<< HEAD
-		try {
-			CheckDailySchedule objM = new CheckDailySchedule();
-			CheckDailyScheduleOptions objO = objM.getOptions();
-			
-			objO.CommandLineArgs(pstrArgs);
-			objM.Execute();
-		}
-		
-		catch (Exception e) {
-			System.err.println(conMethodName + ": " + "Error occured ..." + e.getMessage()); 
-			e.printStackTrace(System.err);
-			int intExitCode = 99;
-			logger.error(String.format("JSJ-E-105: %1$s - terminated with exit-code %2$d", conMethodName, intExitCode), e);		
-			System.exit(intExitCode);
-		}
-		
-		logger.info(String.format("JSJ-I-106: %1$s - ended without errors", conMethodName));		
-	}
-=======
+
         logger.info(String.format("JSJ-I-106: %1$s - ended without errors", conMethodName));
     }
->>>>>>> origin/release/1.9
-
+ 
 }  // class CheckDailyScheduleMain

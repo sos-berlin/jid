@@ -64,97 +64,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             where += and + " id.historyId = :historyId";
             and = " and ";
         }
-<<<<<<< HEAD
-	    
-		if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
-			where += and + " startTime>= :startTime";
-			and = " and ";
-		}
-
-		if (filter.getEndTime() != null && !filter.getEndTime().equals("")) {
-			where += and + " endTime <= :endTime ";
-			and = " and ";
-		}
-		
-		if (filter.getStatus() != null && !filter.getStatus().equals("")) {
-			where += and + " state = :state";
-			and = " and ";
-		}
-		
-		if (where.trim().equals("")) {
-
-		}
-		else {
-			where = "where " + where;
-		}
-		return where;
  
-	}
-	
-	public int deleteFromTo() {
-
-		if (session == null) {
-			beginTransaction();
-		}
-
-		String hql = "delete from SchedulerOrderStepHistoryDBItem " + getWhereFromTo();
-
-		Query query = session.createQuery(hql);
-		query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
-		query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
-
-		int row = query.executeUpdate();
-
-		return row;
-	}
-	
-  
-	public void deleteInterval(final int interval){
-		GregorianCalendar now = new GregorianCalendar();
-		now.add(GregorianCalendar.DAY_OF_YEAR, -interval);
-		filter.setExecutedTo(new Date());
-		filter.setExecutedFrom(now.getTime());
-		this.deleteFromTo();
-	}
-	
-	public List<SchedulerOrderStepHistoryDBItem> getSchedulerOrderStepHistoryListFromTo(final int limit) {
-		initSession();
-
- 		Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
-
-		if (filter.getExecutedFromUtc() != null && !filter.getExecutedFromUtc().equals("")) {
-			query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
-		}
-		if (filter.getExecutedToUtc() != null && !filter.getExecutedToUtc().equals("")) {
-			query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
-		}
-
-		if (limit > 0) {
-			query.setMaxResults(limit);
-		}
-
-		List<SchedulerOrderStepHistoryDBItem> schedulerHistoryList = query.list();
- 		return schedulerHistoryList;
-
-	}
-
-   
-
-	public List<SchedulerOrderStepHistoryDBItem> getOrderStepHistoryItems(final int limit, long historyId)  {
-		initSession();
-
-		filter.setHistoryId(historyId);
-		
-		transaction = session.beginTransaction();
-		Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhere());
-
-        if (filter.getHistoryId() != null ) {
-            query.setLong("historyId", filter.getHistoryId());
-         }
-        if (filter.getStatus() != null && !filter.getStatus().equals("")) {
-        	query.setParameter("state", filter.getStatus());
-         }
-=======
 
         if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
             where += and + " startTime>= :startTime";
@@ -232,7 +142,6 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
         if (filter.getHistoryId() != null) {
             query.setLong("historyId", filter.getHistoryId());
         }
->>>>>>> origin/release/1.9
         if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
             query.setTimestamp("startTime", filter.getStartTime());
         }

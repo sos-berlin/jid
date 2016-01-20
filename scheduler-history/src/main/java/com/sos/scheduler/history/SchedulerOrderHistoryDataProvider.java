@@ -16,131 +16,7 @@ import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
 
 public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvider {
 
-<<<<<<< HEAD
-	@SuppressWarnings("unused")
-	private final String						conClassName						= "SchedulerOrderHistoryDataProvider";
 
-	private List<SchedulerOrderHistoryDBItem>	listOfSchedulerOrderHistoryDBItems	= null;
-	//    private List<SchedulerOrderHistoryDBItem>   listOfSchedulerOrderHistoryDBSchedulersItems  = null;
-	private SchedulerOrderHistoryDBLayer		schedulerOrderHistoryDBLayer		= null;
-	private static Logger						logger								= Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
-	private String                              timeZone;
-
-	public SchedulerOrderHistoryDataProvider(final File configurationFile) {
-		schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
-
-	}
-
-	@Override
-	public SchedulerOrderHistoryFilter getFilter() {
-		return schedulerOrderHistoryDBLayer.getFilter();
-	}
-
-	@Override
-	public void resetFilter() {
-		schedulerOrderHistoryDBLayer.resetFilter();
-	}
-
-	@Override
-	public void getData(int limit) {
-	    schedulerOrderHistoryDBLayer.getFilter().setLimit(limit);
-		listOfSchedulerOrderHistoryDBItems = schedulerOrderHistoryDBLayer.getSchedulerOrderHistoryListFromTo();
-	}
-
-	public void fillSchedulerIds(final CCombo cbSchedulerId) {
-		if (listOfSchedulerOrderHistoryDBItems != null) {
-			//Es ist schneller, die vorhandenen Sätze zu verwenden.
-			//listOfSchedulerOrderHistoryDBSchedulersItems = schedulerOrderHistoryDBLayer.getSchedulerOrderHistoryListSchedulersFromTo();
-			Iterator<SchedulerOrderHistoryDBItem> schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
-			while (schedulerOrderHistoryEntries.hasNext()) {
-				SchedulerOrderHistoryDBItem h = schedulerOrderHistoryEntries.next();
-				if (cbSchedulerId.indexOf(h.getSpoolerId()) < 0) {
-					logger.debug("... cbSchedulerId --> : " + h.getSpoolerId());
-					cbSchedulerId.add(h.getSpoolerId());
-				}
-			}
-		}
-	}
-
-	public String getLogAsString(final Table tableSchedulerOrderHistory) {
-		String log = "";
-		if (tableSchedulerOrderHistory.getSelectionIndex() >= 0) {
-			TableItem t = tableSchedulerOrderHistory.getItem(tableSchedulerOrderHistory.getSelectionIndex());
-			SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t.getData();
-			if (h.getHistoryId() != null) {
-				log = getLogAsString(h.getHistoryId());
-			}
-		}
-		return log;
-	}
-
-	public String getLogAsString(final Long id) {
-		String log = "";
-		try {
-			SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem = schedulerOrderHistoryDBLayer.get(id);
-			if (schedulerOrderHistoryDBItem != null && schedulerOrderHistoryDBItem.getLog() != null) {
-				log = schedulerOrderHistoryDBItem.getLogAsString();
-			}
-		}
-		catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return log;
-	}
-
-	public void fillTableShort(final Table table) {
-		if (listOfSchedulerOrderHistoryDBItems != null) {
-
-			Iterator schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
-			while (schedulerOrderHistoryEntries.hasNext()) {
-				SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryEntries.next();
-				if (schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
-				}
-				else {
-					final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
-					h.setDateTimeZone4Getters(timeZone);
-					newItemTableItem.setDBItem(h);
-
-					logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
-					newItemTableItem.setData(h);
-					newItemTableItem.setColor();
-					newItemTableItem.setColumnsShort();
- 				 
-				}
-			}
-		}
-	}
-
-	@Override
-	public void fillTable(final Table table) {
-
-		if (listOfSchedulerOrderHistoryDBItems != null) {
-			Iterator schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
-			while (schedulerOrderHistoryEntries.hasNext()) {
-				SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryEntries.next();
-				if (schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
-				}
-				else {
-     				final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
-	                h.setDateTimeZone4Getters(timeZone);
-
-					newItemTableItem.setDBItem(h);
-
-					logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
-					newItemTableItem.setData(h);
-					newItemTableItem.setColor();
-					newItemTableItem.setColumns();
-
-				}
-			}
-		}
-	}
-
-	@Override
-	public void commit() {
-		schedulerOrderHistoryDBLayer.commit();
-	}
-=======
     @SuppressWarnings("unused")
     private final String conClassName = "SchedulerOrderHistoryDataProvider";
 
@@ -262,8 +138,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
     public void commit() {
         schedulerOrderHistoryDBLayer.commit();
     }
->>>>>>> origin/release/1.9
-
+ 
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
         this.getFilter().setTimeZone(timeZone);
