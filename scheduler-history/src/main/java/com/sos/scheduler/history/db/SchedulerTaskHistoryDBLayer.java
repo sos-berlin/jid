@@ -1,6 +1,7 @@
 package com.sos.scheduler.history.db;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
@@ -56,7 +57,19 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer{
 		this.resetFilter();
 	}
 
-	public SchedulerTaskHistoryDBItem get(Long id) {
+    public SchedulerTaskHistoryDBLayer(File configurationFile) {
+        super();
+        try {
+            this.setConfigurationFileName(configurationFile.getCanonicalPath());
+        } catch (IOException e) {
+            logger.error(e.getMessage(),e);
+            this.setConfigurationFileName("");
+        }
+        this.initConnection(this.getConfigurationFileName());
+        this.resetFilter();
+    }
+    
+    public SchedulerTaskHistoryDBItem get(Long id) {
 		if(connection == null){
 			initConnection(getConfigurationFileName());
 		}

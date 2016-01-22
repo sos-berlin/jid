@@ -1,5 +1,3 @@
-
-
 package com.sos.dailyschedule.job;
 
 import java.io.File;
@@ -8,21 +6,10 @@ import org.apache.log4j.Logger;
 
 import sos.scheduler.job.JobSchedulerJobAdapter;
 import sos.spooler.Spooler;
-/**
- * \class 		CheckDailyScheduleJSAdapterClass - JobScheduler Adapter for "Checking a DailySchedule with runs in History"
- *
- * \brief AdapterClass of CheckDailySchedule for the SOSJobScheduler
- *
- * This Class CheckDailyScheduleJSAdapterClass works as an adapter-class between the SOS
- * JobScheduler and the worker-class CheckDailySchedule.
- *
- * see \see C:\Dokumente und Einstellungen\Uwe Risse\Lokale Einstellungen\Temp\scheduler_editor-3456357879351999228.html for more details.
- *
- * \verbatim ;
- * mechanicaly created by C:\Dokumente und Einstellungen\Uwe Risse\Eigene Dateien\sos-berlin.com\jobscheduler.1.3.9\scheduler_139\config\JOETemplates\java\xsl\JSJobDoc2JSAdapterClass.xsl from http://www.sos-berlin.com at 20111212115623
- * \endverbatim
- */
+ 
+
 public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
+
 	private final String					conClassName						= "CheckDailyScheduleJSAdapterClass";  //$NON-NLS-1$
 	private static Logger		logger			= Logger.getLogger(CheckDailyScheduleJSAdapterClass.class);
 
@@ -36,12 +23,10 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 		try {
 			super.spooler_process();
 			doProcessing();
-		}
-		catch (Exception e) {
+        } catch (Exception e) {
 			return false;
 		}
-		// return value for classic and order driven processing
-		// TODO create method in base-class for this functionality
+
 		return spooler_task.job().order_queue() != null;
 
 	} // spooler_process
@@ -59,7 +44,6 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 		
 		objO.setAllOptions(getSchedulerParameterAsProperties(getParameters()));
 
-		 
 		Object objSp = getSpoolerObject();
 
 		String schedulerId = "";
@@ -100,4 +84,3 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter  {
 	} // doProcessing
 
 }
-

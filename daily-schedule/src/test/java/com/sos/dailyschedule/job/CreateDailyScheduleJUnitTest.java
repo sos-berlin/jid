@@ -1,26 +1,22 @@
 package com.sos.dailyschedule.job;
 
 import static org.junit.Assert.assertEquals;
-
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-
 import com.sos.JSHelper.Basics.JSToolBox;
 import com.sos.JSHelper.Listener.JSListenerClass;
 import com.sos.dailyschedule.db.DailyScheduleDBItem;
 import com.sos.dailyschedule.db.DailyScheduleDBLayer;
 
-//@Ignore("To reactivate first a Jobscheduler has to be reconfigured to match a running test machine!")
 public class CreateDailyScheduleJUnitTest extends JSToolBox {
+ 
 	@SuppressWarnings("unused")
 	private final static String				conClassName	= "CreateDaysScheduleJUnitTest";						//$NON-NLS-1$
 	@SuppressWarnings("unused")
@@ -65,6 +61,7 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 			pobjHM.put("CreateDailyScheduleOptionsSuperClass.schedulerHostName", "galadriel.sos");
 			pobjHM.put("CreateDailyScheduleOptionsSuperClass.dayOffset", 0);
 			pobjHM.put("configurationFile","R:/nobackup/junittests/hibernate/hibernate.cfg.xml");
+
 			objE.getOptions().setAllOptions(pobjHM);
 			assertEquals("", objOptions.scheduler_port.value(), 4410);
 			objE.Execute();

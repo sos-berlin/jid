@@ -1,6 +1,7 @@
 package com.sos.dailyschedule.db;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -55,7 +56,18 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
 		this.initConnection(this.getConfigurationFileName());
 		resetFilter();
 	}
-
+    
+	public DailyScheduleDBLayer(final File configurationFile) {
+        super();
+        try {
+            this.setConfigurationFileName(configurationFile.getCanonicalPath());
+        } catch (IOException e) {
+            this.setConfigurationFileName("");
+            logger.error(e.getMessage(),e);
+        }
+        this.initConnection(this.getConfigurationFileName());
+        resetFilter();
+    }
 	public DailyScheduleDBItem getHistory(final Long id) {
 		if(connection == null){
 			initConnection(getConfigurationFileName());

@@ -1,7 +1,6 @@
-
-
 package com.sos.dailyschedule.job;
 
+import java.io.File;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
@@ -9,7 +8,9 @@ import org.apache.log4j.Logger;
 import com.sos.JSHelper.Basics.JSJobUtilitiesClass;
 import com.sos.dailyschedule.db.DailyScheduleAdjustment;
 
+ 
 public class CheckDailySchedule extends JSJobUtilitiesClass <CheckDailyScheduleOptions> {
+
 	private final String					conClassName						= "CheckDailySchedule";  //$NON-NLS-1$
 	private static Logger		logger			= Logger.getLogger(CheckDailySchedule.class);
 
@@ -29,13 +30,13 @@ public class CheckDailySchedule extends JSJobUtilitiesClass <CheckDailyScheduleO
 		try {
 			getOptions().CheckMandatory();
 			logger.debug(getOptions().dirtyString());
-			DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(objOptions.configuration_file.Value());
+			DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(new File(objOptions.configuration_file.Value()));
 			dailyScheduleAdjustment.setOptions(objOptions);
 			//It is not neccessary to check into the future.
 			dailyScheduleAdjustment.setTo(new Date());
  			dailyScheduleAdjustment.adjustWithHistory();
-		} catch (Exception e) {
-			e.printStackTrace(System.err);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
 			throw new Exception (e);
 		}
 		return this;

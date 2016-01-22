@@ -1,5 +1,7 @@
 package com.sos.dailyschedule.dialog.classes;
 
+import java.io.File;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -63,8 +65,8 @@ public class SOSDialogOrderStepHistory {
 				| SWT.MULTI, messages);
 		tableStepHistoryDetail.setLogTabFolder(logTabFolder);
 		tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
-		SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(objOptions
-				.getConfigurationFile().Value(), schedulerOrderHistoryDBItem.getHistoryId());
+		SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(new File(objOptions
+				.getConfigurationFile().Value()), schedulerOrderHistoryDBItem.getHistoryId());
 		schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
 		schedulerOrderStepHistoryDataProvider.getData(0);
 		schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
