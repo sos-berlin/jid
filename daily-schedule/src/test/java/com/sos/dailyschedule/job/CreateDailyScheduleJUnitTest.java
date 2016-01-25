@@ -80,7 +80,7 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 			}
 			d.getConnection().commit();
 		} catch (Exception e) {
-			e.printStackTrace();
+            logger.error(e.getMessage(),e);
 		}
 	}
 
