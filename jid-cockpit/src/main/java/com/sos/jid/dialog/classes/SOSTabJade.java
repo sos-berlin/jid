@@ -18,63 +18,54 @@ import com.sos.dialog.classes.SOSUrl;
 
 public class SOSTabJade extends CTabItem {
 
-	private static final String TABNAME_JADE_COCKPIT = "Jade Cockpit";
-	private static final String TABNAME_JADE_BACKGROUND_SERVICE = "Jade Background Service";
- 
+    private static final String TABNAME_JADE_COCKPIT = "Jade Cockpit";
+    private static final String TABNAME_JADE_BACKGROUND_SERVICE = "Jade Background Service";
 
-	private final Composite composite;
-	private Preferences prefs;
-	private CTabFolder mainTabFolder = null;
-	 
-	private SOSTabJadeCockpit tbtmJadeCockpit;
+    private final Composite composite;
+    private Preferences prefs;
+    private CTabFolder mainTabFolder = null;
+
+    private SOSTabJadeCockpit tbtmJadeCockpit;
     private SosTabJOC tbtmJadeJoc;
     private SOSTabJadeBackground tbtmJadeBackground;
-    
-    private SOSDashboardOptions  objOptions=null;
 
-	public SOSTabJade(final SOSDashboardOptions objOptions_,final String caption, final CTabFolder parent ) {
-		super(parent, SWT.NONE);
-		objOptions = objOptions_;
-		setText(caption);
-		composite = new Composite(parent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
-		composite.setLayout(layout);
-		createContents();
-		composite.layout();
-		this.setControl(composite);
+    private SOSDashboardOptions objOptions = null;
 
-	}
+    public SOSTabJade(final SOSDashboardOptions objOptions_, final String caption, final CTabFolder parent) {
+        super(parent, SWT.NONE);
+        objOptions = objOptions_;
+        setText(caption);
+        composite = new Composite(parent, SWT.NONE);
+        GridLayout layout = new GridLayout(1, false);
+        composite.setLayout(layout);
+        createContents();
+        composite.layout();
+        this.setControl(composite);
 
-	public void disableRefresh(){
-		 
+    }
 
-	}
+    public void disableRefresh() {
 
-	public void enableRefresh(){
-		  
+    }
 
-	}
-	/**
-	 * Create contents of the window
-	 */
-	protected void createContents() {
-		prefs = Preferences.userNodeForPackage(this.getClass());
+    public void enableRefresh() {
 
-		mainTabFolder = new CTabFolder(composite, SWT.NONE);
+    }
+
+    /** Create contents of the window */
+    protected void createContents() {
+        prefs = Preferences.userNodeForPackage(this.getClass());
+
+        mainTabFolder = new CTabFolder(composite, SWT.NONE);
         mainTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		mainTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
+        mainTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
-		tbtmJadeCockpit = new SOSTabJadeCockpit(TABNAME_JADE_COCKPIT, mainTabFolder);
+        tbtmJadeCockpit = new SOSTabJadeCockpit(TABNAME_JADE_COCKPIT, mainTabFolder);
         tbtmJadeJoc = new SosTabJOC(mainTabFolder, new SOSUrl("http://www.sos-berlin.com"));
-        tbtmJadeBackground = new SOSTabJadeBackground(objOptions,TABNAME_JADE_BACKGROUND_SERVICE, mainTabFolder);
-	 	
+        tbtmJadeBackground = new SOSTabJadeBackground(objOptions, TABNAME_JADE_BACKGROUND_SERVICE, mainTabFolder);
+
         mainTabFolder.setSelection(0);
-  
-	}
 
-	 
-	 
-
-
+    }
 
 }

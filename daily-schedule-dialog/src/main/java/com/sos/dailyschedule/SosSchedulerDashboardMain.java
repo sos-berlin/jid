@@ -80,8 +80,8 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     sosLoginDialog.setMsg("login cancelled");
                 }
             } catch (Exception e) {
-                
-                LOGGER.error(e.getMessage(),e);
+
+                LOGGER.error(e.getMessage(), e);
                 boolean enabled = getNextSecurityServer();
                 tryingNextServer = true;
                 if (!enabled) {
@@ -115,7 +115,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                         objOptions.securityServer.Value(webServicAddress);
                     }
                 } catch (Exception e) {
-                    LOGGER.info(e.getMessage(),e);
+                    LOGGER.info(e.getMessage(), e);
                     enabled = true;
                 }
             }
@@ -212,7 +212,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 System.exit(intExitCode);
                 LOGGER.error(String.format(getMsg(SOS_EXIT_CODE_RAISED), conMethodName, intExitCode), e);
             } catch (Exception ee) {
-                LOGGER.error(ee.getMessage(),ee);
+                LOGGER.error(ee.getMessage(), ee);
                 int intExitCode = 199;
                 System.exit(intExitCode);
             }

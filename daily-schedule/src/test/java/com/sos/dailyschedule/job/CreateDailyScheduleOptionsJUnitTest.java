@@ -79,7 +79,7 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
     }
 
     private HashMap<String, String> SetJobSchedulerSSHJobOptions(HashMap<String, String> pobjHM) {
-        pobjHM.put("CreateDaysScheduleOptionsJUnitTest.auth_file", "test"); 
+        pobjHM.put("CreateDaysScheduleOptionsJUnitTest.auth_file", "test");
         return pobjHM;
     }
 

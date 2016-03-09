@@ -12,33 +12,30 @@ import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 
-/**
- * \class 		nameOptionsSuperClass - title
+/** \class nameOptionsSuperClass - title
  *
- * \brief 
- * An Options-Super-Class with all Options. This Class will be extended by the "real" Options-class (\see nameOptions.
- * The "real" Option class will hold all the things, which are normaly overwritten at a new generation
- * of the super-class.
+ * \brief An Options-Super-Class with all Options. This Class will be extended
+ * by the "real" Options-class (\see nameOptions. The "real" Option class will
+ * hold all the things, which are normaly overwritten at a new generation of the
+ * super-class.
  *
  *
-
- *
- * see \see C:\Dokumente und Einstellungen\Uwe Risse\Lokale Einstellungen\Temp\scheduler_editor-8766529980398533444.html for (more) details.
  * 
- * \verbatim ;
- * mechanicaly created by C:\Dokumente und Einstellungen\Uwe Risse\Eigene Dateien\sos-berlin.com\jobscheduler.1.3.9\scheduler_139\config\JOETemplates\java\xsl\JSJobDoc2JSOptionSuperClass.xsl from http://www.sos-berlin.com at 20120203101939 
- * \endverbatim
- * \section OptionsTable Tabelle der vorhandenen Optionen
+ *
+ * see \see C:\Dokumente und Einstellungen\Uwe Risse\Lokale
+ * Einstellungen\Temp\scheduler_editor-8766529980398533444.html for (more)
+ * details.
+ * 
+ * \verbatim ; mechanicaly created by C:\Dokumente und Einstellungen\Uwe
+ * Risse\Eigene
+ * Dateien\sos-berlin.com\jobscheduler.1.3.9\scheduler_139\config\JOETemplates
+ * \java\xsl\JSJobDoc2JSOptionSuperClass.xsl from http://www.sos-berlin.com at
+ * 20120203101939 \endverbatim \section OptionsTable Tabelle der vorhandenen
+ * Optionen
  * 
  * Tabelle mit allen Optionen
  * 
- * MethodName
- * Title
- * Setting
- * Description
- * IsMandatory
- * DataType
- * InitialValue
+ * MethodName Title Setting Description IsMandatory DataType InitialValue
  * TestValue
  * 
  * 
@@ -48,154 +45,131 @@ import java.util.HashMap;
  * Die folgenden Methode kann verwendet werden, um für einen Test eine HashMap
  * mit sinnvollen Werten für die einzelnen Optionen zu erzeugen.
  *
- * \verbatim
- private HashMap <String, String> SetJobSchedulerSSHJobOptions (HashMap <String, String> pobjHM) {
-	pobjHM.put ("		nameOptionsSuperClass.auth_file", "test");  // This parameter specifies the path and name of a user's pr
-		return pobjHM;
-  }  //  private void SetJobSchedulerSSHJobOptions (HashMap <String, String> pobjHM)
- * \endverbatim
- */
+ * \verbatim private HashMap <String, String> SetJobSchedulerSSHJobOptions
+ * (HashMap <String, String> pobjHM) { pobjHM.put
+ * ("		nameOptionsSuperClass.auth_file", "test"); // This parameter specifies
+ * the path and name of a user's pr return pobjHM; } // private void
+ * SetJobSchedulerSSHJobOptions (HashMap <String, String> pobjHM) \endverbatim */
 @JSOptionClass(name = "SOSDashboardOptionsSuperClass", description = "SOSDashboardOptionsSuperClass")
 public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
-    /**
-     * 
-     */
-    private static final long  serialVersionUID           = -6664326152593606058L;
-    private final String       conClassName               = "SOSDashboardOptionsSuperClass";
-    @SuppressWarnings("unused")
-    private static Logger      logger                     = Logger.getLogger(SOSDashboardOptionsSuperClass.class);
 
     /**
-     * \var configurationFile : 
      * 
-     *
      */
+    private static final long serialVersionUID = -6664326152593606058L;
+    private final String conClassName = "SOSDashboardOptionsSuperClass";
+    @SuppressWarnings("unused")
+    private static Logger logger = Logger.getLogger(SOSDashboardOptionsSuperClass.class);
+
+    /** \var configurationFile : */
     @JSOptionDefinition(name = "Hibernate_Configuration_File", description = "", key = "Hibernate_Configuration_File", type = "SOSOptionString", mandatory = false)
     public SOSOptionInFileName hibernateConfigurationFile = new SOSOptionInFileName(this, conClassName + ".Hibernate_Configuration_File", // HashMap-Key
-                                                                  "Configuration File for Hibernate", // Titel
-                                                                  "./hibernate_mysql.cfg.xml", // InitValue
-                                                                  " ", // DefaultValue
-                                                                  true // isMandatory
-                                                          );
-    public SOSOptionInFileName hibernateConfigFile        = hibernateConfigurationFile;
-    
+    "Configuration File for Hibernate", // Titel
+    "./hibernate_mysql.cfg.xml", // InitValue
+    " ", // DefaultValue
+    true // isMandatory
+    );
+    public SOSOptionInFileName hibernateConfigFile = hibernateConfigurationFile;
 
-        
-    
-    public SOSOptionInFileName hibernateConfig            = (SOSOptionInFileName) hibernateConfigurationFile.SetAlias(conClassName + ".Config");
+    public SOSOptionInFileName hibernateConfig = (SOSOptionInFileName) hibernateConfigurationFile.SetAlias(conClassName + ".Config");
 
-    /**
-     * \var configurationFile : 
-     * 
-     *
-     */
+    /** \var configurationFile : */
     @JSOptionDefinition(name = "security_server", description = "", key = "security_server", type = "SOSOptionString", mandatory = false)
     public SOSOptionString securityServer = new SOSOptionString(this, conClassName + ".SecurityServer", // HashMap-Key
-                                                                  "Security Server for security rest service", // Titel
-                                                                  " ", // InitValue
-                                                                  " ", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
-    
-/**
-* \var schedulerId : 
-* 
-*
-*/
-@JSOptionDefinition(name = "scheduler_id", description = "", key = "scheduler_id", type = "SOSOptionString", mandatory = false)
-public SOSOptionString schedulerId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
-                                                             "scheduler_id that is assigned to this dashboard", // Titel
-                                                             " ", // InitValue
-                                                             " ", // DefaultValue
-                                                             true // isMandatory
-                                                     );
+    "Security Server for security rest service", // Titel
+    " ", // InitValue
+    " ", // DefaultValue
+    false // isMandatory
+    );
 
-/**
-* \var sessionId : 
-* 
-*
-*/
-@JSOptionDefinition(name = "scheduler_id", description = "", key = "session_id", type = "SOSOptionString", mandatory = false)
-public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
-                                                         "sessionId that is assigned to this dashboard", // Titel
-                                                         " ", // InitValue
-                                                         " ", // DefaultValue
-                                                         false // isMandatory
-                                                 );
+    /** \var schedulerId : */
+    @JSOptionDefinition(name = "scheduler_id", description = "", key = "scheduler_id", type = "SOSOptionString", mandatory = false)
+    public SOSOptionString schedulerId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
+    "scheduler_id that is assigned to this dashboard", // Titel
+    " ", // InitValue
+    " ", // DefaultValue
+    true // isMandatory
+    );
 
-    
-    
+    /** \var sessionId : */
+    @JSOptionDefinition(name = "scheduler_id", description = "", key = "session_id", type = "SOSOptionString", mandatory = false)
+    public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".SchedulerId", // HashMap-Key
+    "sessionId that is assigned to this dashboard", // Titel
+    " ", // InitValue
+    " ", // DefaultValue
+    false // isMandatory
+    );
+
     @JSOptionDefinition(name = "enableJobStart", description = "", key = "enableJobStart", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableJobStart             = new SOSOptionBoolean(this, conClassName + ".enable_job_start", // HashMap-Key
-                                                                  "Starting jobs and orders in context menu", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableJobStart = new SOSOptionBoolean(this, conClassName + ".enable_job_start", // HashMap-Key
+    "Starting jobs and orders in context menu", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
     @JSOptionDefinition(name = "enable_joc", description = "", key = "enable_joc", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableJOC                  = new SOSOptionBoolean(this, conClassName + ".enable_joc", // HashMap-Key
-                                                                  "Show JOC", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-            );
-     
+    public SOSOptionBoolean enableJOC = new SOSOptionBoolean(this, conClassName + ".enable_joc", // HashMap-Key
+    "Show JOC", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
+
     @JSOptionDefinition(name = "enable_reports", description = "", key = "enable_reports", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableReports                  = new SOSOptionBoolean(this, conClassName + ".enable_reports", // HashMap-Key
-                                                                  "Show Reports", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableReports = new SOSOptionBoolean(this, conClassName + ".enable_reports", // HashMap-Key
+    "Show Reports", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
     @JSOptionDefinition(name = "enable_jade", description = "", key = "enable_jade", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableJade                  = new SOSOptionBoolean(this, conClassName + ".enable_jade", // HashMap-Key
-                                                                  "Show Jade Tab", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableJade = new SOSOptionBoolean(this, conClassName + ".enable_jade", // HashMap-Key
+    "Show Jade Tab", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
 
     @JSOptionDefinition(name = "enable_joe", description = "", key = "enable_joe", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableJOE                  = new SOSOptionBoolean(this, conClassName + ".enable_joe", // HashMap-Key
-                                                                  "Show JOC", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableJOE = new SOSOptionBoolean(this, conClassName + ".enable_joe", // HashMap-Key
+    "Show JOC", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
 
     @JSOptionDefinition(name = "enable_events", description = "", key = "enable_events", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableEvents               = new SOSOptionBoolean(this, conClassName + ".enable_events", // HashMap-Key
-                                                                  "Show Events", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableEvents = new SOSOptionBoolean(this, conClassName + ".enable_events", // HashMap-Key
+    "Show Events", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
 
     @JSOptionDefinition(name = "enable_jobnet", description = "", key = "enable_jobnet", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableJobnet               = new SOSOptionBoolean(this, conClassName + ".enable_jobnet", // HashMap-Key
-                                                                  "Show JobNet", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableJobnet = new SOSOptionBoolean(this, conClassName + ".enable_jobnet", // HashMap-Key
+    "Show JobNet", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
 
     @JSOptionDefinition(name = "enable_scheduler_instances", description = "", key = "enable_scheduler_instances", type = "SOSOptionBoolean", mandatory = false)
-    public SOSOptionBoolean    enableSchedulerInstances               = new SOSOptionBoolean(this, conClassName + ".enable_scheduler_instances", // HashMap-Key
-                                                                  "Show Scheduler Instances", // Titel
-                                                                  "false", // InitValue
-                                                                  "false", // DefaultValue
-                                                                  false // isMandatory
-                                                          );
+    public SOSOptionBoolean enableSchedulerInstances = new SOSOptionBoolean(this, conClassName + ".enable_scheduler_instances", // HashMap-Key
+    "Show Scheduler Instances", // Titel
+    "false", // InitValue
+    "false", // DefaultValue
+    false // isMandatory
+    );
 
     public SOSOptionBoolean getEnableJade() {
         return enableJade;
     }
-    
 
     public SOSOptionBoolean getEnableReports() {
         return enableReports;
     }
-    
+
     public SOSOptionBoolean getEnableJOC() {
         return enableJOC;
     }
@@ -231,48 +205,43 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
     public void setSessionId(final SOSOptionString sessionId_) {
         sessionId = sessionId_;
     }
-    
+
     public SOSOptionString getSessionId() {
         return this.sessionId;
-    }    
+    }
+
     public SOSOptionString getSecurityServer() {
         return this.securityServer;
     }
- 
+
     public void setSecurityServer(final SOSOptionString p_securityServer) {
         this.securityServer = p_securityServer;
     }
-    
+
     public SOSOptionString getSchedulerId() {
         return this.schedulerId;
     }
- 
+
     public void setSchedulerId(final SOSOptionString p_schedulerId) {
         this.schedulerId = p_schedulerId;
     }
-    
-    
-    /**
-     * \brief getconfigurationFile : 
+
+    /** \brief getconfigurationFile :
      * 
      * \details
      * 
      *
-     * \return 
-     *
-     */
+     * \return */
     public SOSOptionInFileName getConfigurationFile() {
         return hibernateConfigurationFile;
     }
 
-    /**
-     * \brief setconfigurationFile : 
+    /** \brief setconfigurationFile :
      * 
      * \details
      * 
      *
-     * @param p_configurationFile :
-     */
+     * @param p_configurationFile : */
     public void setConfigurationFile(final SOSOptionInFileName p_configurationFile) {
         this.hibernateConfigurationFile = p_configurationFile;
     }
@@ -293,15 +262,12 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
         this.setAllOptions(JSSettings);
     } // public nameOptionsSuperClass (HashMap JSSettings)
 
-    /**
-     * \brief getAllOptionsAsString - liefert die Werte und Beschreibung aller
+    /** \brief getAllOptionsAsString - liefert die Werte und Beschreibung aller
      * Optionen als String
      *
      * \details
      * 
-     * \see toString 
-     * \see toOut
-     */
+     * \see toString \see toOut */
     private String getAllOptionsAsString() {
         @SuppressWarnings("unused")
         final String conMethodName = conClassName + "::getAllOptionsAsString";
@@ -316,8 +282,7 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
         return strT;
     } // private String getAllOptionsAsString ()
 
-    /**
-     * \brief setAllOptions - übernimmt die OptionenWerte aus der HashMap
+    /** \brief setAllOptions - übernimmt die OptionenWerte aus der HashMap
      *
      * \details In der als Parameter anzugebenden HashMap sind Schlüssel (Name)
      * und Wert der jeweiligen Option als Paar angegeben. Ein Beispiel für den
@@ -331,8 +296,7 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
      * \see JSOptionsClass::getItem
      *
      * @param pobjJSSettings
-     * @throws Exception
-     */
+     * @throws Exception */
     public void setAllOptions(HashMap<String, String> pobjJSSettings) {
         @SuppressWarnings("unused")
         final String conMethodName = conClassName + "::setAllOptions";
@@ -343,29 +307,25 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
         flgSetAllOptions = false;
     } // public void setAllOptions (HashMap <String, String> JSSettings)
 
-    /**
-     * \brief CheckMandatory - prüft alle Muss-Optionen auf Werte
+    /** \brief CheckMandatory - prüft alle Muss-Optionen auf Werte
      *
      * \details
+     * 
      * @throws Exception
      *
-     * @throws Exception
-     * - wird ausgelöst, wenn eine mandatory-Option keinen Wert hat
-     */
+     * @throws Exception - wird ausgelöst, wenn eine mandatory-Option keinen
+     *             Wert hat */
     @Override
     public void CheckMandatory() throws JSExceptionMandatoryOptionMissing //
             , Exception {
         try {
             super.CheckMandatory();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new JSExceptionMandatoryOptionMissing(e.toString());
         }
     } // public void CheckMandatory ()
 
-    /**
-     *
-     * \brief CommandLineArgs - Übernehmen der Options/Settings aus der
+    /** \brief CommandLineArgs - Übernehmen der Options/Settings aus der
      * Kommandozeile
      *
      * \details Die in der Kommandozeile beim Starten der Applikation
@@ -375,8 +335,7 @@ public SOSOptionString sessionId = new SOSOptionString(this, conClassName + ".Sc
      * \return void
      *
      * @param pstrArgs
-     * @throws Exception
-     */
+     * @throws Exception */
     @Override
     public void CommandLineArgs(String[] pstrArgs) {
         super.CommandLineArgs(pstrArgs);

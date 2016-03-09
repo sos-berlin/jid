@@ -164,9 +164,8 @@ public class Calendar2DB {
                 }
             }
             dailySchedulerDBItem.setResult(0);
-  
+
             dailySchedulerDBItem.setStatus(DashBoardConstants.STATUS_NOT_ASSIGNED);
-            
 
             dailySchedulerDBItem.setModified(new Date());
             dailySchedulerDBItem.setCreated(new Date());

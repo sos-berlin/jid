@@ -16,7 +16,7 @@ import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
 import com.sos.scheduler.history.classes.SchedulerHistoryTableItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
- 
+
 public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvider {
 
     @SuppressWarnings("unused")
@@ -81,7 +81,7 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
                 log = schedulerHistoryDBItem.getLogAsString();
             }
         } catch (IOException e1) {
-            logger.error(e1.getMessage(),e1);
+            logger.error(e1.getMessage(), e1);
         }
         return log;
     }
@@ -91,7 +91,7 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
         if (listOfSchedulerTaskHistoryDBItems != null) {
             table.setRedraw(false);
 
-            Iterator <SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
+            Iterator<SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
             while (schedulerHistoryEntries.hasNext()) {
                 SchedulerTaskHistoryDBItem h = schedulerHistoryEntries.next();
                 if (schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
@@ -114,9 +114,9 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
 
         if (listOfSchedulerTaskHistoryDBItems != null) {
             table.setRedraw(false);
-            Iterator <SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
+            Iterator<SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
             while (schedulerHistoryEntries.hasNext()) {
-                SchedulerTaskHistoryDBItem h =  schedulerHistoryEntries.next();
+                SchedulerTaskHistoryDBItem h = schedulerHistoryEntries.next();
                 if (schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
                 } else {
                     final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);

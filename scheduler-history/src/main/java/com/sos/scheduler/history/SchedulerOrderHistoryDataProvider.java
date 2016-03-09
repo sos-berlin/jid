@@ -20,7 +20,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
     private final String conClassName = "SchedulerOrderHistoryDataProvider";
 
     private List<SchedulerOrderHistoryDBItem> listOfSchedulerOrderHistoryDBItems = null;
- 
+
     private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
     private static Logger logger = Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
     private String timeZone;

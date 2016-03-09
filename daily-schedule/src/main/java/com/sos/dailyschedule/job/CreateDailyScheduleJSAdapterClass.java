@@ -9,119 +9,114 @@ import sos.spooler.Spooler;
 
 import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 
- 
 public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
-	private final String	conClassName	= "CreateDailyScheduleJSAdapterClass";							//$NON-NLS-1$
-	private static Logger	logger			= Logger.getLogger(CreateDailyScheduleJSAdapterClass.class);
 
-	public void init() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::init"; //$NON-NLS-1$
-		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
-		doInitialize();
-	}
+    private final String conClassName = "CreateDailyScheduleJSAdapterClass";							//$NON-NLS-1$
+    private static Logger logger = Logger.getLogger(CreateDailyScheduleJSAdapterClass.class);
 
-	private void doInitialize() {
-	} // doInitialize
+    public void init() {
+        @SuppressWarnings("unused")
+        final String conMethodName = conClassName + "::init"; //$NON-NLS-1$
+        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        doInitialize();
+    }
 
-	@Override
-	public boolean spooler_init() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_init"; //$NON-NLS-1$
-		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
-		return super.spooler_init();
-	}
+    private void doInitialize() {
+    } // doInitialize
 
-	@Override
-	public boolean spooler_process() throws Exception {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_process"; //$NON-NLS-1$
-		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+    @Override
+    public boolean spooler_init() {
+        @SuppressWarnings("unused")
+        final String conMethodName = conClassName + "::spooler_init"; //$NON-NLS-1$
+        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        return super.spooler_init();
+    }
 
-		try {
-			super.spooler_process();
-			doProcessing();
-		}
-		catch (Exception e) {
-			logger.error(e.getMessage(),e);
-			logger.debug("Exception:" + e.getMessage());
+    @Override
+    public boolean spooler_process() throws Exception {
+        @SuppressWarnings("unused")
+        final String conMethodName = conClassName + "::spooler_process"; //$NON-NLS-1$
+        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
 
-			return false;
-		}
-		finally {
-		}  
-		return spooler_task.job().order_queue() != null;
+        try {
+            super.spooler_process();
+            doProcessing();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            logger.debug("Exception:" + e.getMessage());
 
-	} // spooler_process
+            return false;
+        } finally {
+        }
+        return spooler_task.job().order_queue() != null;
 
-	@Override
-	public void spooler_exit() {
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::spooler_exit"; //$NON-NLS-1$
-		super.spooler_exit();
-	}
+    } // spooler_process
 
-	private void doProcessing() throws Exception {
- 
-		@SuppressWarnings("unused")
-		final String conMethodName = conClassName + "::doProcessing";
-		logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
-		CreateDailySchedule objR = new CreateDailySchedule();
-		CreateDailyScheduleOptions objO = objR.Options();
-		objO.setAllOptions(getSchedulerParameterAsProperties(getJobOrOrderParameters()));
+    @Override
+    public void spooler_exit() {
+        @SuppressWarnings("unused")
+        final String conMethodName = conClassName + "::spooler_exit"; //$NON-NLS-1$
+        super.spooler_exit();
+    }
 
-		Object objSp = getSpoolerObject();
-		objO.SchedulerHostName.isMandatory(true);
-		objO.scheduler_port.isMandatory(true);
+    private void doProcessing() throws Exception {
 
-		Spooler objSpooler = (Spooler) objSp;
-		int port = 4444;
-		String host = "localhost";
+        @SuppressWarnings("unused")
+        final String conMethodName = conClassName + "::doProcessing";
+        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        CreateDailySchedule objR = new CreateDailySchedule();
+        CreateDailyScheduleOptions objO = objR.Options();
+        objO.setAllOptions(getSchedulerParameterAsProperties(getJobOrOrderParameters()));
 
-		if (objO.getItem("SchedulerTcpPortNumber") != null) {
-			logger.debug("port from param");
-			port = objO.SchedulerTcpPortNumber.value();
-		}
-		else {
-			logger.debug("port from scheduler");
-			port = objSpooler.tcp_port();
-		}
+        Object objSp = getSpoolerObject();
+        objO.SchedulerHostName.isMandatory(true);
+        objO.scheduler_port.isMandatory(true);
 
-		if (objO.getItem("SchedulerHostName") != null) {
-			host = objO.SchedulerHostName.Value();
-		}
-		else {
-			host = objSpooler.hostname();
-		}
+        Spooler objSpooler = (Spooler) objSp;
+        int port = 4444;
+        String host = "localhost";
 
-		String configuration_file = "";
-		if (objO.getItem("configuration_file") != null) {
-			logger.debug("configuration_file from param");
-			configuration_file = objO.configuration_file.Value();
-		}
-		else {
-			logger.debug("configuration_file from scheduler");
-			File f = new File(new File(objSpooler.configuration_directory()).getParent(), "hibernate.cfg.xml");
-			if (!f.exists()){
-	 			  f = new File(new File(objSpooler.directory()),"config/hibernate.cfg.xml");
-			}
-			configuration_file = f.getAbsolutePath();
-		}
+        if (objO.getItem("SchedulerTcpPortNumber") != null) {
+            logger.debug("port from param");
+            port = objO.SchedulerTcpPortNumber.value();
+        } else {
+            logger.debug("port from scheduler");
+            port = objSpooler.tcp_port();
+        }
 
-		objO.configuration_file.Value(configuration_file);
-		objO.SchedulerHostName.Value(host);
-		objO.scheduler_port.value(port);
+        if (objO.getItem("SchedulerHostName") != null) {
+            host = objO.SchedulerHostName.Value();
+        } else {
+            host = objSpooler.hostname();
+        }
 
-		objO.CheckMandatory();
-		objR.setJSJobUtilites(this);
+        String configuration_file = "";
+        if (objO.getItem("configuration_file") != null) {
+            logger.debug("configuration_file from param");
+            configuration_file = objO.configuration_file.Value();
+        } else {
+            logger.debug("configuration_file from scheduler");
+            File f = new File(new File(objSpooler.configuration_directory()).getParent(), "hibernate.cfg.xml");
+            if (!f.exists()) {
+                f = new File(new File(objSpooler.directory()), "config/hibernate.cfg.xml");
+            }
+            configuration_file = f.getAbsolutePath();
+        }
 
-		SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File(configuration_file));
-		schedulerInstancesDBLayer.beginTransaction();
-		
-		schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDBLayer.setInstancesDbItemValues(host,port, objSpooler));
-		schedulerInstancesDBLayer.commit();
+        objO.configuration_file.Value(configuration_file);
+        objO.SchedulerHostName.Value(host);
+        objO.scheduler_port.value(port);
 
-		objR.Execute();
-	} // doProcessing
+        objO.CheckMandatory();
+        objR.setJSJobUtilites(this);
+
+        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File(configuration_file));
+        schedulerInstancesDBLayer.beginTransaction();
+
+        schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDBLayer.setInstancesDbItemValues(host, port, objSpooler));
+        schedulerInstancesDBLayer.commit();
+
+        objR.Execute();
+    } // doProcessing
 
 }

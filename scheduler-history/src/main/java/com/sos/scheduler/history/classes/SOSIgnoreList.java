@@ -2,52 +2,47 @@ package com.sos.scheduler.history.classes;
 
 import java.util.ArrayList;
 
- 
-
 import com.sos.hibernate.classes.DbItem;
- 
+
 public class SOSIgnoreList {
 
-	private ArrayList <DbItem> ignoreList= null;
-		
-	public  SOSIgnoreList() {
-		ignoreList = new ArrayList  <DbItem> ();
-	}
+    private ArrayList<DbItem> ignoreList = null;
 
-	public void add(DbItem s){
-	    if (!this.contains(s)) {
-	        ignoreList.add(s);
-	    }
-	}
+    public SOSIgnoreList() {
+        ignoreList = new ArrayList<DbItem>();
+    }
 
-  
-	public void reset(){
-		ignoreList.clear();
-	}
- 
+    public void add(DbItem s) {
+        if (!this.contains(s)) {
+            ignoreList.add(s);
+        }
+    }
 
-	public boolean contains(DbItem s){
-		 
-		  for( DbItem oh: ignoreList){
-			  if (oh.isOrderJob()){
-				  
-				   if ( ( oh.getOrderId() == null || oh.getOrderId().equals("null")  || oh.getOrderId().equals(s.getOrderId())) && oh.getJobChain().equals(s.getJobChain())){
-					   return true;
-				   }
-					   
-			  }else{
-		            if ( oh.getJob() == null || oh.getJob().equals(s.getJob()) ){
-		            	return true;
-		            }
-			  }
-        }		
-		  return false;
-	}
-	
-  
- 
-	public int size(){
-		return ignoreList.size();
-	}
-	
+    public void reset() {
+        ignoreList.clear();
+    }
+
+    public boolean contains(DbItem s) {
+
+        for (DbItem oh : ignoreList) {
+            if (oh.isOrderJob()) {
+
+                if ((oh.getOrderId() == null || oh.getOrderId().equals("null") || oh.getOrderId().equals(s.getOrderId()))
+                        && oh.getJobChain().equals(s.getJobChain())) {
+                    return true;
+                }
+
+            } else {
+                if (oh.getJob() == null || oh.getJob().equals(s.getJob())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public int size() {
+        return ignoreList.size();
+    }
+
 }
