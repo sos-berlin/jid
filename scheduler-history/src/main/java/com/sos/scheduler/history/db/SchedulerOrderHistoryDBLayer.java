@@ -203,7 +203,6 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
     private List<SchedulerOrderHistoryDBItem> executeQuery(Query query, int limit) {
         lastQuery = query.getQueryString();
 
- 
         if (filter.getExecutedUtcFrom() != null && !filter.getExecutedUtcFrom().equals("")) {
             query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
         }
@@ -228,7 +227,7 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList = query.list();
         int i = schedulerOrderHistoryList.size();
         return schedulerOrderHistoryList;
- 
+
     }
 
     public List<SchedulerOrderHistoryDBItem> getSchedulerOrderHistoryListFromTo() {
@@ -284,8 +283,8 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
 
         initSession();
 
-        String q = "from SchedulerOrderHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerOrderHistoryDBItem " + getWhereFromTo()
-                + ")";
+        String q = "from SchedulerOrderHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerOrderHistoryDBItem "
+                + getWhereFromTo() + ")";
         Query query = session.createQuery(q);
 
         // Query query = session.createQuery("from SchedulerOrderHistoryDBItem "

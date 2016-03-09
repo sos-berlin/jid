@@ -16,7 +16,6 @@ import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
 
 public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvider {
 
-
     @SuppressWarnings("unused")
     private final String conClassName = "SchedulerOrderHistoryDataProvider";
 
@@ -138,7 +137,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
     public void commit() {
         schedulerOrderHistoryDBLayer.commit();
     }
- 
+
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
         this.getFilter().setTimeZone(timeZone);

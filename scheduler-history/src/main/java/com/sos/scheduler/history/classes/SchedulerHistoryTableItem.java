@@ -98,8 +98,8 @@ public class SchedulerHistoryTableItem extends SOSTableItem implements ISOSTable
     public void setColumns() {
         DbItem d = dbItem;
 
-        textBuffer = new String[] { "", d.getSpoolerId(), d.getJobOrJobchain(), d.getStartTimeFormated(), d.getEndTimeFormated(), d.getDurationFormated(),
-                d.getExecResult() };
+        textBuffer = new String[] { "", d.getSpoolerId(), d.getJobOrJobchain(), d.getStartTimeFormated(), d.getEndTimeFormated(),
+                d.getDurationFormated(), d.getExecResult() };
 
         this.setText(textBuffer);
     }

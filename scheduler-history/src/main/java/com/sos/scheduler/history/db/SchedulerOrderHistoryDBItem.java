@@ -260,8 +260,8 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
         if (this.getState() == null) {
             return false;
         } else {
-            return this.getState().toLowerCase().contains("error") || this.getState().toLowerCase().contains("fehler") || this.getState().startsWith("!")
-                    || this.getState().toLowerCase().contains("fault");
+            return this.getState().toLowerCase().contains("error") || this.getState().toLowerCase().contains("fehler")
+                    || this.getState().startsWith("!") || this.getState().toLowerCase().contains("fault");
         }
     }
 

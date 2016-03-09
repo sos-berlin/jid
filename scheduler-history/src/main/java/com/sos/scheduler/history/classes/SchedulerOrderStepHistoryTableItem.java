@@ -107,8 +107,8 @@ public class SchedulerOrderStepHistoryTableItem extends SOSTableItem implements 
             jobname = d.getSchedulerTaskHistoryDBItem().getJob();
         }
 
-        textBuffer = new String[] { d.getId().getStepValue(), d.getState(), jobname, d.getStartTimeFormated(), d.getEndTimeFormated(), d.getDurationFormated(),
-                d.getExecResult(), d.getErrorCode(), d.getErrorText() };
+        textBuffer = new String[] { d.getId().getStepValue(), d.getState(), jobname, d.getStartTimeFormated(), d.getEndTimeFormated(),
+                d.getDurationFormated(), d.getExecResult(), d.getErrorCode(), d.getErrorText() };
 
         this.setText(textBuffer);
     }

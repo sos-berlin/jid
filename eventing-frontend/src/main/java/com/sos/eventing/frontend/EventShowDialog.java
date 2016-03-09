@@ -324,8 +324,9 @@ public class EventShowDialog extends JSToolBox {
                         attr = n.getAttributes();
                         final TableItem newItemTableItem = new TableItem(table, SWT.BORDER);
                         textBuffer = new String[] { getText(attr.getNamedItem("event_class")), getText(attr.getNamedItem("event_id")),
-                                getText(attr.getNamedItem("job_name")), getText(attr.getNamedItem("job_chain")), getText(attr.getNamedItem("order_id")),
-                                getText(attr.getNamedItem("exit_code")), getText(attr.getNamedItem("created")), getText(attr.getNamedItem("expires")),
+                                getText(attr.getNamedItem("job_name")), getText(attr.getNamedItem("job_chain")),
+                                getText(attr.getNamedItem("order_id")), getText(attr.getNamedItem("exit_code")),
+                                getText(attr.getNamedItem("created")), getText(attr.getNamedItem("expires")),
                                 getText(attr.getNamedItem("remote_scheduler_host")), getText(attr.getNamedItem("remote_scheduler_port")),
                                 getText(attr.getNamedItem("scheduler_id")) };
 
@@ -440,16 +441,37 @@ public class EventShowDialog extends JSToolBox {
                         String s = "";
                         if (t != null) {
                             s = "<add_order job_chain=\"" + job_chain + "\" state=\"" + state + "\" at=\"now\">";
-                            s += " <params>" + "<param name=\"action\"                 value=\"remove\"/>" + "<param name=\"event_class\"            value=\""
-                                    + t.getText() + "\"/>" + "<param name=\"event_id\"               value=\"" + t.getText(1) + "\"/>"
-                                    + "<param name=\"job_name\"               value=\"" + t.getText(2) + "\"/>"
-                                    + "<param name=\"job_chain\"              value=\"" + t.getText(3) + "\"/>"
-                                    + "<param name=\"order_id\"               value=\"" + t.getText(4) + "\"/>"
-                                    + "<param name=\"exit_code\"              value=\"" + t.getText(5) + "\"/>"
-                                    + "<param name=\"created\"                value=\"" + t.getText(6) + "\"/>"
-                                    + "<param name=\"expiration_date\"        value=\"" + t.getText(7) + "\"/>"
-                                    + "<param name=\"remote_scheduler_host\"  value=\"" + t.getText(8) + "\"/>"
-                                    + "<param name=\"remote_scheduler_port\"  value=\"" + t.getText(9) + "\"/>"
+                            s += " <params>" + "<param name=\"action\"                 value=\"remove\"/>"
+                                    + "<param name=\"event_class\"            value=\""
+                                    + t.getText()
+                                    + "\"/>"
+                                    + "<param name=\"event_id\"               value=\""
+                                    + t.getText(1)
+                                    + "\"/>"
+                                    + "<param name=\"job_name\"               value=\""
+                                    + t.getText(2)
+                                    + "\"/>"
+                                    + "<param name=\"job_chain\"              value=\""
+                                    + t.getText(3)
+                                    + "\"/>"
+                                    + "<param name=\"order_id\"               value=\""
+                                    + t.getText(4)
+                                    + "\"/>"
+                                    + "<param name=\"exit_code\"              value=\""
+                                    + t.getText(5)
+                                    + "\"/>"
+                                    + "<param name=\"created\"                value=\""
+                                    + t.getText(6)
+                                    + "\"/>"
+                                    + "<param name=\"expiration_date\"        value=\""
+                                    + t.getText(7)
+                                    + "\"/>"
+                                    + "<param name=\"remote_scheduler_host\"  value=\""
+                                    + t.getText(8)
+                                    + "\"/>"
+                                    + "<param name=\"remote_scheduler_port\"  value=\""
+                                    + t.getText(9)
+                                    + "\"/>"
                                     + "<param name=\"scheduler_id\"           value=\"" + t.getText(10) + "\"/>" + " </params></add_order>";
 
                             sendCommand(s);

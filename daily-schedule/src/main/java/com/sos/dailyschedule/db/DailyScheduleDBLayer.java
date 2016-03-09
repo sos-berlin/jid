@@ -177,7 +177,8 @@ public class DailyScheduleDBLayer extends SOSHibernateIntervalDBLayer {
     public List<DailyScheduleDBItem> getWaitingDailyScheduleList(final int limit) {
         initSession();
 
-        Query query = session.createQuery("from DailyScheduleDBItem " + getWhere() + "  and status = 0  " + filter.getOrderCriteria() + filter.getSortMode());
+        Query query = session.createQuery("from DailyScheduleDBItem " + getWhere() + "  and status = 0  " + filter.getOrderCriteria()
+                + filter.getSortMode());
 
         return executeQuery(query, limit);
 

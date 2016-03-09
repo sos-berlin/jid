@@ -7,7 +7,6 @@ import org.junit.*;
 
 import static org.junit.Assert.assertEquals;
 
- 
 public class CheckDailyScheduleOptionsJUnitTest extends JSToolBox {
 
     private final String conClassName = "CheckDailyScheduleOptionsJUnitTest"; //$NON-NLS-1$
@@ -44,7 +43,6 @@ public class CheckDailyScheduleOptionsJUnitTest extends JSToolBox {
     public void tearDown() throws Exception {
     }
 
- 
     @Test
     public void testconfiguration_file() {  // SOSOptionString
         objOptions.configuration_file.Value("++----++");

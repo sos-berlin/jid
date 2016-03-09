@@ -64,7 +64,6 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             where += and + " id.historyId = :historyId";
             and = " and ";
         }
- 
 
         if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
             where += and + " startTime>= :startTime";
@@ -112,7 +111,8 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
     public List<SchedulerOrderStepHistoryDBItem> getSchedulerOrderStepHistoryListFromTo(final int limit) {
         initSession();
 
-        Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
+        Query query = session.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
+                + filter.getSortMode());
 
         if (filter.getExecutedFromUtc() != null && !filter.getExecutedFromUtc().equals("")) {
             query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());

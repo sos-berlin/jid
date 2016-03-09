@@ -141,7 +141,8 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     private void searchInLog() {
-        if (sosSearchFilterData != null && sosSearchFilterData.getSearchfield() != null && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
+        if (sosSearchFilterData != null && sosSearchFilterData.getSearchfield() != null
+                && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
             boolean first = true;
             this.unmark();
             String s = sosSearchFilterData.getSearchfield();

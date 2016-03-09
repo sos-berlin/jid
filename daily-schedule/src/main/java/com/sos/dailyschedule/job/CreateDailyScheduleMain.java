@@ -5,7 +5,6 @@ import com.sos.JSHelper.Basics.JSToolBox;
 
 public class CreateDailyScheduleMain extends JSToolBox {
 
-
     private final static String conClassName = "CreateDaysScheduleMain"; //$NON-NLS-1$
     private static Logger logger = Logger.getLogger(CreateDailyScheduleMain.class);
     protected CreateDailyScheduleOptions objOptions = null;

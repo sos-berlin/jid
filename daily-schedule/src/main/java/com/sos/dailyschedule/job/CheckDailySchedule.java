@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.sos.JSHelper.Basics.JSJobUtilitiesClass;
 import com.sos.dailyschedule.db.DailyScheduleAdjustment;
 
- 
 public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOptions> {
 
     private final String conClassName = "CheckDailySchedule";  //$NON-NLS-1$
@@ -59,5 +58,5 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
 
     private void doInitialize() {
     } // doInitialize
- 
+
 }  // class CheckDailySchedule

@@ -6,7 +6,6 @@ import com.sos.JSHelper.Basics.IJSCommands;
 import com.sos.JSHelper.Basics.JSJobUtilitiesClass;
 import com.sos.dailyschedule.db.Calendar2DB;
 
- 
 public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailyScheduleOptions> implements IJSCommands {
 
     private final String conClassName = "CreateDailySchedule";						//$NON-NLS-1$

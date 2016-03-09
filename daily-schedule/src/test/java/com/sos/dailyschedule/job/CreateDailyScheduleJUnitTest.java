@@ -15,7 +15,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 public class CreateDailyScheduleJUnitTest extends JSToolBox {
- 
+
     @SuppressWarnings("unused")
     private final static String conClassName = "CreateDaysScheduleJUnitTest";						//$NON-NLS-1$
     @SuppressWarnings("unused")

@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 
 import sos.scheduler.job.JobSchedulerJobAdapter;
 import sos.spooler.Spooler;
- 
 
 public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 

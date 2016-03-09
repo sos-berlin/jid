@@ -65,7 +65,7 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         final String conMethodName = conClassName + "::doProcessing";
         logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
         CreateDailySchedule objR = new CreateDailySchedule();
-		CreateDailyScheduleOptions objO = objR.getOptions();
+        CreateDailyScheduleOptions objO = objR.getOptions();
         objO.setAllOptions(getSchedulerParameterAsProperties(getJobOrOrderParameters()));
 
         Object objSp = getSpoolerObject();
