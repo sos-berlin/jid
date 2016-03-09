@@ -85,7 +85,7 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
 
             d.commit();
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
         }
     }
 

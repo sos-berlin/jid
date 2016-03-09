@@ -17,7 +17,7 @@ import com.sos.eventing.frontend.Scheduler;
 @SuppressWarnings("deprecation")
 public class SOSTabEventList extends CTabItem {
 
-    private static Logger       logger          = Logger.getLogger(SOSTabEventList.class);
+    private static Logger logger = Logger.getLogger(SOSTabEventList.class);
     private final Composite parentComposite;
     private final GridLayout layout;
     private Table table;

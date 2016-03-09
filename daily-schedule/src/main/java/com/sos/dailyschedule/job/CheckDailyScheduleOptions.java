@@ -7,7 +7,6 @@ import com.sos.JSHelper.Listener.JSListener;
 import org.apache.log4j.Logger;
 
 @JSOptionClass(name = "CheckDailyScheduleOptions", description = "Checking a DailySchedule with runs in History")
-
 public class CheckDailyScheduleOptions extends CheckDailyScheduleOptionsSuperClass {
 
     @SuppressWarnings("unused")//$NON-NLS-1$
@@ -22,7 +21,6 @@ public class CheckDailyScheduleOptions extends CheckDailyScheduleOptionsSuperCla
         this();
         this.registerMessageListener(pobjListener);
     } // public CheckDailyScheduleOptions
-
 
     public CheckDailyScheduleOptions(HashMap<String, String> JSSettings) throws Exception {
         super(JSSettings);

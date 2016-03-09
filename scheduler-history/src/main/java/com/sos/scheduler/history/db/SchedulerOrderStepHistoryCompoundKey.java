@@ -9,7 +9,6 @@ import javax.persistence.Transient;
 @Embeddable
 public class SchedulerOrderStepHistoryCompoundKey implements Serializable {
 
- 
     private static final long serialVersionUID = 1L;
     private Long historyId;
     private Long step;

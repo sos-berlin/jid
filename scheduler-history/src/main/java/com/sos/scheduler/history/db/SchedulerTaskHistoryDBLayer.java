@@ -257,8 +257,7 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         int limit = this.getFilter().getLimit();
         initSession();
 
-        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromToStart() + filter.getOrderCriteria()
-                + filter.getSortMode());
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromToStart() + filter.getOrderCriteria() + filter.getSortMode());
         return executeQuery(query, limit);
 
     }
@@ -267,8 +266,7 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         int limit = this.getFilter().getLimit();
         initSession();
 
-        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromToStart() + filter.getOrderCriteria()
-                + filter.getSortMode());
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhereFromToStart() + filter.getOrderCriteria() + filter.getSortMode());
         return executeQuery(query, limit);
 
     }
@@ -277,8 +275,8 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         int limit = this.getFilter().getLimit();
         initSession();
 
-        String q = "from SchedulerTaskHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerTaskHistoryDBItem "
-                + getWhereFromTo() + ")";
+        String q = "from SchedulerTaskHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerTaskHistoryDBItem " + getWhereFromTo()
+                + ")";
         // String q = "from SchedulerTaskHistoryDBItem  " + getWhereFromTo() +
         // " group by spoolerId";
         Query query = session.createQuery(q);
@@ -289,8 +287,7 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         int limit = this.getFilter().getLimit();
         initSession();
 
-        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhere() + this.filter.getOrderCriteria()
-                + this.filter.getSortMode());
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhere() + this.filter.getOrderCriteria() + this.filter.getSortMode());
 
         if (filter.getSchedulerId() != null && filter.getSchedulerId() != "") {
             query.setText("schedulerId", filter.getSchedulerId());
@@ -324,8 +321,7 @@ public class SchedulerTaskHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         this.filter.setLimit(1);
         initSession();
 
-        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhere() + this.filter.getOrderCriteria()
-                + this.filter.getSortMode());
+        Query query = session.createQuery("from SchedulerTaskHistoryDBItem " + getWhere() + this.filter.getOrderCriteria() + this.filter.getSortMode());
 
         if (filter.getSchedulerId() != null && filter.getSchedulerId() != "") {
             query.setText("schedulerId", filter.getSchedulerId());

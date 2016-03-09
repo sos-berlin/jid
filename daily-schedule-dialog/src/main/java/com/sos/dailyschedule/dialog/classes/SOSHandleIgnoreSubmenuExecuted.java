@@ -12,24 +12,21 @@ import com.sos.jid.dialog.classes.SOSDashboardTableView;
 import com.sos.localization.Messages;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 
-public class SOSHandleIgnoreSubmenuExecuted extends SOSHandleIgnoreSubmenu{
+public class SOSHandleIgnoreSubmenuExecuted extends SOSHandleIgnoreSubmenu {
 
-	private static final String USE_CONTEXT_EXECUTED = "sosDashboardExecuted";   
-	
+    private static final String USE_CONTEXT_EXECUTED = "sosDashboardExecuted";
 
-	public SOSHandleIgnoreSubmenuExecuted(Menu parent, SOSDashboardTableView sosDashboardTableView_, Messages messages_,
-			Preferences prefs_) {
-		super(parent, sosDashboardTableView_, messages_, prefs_);
- 	}
-	
-	public String getContext(){
-		return USE_CONTEXT_EXECUTED;
-	}
+    public SOSHandleIgnoreSubmenuExecuted(Menu parent, SOSDashboardTableView sosDashboardTableView_, Messages messages_, Preferences prefs_) {
+        super(parent, sosDashboardTableView_, messages_, prefs_);
+    }
 
-	@Override 
-	protected void addSpecialContextMenu() {
-		
-	}
+    public String getContext() {
+        return USE_CONTEXT_EXECUTED;
+    }
 
-	 
+    @Override
+    protected void addSpecialContextMenu() {
+
+    }
+
 }

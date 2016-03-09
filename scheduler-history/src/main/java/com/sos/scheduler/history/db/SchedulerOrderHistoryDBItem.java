@@ -49,7 +49,6 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
         historyId = id;
     }
 
-     
     @Override
     @Column(name = "`SPOOLER_ID`", nullable = false)
     public String getSpoolerId() {
@@ -261,8 +260,8 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
         if (this.getState() == null) {
             return false;
         } else {
-            return this.getState().toLowerCase().contains("error") || this.getState().toLowerCase().contains("fehler")
-                    || this.getState().startsWith("!") || this.getState().toLowerCase().contains("fault");
+            return this.getState().toLowerCase().contains("error") || this.getState().toLowerCase().contains("fehler") || this.getState().startsWith("!")
+                    || this.getState().toLowerCase().contains("fault");
         }
     }
 
@@ -272,11 +271,11 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
         return ((SchedulerOrderHistoryDBItem) h).getJobChain().equals(this.getJobChain())
                 && ((SchedulerOrderHistoryDBItem) h).getOrderId().equals(this.getOrderId());
     }
-    
+
     @Override
     @Transient
     public int hashCode() {
-        return  this.historyId.intValue();
+        return this.historyId.intValue();
     }
 
     @Transient

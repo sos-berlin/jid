@@ -26,7 +26,6 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
     @SuppressWarnings("unused")
     private final String conClassName = "SchedulerHistoryDataProvider";
 
- 
     private SchedulerTaskHistoryDataProvider schedulerTaskHistoryDataProvider;
     private SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider;
     private SchedulerInstancesDataProvider schedulerInstancesDataProvider;
