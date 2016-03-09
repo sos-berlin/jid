@@ -266,11 +266,11 @@ public class SchedulerTaskHistoryDBItem extends SchedulerHistoryLogDBItem {
     public boolean equals(Object h) {
         return (((SchedulerTaskHistoryDBItem) h).getJobName().equals(this.getJobName()));
     }
-    
+
     @Override
     @Transient
     public int hashCode() {
-        return  this.id.intValue();
+        return this.id.intValue();
     }
 
 }

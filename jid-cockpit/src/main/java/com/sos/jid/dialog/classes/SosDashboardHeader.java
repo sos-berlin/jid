@@ -200,7 +200,7 @@ public class SosDashboardHeader extends JSToolBox {
                         try {
                             searchField.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
                         } catch (Exception ee) {
-                            logger.error(ee.getMessage(),ee);
+                            logger.error(ee.getMessage(), ee);
                         }
 
                     }

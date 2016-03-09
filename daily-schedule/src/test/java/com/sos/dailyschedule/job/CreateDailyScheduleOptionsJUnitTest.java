@@ -10,6 +10,7 @@ import java.util.HashMap;
 import static org.junit.Assert.assertEquals;
 
 public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
+
     private final String conClassName = "CreateDaysScheduleOptionsJUnitTest";						//$NON-NLS-1$
     @SuppressWarnings("unused")//$NON-NLS-1$
     private static Logger logger = Logger.getLogger(CreateDailyScheduleOptionsJUnitTest.class);
@@ -78,7 +79,7 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
     }
 
     private HashMap<String, String> SetJobSchedulerSSHJobOptions(HashMap<String, String> pobjHM) {
-        pobjHM.put("CreateDaysScheduleOptionsJUnitTest.auth_file", "test"); 
+        pobjHM.put("CreateDaysScheduleOptionsJUnitTest.auth_file", "test");
         return pobjHM;
     }
 

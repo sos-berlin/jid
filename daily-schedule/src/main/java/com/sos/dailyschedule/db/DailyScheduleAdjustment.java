@@ -17,29 +17,30 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class DailyScheduleAdjustment {
-	private DailyScheduleDBLayer dailyScheduleDBLayer;
-	private SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer;
-	private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer;
-	private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+
+    private DailyScheduleDBLayer dailyScheduleDBLayer;
+    private SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer;
+    private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer;
+    private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
     private String schedulerId;
-	private Date from;
-	private Date to;
-	private int dayOffset;
+    private Date from;
+    private Date to;
+    private int dayOffset;
     private CheckDailyScheduleOptions options = null;
-    private static Logger       logger          = Logger.getLogger(DailyScheduleAdjustment.class);
-	
+    private static Logger logger = Logger.getLogger(DailyScheduleAdjustment.class);
+
     public DailyScheduleAdjustment(File configurationFile) {
         dailyScheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
         schedulerTaskHistoryDBLayer = new SchedulerTaskHistoryDBLayer(configurationFile);
         schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
 
         //
-	}
-	
-	private void adjustDaysScheduleItem(DailyScheduleDBItem dailyScheduleItem,List <SchedulerTaskHistoryDBItem> schedulerHistoryList) {
-	    logger.debug(String.format("%s records in schedulerHistoryList",schedulerHistoryList.size()));
-        for (int i = 0; i<schedulerHistoryList.size(); i++) {
-        	SchedulerTaskHistoryDBItem schedulerHistoryDBItem = (SchedulerTaskHistoryDBItem) schedulerHistoryList.get(i);
+    }
+
+    private void adjustDaysScheduleItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerTaskHistoryDBItem> schedulerHistoryList) {
+        logger.debug(String.format("%s records in schedulerHistoryList", schedulerHistoryList.size()));
+        for (int i = 0; i < schedulerHistoryList.size(); i++) {
+            SchedulerTaskHistoryDBItem schedulerHistoryDBItem = (SchedulerTaskHistoryDBItem) schedulerHistoryList.get(i);
             if (!schedulerHistoryDBItem.isAssignToDaysScheduler() /*
                                                                    * && !
                                                                    * dailyScheduleDBLayer
@@ -47,32 +48,32 @@ public class DailyScheduleAdjustment {
                                                                    * schedulerHistoryDBItem
                                                                    * )
                                                                    */) {
-            	if (dailyScheduleItem.isStandalone() && dailyScheduleItem.isEqual(schedulerHistoryDBItem)){
-            	    logger.debug(String.format("... assign %s to %s", schedulerHistoryDBItem.getId(),dailyScheduleItem.getJobName()));
+                if (dailyScheduleItem.isStandalone() && dailyScheduleItem.isEqual(schedulerHistoryDBItem)) {
+                    logger.debug(String.format("... assign %s to %s", schedulerHistoryDBItem.getId(), dailyScheduleItem.getJobName()));
                     dailyScheduleItem.setScheduleExecuted(schedulerHistoryDBItem.getStartTime());
                     dailyScheduleItem.setSchedulerHistoryId(schedulerHistoryDBItem.getId());
                     dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
                     dailyScheduleItem.setResult(schedulerHistoryDBItem.getExitCode());
-        	    	try {
-						dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-					} catch (Exception e) {
-						logger.error("Error occurred updating item: ", e);
-					}
+                    try {
+                        dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
+                    } catch (Exception e) {
+                        logger.error("Error occurred updating item: ", e);
+                    }
                     schedulerHistoryDBItem.setAssignToDaysScheduler(true);
                     break;
                 }
             }
         }
-        logger.debug(String.format("... could not assign %s planned at:%s",dailyScheduleItem.getJobName(),dailyScheduleItem.getSchedulePlannedFormated() ));
-	}
-	
+        logger.debug(String.format("... could not assign %s planned at:%s", dailyScheduleItem.getJobName(), dailyScheduleItem.getSchedulePlannedFormated()));
+    }
+
     private void adjustDaysScheduleOrderItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList) {
-		if (dailyScheduleDBLayer.getConnection() == null) {
-			dailyScheduleDBLayer.initConnection(dailyScheduleDBLayer.getConfigurationFileName());
-		}
+        if (dailyScheduleDBLayer.getConnection() == null) {
+            dailyScheduleDBLayer.initConnection(dailyScheduleDBLayer.getConfigurationFileName());
+        }
         logger.debug(String.format("%s records in schedulerOrderHistoryList", schedulerOrderHistoryList.size()));
-		for (int i = 0; i < schedulerOrderHistoryList.size(); i++) {
-			SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryList.get(i);
+        for (int i = 0; i < schedulerOrderHistoryList.size(); i++) {
+            SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryList.get(i);
             if (!schedulerOrderHistoryDBItem.isAssignToDaysScheduler() /*
                                                                         * && !
                                                                         * dailyScheduleDBLayer
@@ -82,135 +83,134 @@ public class DailyScheduleAdjustment {
                                                                         * schedulerOrderHistoryDBItem
                                                                         * )
                                                                         */) {
-				if (dailyScheduleItem.isOrderJob() && dailyScheduleItem.isEqual(schedulerOrderHistoryDBItem)) {
-					logger.debug(String.format("... assign %s to %s/%s", schedulerOrderHistoryDBItem.getHistoryId(), dailyScheduleItem.getJobChainNotNull(),
-							dailyScheduleItem.getOrderId()));
-					dailyScheduleItem.setScheduleExecuted(schedulerOrderHistoryDBItem.getStartTime());
-					dailyScheduleItem.setSchedulerOrderHistoryId(schedulerOrderHistoryDBItem.getHistoryId());
+                if (dailyScheduleItem.isOrderJob() && dailyScheduleItem.isEqual(schedulerOrderHistoryDBItem)) {
+                    logger.debug(String.format("... assign %s to %s/%s", schedulerOrderHistoryDBItem.getHistoryId(), dailyScheduleItem.getJobChainNotNull(), dailyScheduleItem.getOrderId()));
+                    dailyScheduleItem.setScheduleExecuted(schedulerOrderHistoryDBItem.getStartTime());
+                    dailyScheduleItem.setSchedulerOrderHistoryId(schedulerOrderHistoryDBItem.getHistoryId());
                     dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
-					if (schedulerOrderHistoryDBItem.haveError()) {
-						dailyScheduleItem.setResult(1);
+                    if (schedulerOrderHistoryDBItem.haveError()) {
+                        dailyScheduleItem.setResult(1);
                     } else {
-						dailyScheduleItem.setResult(0);
-					}
-					try {
-						dailyScheduleDBLayer.getConnection().beginTransaction();
-						dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-						dailyScheduleDBLayer.getConnection().commit();
-					} catch (Exception e) {
-						logger.error("Error occurred trying to update Item: ", e);
-					}
-					schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
-					break;
-				}
-			}
-		}
-
-    }
-	
-	public void adjustWithHistory()  {
-	    String lastSchedulerId="***";
-		//Read daysScheduler
-		dailyScheduleDBLayer.setWhereSchedulerId(this.schedulerId);
-		dailyScheduleDBLayer.getFilter().setOrderCriteria("schedulerId");
-		dailyScheduleDBLayer.setWhereFrom(from);
-		dailyScheduleDBLayer.setWhereTo(to);
-		//System.out.println("Optimized version....");
-		List <DailyScheduleDBItem> dailyScheduleList = dailyScheduleDBLayer.getWaitingDailyScheduleList(-1);
-		//read scheduler history
-		schedulerTaskHistoryDBLayer.getFilter().setLimit(-1);
-		schedulerTaskHistoryDBLayer.getFilter().setExecutedFrom(from);
-		schedulerTaskHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
-		//read scheduler Order history
-		schedulerOrderHistoryDBLayer.getFilter().setLimit(-1);
-		schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom(from);
-		schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
-		try {
-			dailyScheduleDBLayer.getConnection().connect();
-			dailyScheduleDBLayer.getConnection().beginTransaction();
-        List<SchedulerTaskHistoryDBItem> schedulerHistoryList = null;
-        List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList = null;
-        for (int i = 0; i < dailyScheduleList.size(); i++) {
-            DailyScheduleDBItem daysScheduleItem = (DailyScheduleDBItem) dailyScheduleList.get(i);
-            String schedulerId = daysScheduleItem.getSchedulerId();
-
-            if (daysScheduleItem.isStandalone()) {
-                // Für jede SchedulerId neue Listen holen.
-                if (schedulerHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
-			            dailyScheduleDBLayer.getConnection().commit();
-						dailyScheduleDBLayer.getConnection().connect();
-			            dailyScheduleDBLayer.getConnection().beginTransaction();
-			            schedulerTaskHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
-			            schedulerHistoryList = schedulerTaskHistoryDBLayer.getUnassignedSchedulerHistoryListFromTo();
-			            lastSchedulerId = schedulerId;
-                    logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
-			       }
-                adjustDaysScheduleItem(daysScheduleItem, schedulerHistoryList);
-            } else {
-                // Für jede SchedulerId neue Listen holen.
-                if (schedulerOrderHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
-			            dailyScheduleDBLayer.getConnection().commit();
-						dailyScheduleDBLayer.getConnection().connect();
-			            dailyScheduleDBLayer.getConnection().beginTransaction();
-			            schedulerOrderHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
-			            schedulerOrderHistoryList = schedulerOrderHistoryDBLayer.getUnassignedSchedulerOrderHistoryListFromTo();
-                    logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
-			            lastSchedulerId = schedulerId;
-			        }
-                adjustDaysScheduleOrderItem(daysScheduleItem, schedulerOrderHistoryList);
+                        dailyScheduleItem.setResult(0);
+                    }
+                    try {
+                        dailyScheduleDBLayer.getConnection().beginTransaction();
+                        dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
+                        dailyScheduleDBLayer.getConnection().commit();
+                    } catch (Exception e) {
+                        logger.error("Error occurred trying to update Item: ", e);
+                    }
+                    schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
+                    break;
+                }
             }
-			}
-			dailyScheduleDBLayer.getConnection().commit();
-		} catch (Exception e) {
-			logger.error("Error occurred adjusting the history: ", e);
+        }
+
     }
-	}
-	
-	private void setFrom() throws ParseException {
-		Date now = new Date();
-		if (dayOffset < 0) {
-		   GregorianCalendar calendar = new GregorianCalendar();
-		   calendar.setTime(now);
-		   calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
-		   now = calendar.getTime();
-		}
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+    public void adjustWithHistory() {
+        String lastSchedulerId = "***";
+        // Read daysScheduler
+        dailyScheduleDBLayer.setWhereSchedulerId(this.schedulerId);
+        dailyScheduleDBLayer.getFilter().setOrderCriteria("schedulerId");
+        dailyScheduleDBLayer.setWhereFrom(from);
+        dailyScheduleDBLayer.setWhereTo(to);
+        // System.out.println("Optimized version....");
+        List<DailyScheduleDBItem> dailyScheduleList = dailyScheduleDBLayer.getWaitingDailyScheduleList(-1);
+        // read scheduler history
+        schedulerTaskHistoryDBLayer.getFilter().setLimit(-1);
+        schedulerTaskHistoryDBLayer.getFilter().setExecutedFrom(from);
+        schedulerTaskHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
+        // read scheduler Order history
+        schedulerOrderHistoryDBLayer.getFilter().setLimit(-1);
+        schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom(from);
+        schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
+        try {
+            dailyScheduleDBLayer.getConnection().connect();
+            dailyScheduleDBLayer.getConnection().beginTransaction();
+            List<SchedulerTaskHistoryDBItem> schedulerHistoryList = null;
+            List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList = null;
+            for (int i = 0; i < dailyScheduleList.size(); i++) {
+                DailyScheduleDBItem daysScheduleItem = (DailyScheduleDBItem) dailyScheduleList.get(i);
+                String schedulerId = daysScheduleItem.getSchedulerId();
+
+                if (daysScheduleItem.isStandalone()) {
+                    // Für jede SchedulerId neue Listen holen.
+                    if (schedulerHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
+                        dailyScheduleDBLayer.getConnection().commit();
+                        dailyScheduleDBLayer.getConnection().connect();
+                        dailyScheduleDBLayer.getConnection().beginTransaction();
+                        schedulerTaskHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
+                        schedulerHistoryList = schedulerTaskHistoryDBLayer.getUnassignedSchedulerHistoryListFromTo();
+                        lastSchedulerId = schedulerId;
+                        logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
+                    }
+                    adjustDaysScheduleItem(daysScheduleItem, schedulerHistoryList);
+                } else {
+                    // Für jede SchedulerId neue Listen holen.
+                    if (schedulerOrderHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
+                        dailyScheduleDBLayer.getConnection().commit();
+                        dailyScheduleDBLayer.getConnection().connect();
+                        dailyScheduleDBLayer.getConnection().beginTransaction();
+                        schedulerOrderHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
+                        schedulerOrderHistoryList = schedulerOrderHistoryDBLayer.getUnassignedSchedulerOrderHistoryListFromTo();
+                        logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
+                        lastSchedulerId = schedulerId;
+                    }
+                    adjustDaysScheduleOrderItem(daysScheduleItem, schedulerOrderHistoryList);
+                }
+            }
+            dailyScheduleDBLayer.getConnection().commit();
+        } catch (Exception e) {
+            logger.error("Error occurred adjusting the history: ", e);
+        }
+    }
+
+    private void setFrom() throws ParseException {
+        Date now = new Date();
+        if (dayOffset < 0) {
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.setTime(now);
+            calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
+            now = calendar.getTime();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String froms = formatter.format(now);
-    	froms = froms + "T00:00:00";
-		formatter = new SimpleDateFormat(dateFormat);
-		this.from = formatter.parse(froms);	
-	}
-	
-	private void setTo() throws ParseException {
-		Date now = new Date();
-		if (dayOffset > 0) {
-		   GregorianCalendar calendar = new GregorianCalendar();
-		   calendar.setTime(now);
-		   calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
-		   now = calendar.getTime();
-		}
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        froms = froms + "T00:00:00";
+        formatter = new SimpleDateFormat(dateFormat);
+        this.from = formatter.parse(froms);
+    }
+
+    private void setTo() throws ParseException {
+        Date now = new Date();
+        if (dayOffset > 0) {
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.setTime(now);
+            calendar.add(GregorianCalendar.DAY_OF_MONTH, dayOffset);
+            now = calendar.getTime();
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String tos = formatter.format(now);
-    	tos = tos + "T23:59:59";
-		formatter = new SimpleDateFormat(dateFormat);
-		this.to = formatter.parse(tos);
-	}
-	
-	public Date getFrom() {
-		return from;
-	}
+        tos = tos + "T23:59:59";
+        formatter = new SimpleDateFormat(dateFormat);
+        this.to = formatter.parse(tos);
+    }
 
-	public Date getTo() {
-		return to;
-	}
+    public Date getFrom() {
+        return from;
+    }
 
-	public void setOptions(CheckDailyScheduleOptions options) throws ParseException {
-		this.options = options;
-		schedulerId = this.options.getscheduler_id().Value();
-		dayOffset = this.options.getdayOffset().value();
-		setFrom();
-		setTo();
-	}
+    public Date getTo() {
+        return to;
+    }
+
+    public void setOptions(CheckDailyScheduleOptions options) throws ParseException {
+        this.options = options;
+        schedulerId = this.options.getscheduler_id().Value();
+        dayOffset = this.options.getdayOffset().value();
+        setFrom();
+        setTo();
+    }
 
     public DailyScheduleDBLayer getDailyScheduleDBLayer() {
         return dailyScheduleDBLayer;

@@ -26,6 +26,7 @@ import com.sos.scheduler.history.SchedulerTaskHistoryDataProvider;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISOSDashboardDataProvider {
+
     private List<DailyScheduleDBItem> listOfDaysScheduleDBItems = null;
     // private List<DailyScheduleDBItem> listOfDaysScheduleDBItemsDistinct =
     // null;
@@ -252,7 +253,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
         try {
             return (Session) this.dailySchedulerDBLayer.getConnection().getCurrentSession();
         } catch (Exception e) {
-            logger.error(e.getMessage(),e);
+            logger.error(e.getMessage(), e);
             return null;
         }
     }

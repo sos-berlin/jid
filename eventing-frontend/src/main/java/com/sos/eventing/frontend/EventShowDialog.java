@@ -122,12 +122,12 @@ public class EventShowDialog extends JSToolBox {
         public boolean equals(final Object o) {
             return super.equals(o);
         }
-        
+
         @Override
         public int hashCode() {
             return _colPos;
         }
-        
+
         @Override
         public int compareTo(final Object o) {
             return 0;
@@ -144,12 +144,12 @@ public class EventShowDialog extends JSToolBox {
         public boolean equals(final Object o) {
             return _textBuffer[_colPos].equals(((StringComparator) o)._textBuffer[_colPos]);
         }
-        
+
         @Override
         public int hashCode() {
             return _colPos;
         }
-        
+
         @Override
         public final int compareTo(final Object arg0) {
             int ret = _textBuffer[_colPos].compareTo(((StringComparator) arg0)._textBuffer[_colPos]);
@@ -188,7 +188,7 @@ public class EventShowDialog extends JSToolBox {
             int ret = _intValue < _intValToCompare ? -1 : _intValue == _intValToCompare ? 0 : 1;
             return _sortFlag ? ret : ret * -1;
         }
- 
+
     }
 
     public class RefreshTask extends TimerTask {

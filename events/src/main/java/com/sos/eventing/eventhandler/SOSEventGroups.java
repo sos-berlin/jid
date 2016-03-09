@@ -1,7 +1,5 @@
 /*
- * Created on 13.10.2008
- *
- * To change the template for this generated file go to
+ * Created on 13.10.2008 To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package com.sos.eventing.eventhandler;
@@ -13,60 +11,58 @@ import com.sos.eventing.evaluate.BooleanExp;
 
 public class SOSEventGroups {
 
-	protected String		condition		= "";
-	protected String		group			= "";
-	protected String		event_class		= "";
-	protected LinkedHashSet<SchedulerEvent>	listOfEvents	= null;
+    protected String condition = "";
+    protected String group = "";
+    protected String event_class = "";
+    protected LinkedHashSet<SchedulerEvent> listOfEvents = null;
 
-	public SOSEventGroups(final String group) {
-		super();
-		this.group = group;
-		listOfEvents = new LinkedHashSet<SchedulerEvent>();
-	}
+    public SOSEventGroups(final String group) {
+        super();
+        this.group = group;
+        listOfEvents = new LinkedHashSet<SchedulerEvent>();
+    }
 
-	public boolean isActiv(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
-		boolean erg = false;
-		if (condition.length() == 0) {
-			condition = "or";
-		}
-		Iterator <SchedulerEvent> i = listOfEvents.iterator();
-		if (condition.equalsIgnoreCase("or")) {
-			while (i.hasNext() && !erg) {
-				SchedulerEvent e = i.next();
-				erg = e.isIn(listOfActiveEvents);
-			}
-		}
-		else {
-			if (condition.equalsIgnoreCase("and")) {
-				erg = true;
-				while (i.hasNext() && erg) {
-					SchedulerEvent e = (SchedulerEvent) i.next();
-					erg = erg && e.isIn(listOfActiveEvents);
-				}
-			}
-			else {
-				BooleanExp exp = new BooleanExp(condition);
-				while (i.hasNext()) {
-					SchedulerEvent e = (SchedulerEvent) i.next();
+    public boolean isActiv(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
+        boolean erg = false;
+        if (condition.length() == 0) {
+            condition = "or";
+        }
+        Iterator<SchedulerEvent> i = listOfEvents.iterator();
+        if (condition.equalsIgnoreCase("or")) {
+            while (i.hasNext() && !erg) {
+                SchedulerEvent e = i.next();
+                erg = e.isIn(listOfActiveEvents);
+            }
+        } else {
+            if (condition.equalsIgnoreCase("and")) {
+                erg = true;
+                while (i.hasNext() && erg) {
+                    SchedulerEvent e = (SchedulerEvent) i.next();
+                    erg = erg && e.isIn(listOfActiveEvents);
+                }
+            } else {
+                BooleanExp exp = new BooleanExp(condition);
+                while (i.hasNext()) {
+                    SchedulerEvent e = (SchedulerEvent) i.next();
 
-					exp.replace(e.getEvent_name(), exp.trueFalse(e.isIn(listOfActiveEvents)));
-				}
-				erg = exp.evaluateExpression();
-			}
-		}
+                    exp.replace(e.getEvent_name(), exp.trueFalse(e.isIn(listOfActiveEvents)));
+                }
+                erg = exp.evaluateExpression();
+            }
+        }
 
-		return erg;
-	}
+        return erg;
+    }
 
-	public String getGroup() {
-		return group;
-	}
+    public String getGroup() {
+        return group;
+    }
 
-	public LinkedHashSet<SchedulerEvent> getListOfEvents() {
-		return listOfEvents;
-	}
+    public LinkedHashSet<SchedulerEvent> getListOfEvents() {
+        return listOfEvents;
+    }
 
-	public String getCondition() {
-		return condition;
-	}
+    public String getCondition() {
+        return condition;
+    }
 }

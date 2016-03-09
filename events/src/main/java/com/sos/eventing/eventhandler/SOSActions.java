@@ -1,7 +1,5 @@
 /*
- * Created on 13.10.2008
- *
- * To change the template for this generated file go to
+ * Created on 13.10.2008 To change the template for this generated file go to
  * Window - Preferences - Java - Code Generation - Code and Comments
  */
 package com.sos.eventing.eventhandler;
@@ -16,75 +14,75 @@ import com.sos.eventing.evaluate.BooleanExp;
 
 public class SOSActions {
 
-	protected String		name				= "";
-	protected String		condition				= "";
-	protected LinkedHashSet<SOSEventGroups>	listOfEventGroups	= null;
-	protected LinkedHashSet<SOSEventCommand>	listOfCommands		= null;
-	protected NodeList		commandNodes		= null;
-	protected Node			commands			= null;
+    protected String name = "";
+    protected String condition = "";
+    protected LinkedHashSet<SOSEventGroups> listOfEventGroups = null;
+    protected LinkedHashSet<SOSEventCommand> listOfCommands = null;
+    protected NodeList commandNodes = null;
+    protected Node commands = null;
 
-	public SOSActions(final String name) {
-		super();
-		this.name = name;
-		listOfEventGroups = new LinkedHashSet<SOSEventGroups>();
-		listOfCommands = new LinkedHashSet<SOSEventCommand>();
-	}
+    public SOSActions(final String name) {
+        super();
+        this.name = name;
+        listOfEventGroups = new LinkedHashSet<SOSEventGroups>();
+        listOfCommands = new LinkedHashSet<SOSEventCommand>();
+    }
 
-	public boolean isActive(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
-		String tmp = condition;
-		if (condition.length() == 0 || condition.equalsIgnoreCase("or")) {
-			condition = "";
-			Iterator <SOSEventGroups> i = listOfEventGroups.iterator();
-			while (i.hasNext()) {
-				SOSEventGroups evg = i.next();
-				condition += evg.group + " or ";
-			}
-			condition += " false";
-		}
+    public boolean isActive(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
+        String tmp = condition;
+        if (condition.length() == 0 || condition.equalsIgnoreCase("or")) {
+            condition = "";
+            Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
+            while (i.hasNext()) {
+                SOSEventGroups evg = i.next();
+                condition += evg.group + " or ";
+            }
+            condition += " false";
+        }
 
-		if (condition.equalsIgnoreCase("and")) {
-			condition = "";
-			Iterator <SOSEventGroups> i = listOfEventGroups.iterator();
-			while (i.hasNext()) {
-				SOSEventGroups evg =  i.next();
-				condition += evg.group + " and ";
-			}
-			condition += " true";
-		}
+        if (condition.equalsIgnoreCase("and")) {
+            condition = "";
+            Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
+            while (i.hasNext()) {
+                SOSEventGroups evg = i.next();
+                condition += evg.group + " and ";
+            }
+            condition += " true";
+        }
 
-		BooleanExp exp = new BooleanExp(condition);
-		Iterator <SOSEventGroups> i = listOfEventGroups.iterator();
-		while (i.hasNext()) {
-			SOSEventGroups evg = i.next();
-			exp.replace(evg.group, exp.trueFalse(evg.isActiv(listOfActiveEvents)));
-		}
-		condition = tmp;
-		return exp.evaluateExpression();
+        BooleanExp exp = new BooleanExp(condition);
+        Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
+        while (i.hasNext()) {
+            SOSEventGroups evg = i.next();
+            exp.replace(evg.group, exp.trueFalse(evg.isActiv(listOfActiveEvents)));
+        }
+        condition = tmp;
+        return exp.evaluateExpression();
 
-	}
+    }
 
-	public LinkedHashSet <SOSEventCommand> getListOfCommands() {
-		return listOfCommands;
-	}
+    public LinkedHashSet<SOSEventCommand> getListOfCommands() {
+        return listOfCommands;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getCondition() {
-		return condition;
-	}
+    public String getCondition() {
+        return condition;
+    }
 
-	public LinkedHashSet <SOSEventGroups> getListOfEventGroups() {
-		return listOfEventGroups;
-	}
+    public LinkedHashSet<SOSEventGroups> getListOfEventGroups() {
+        return listOfEventGroups;
+    }
 
-	public Node getCommands() {
-		return commands;
-	}
+    public Node getCommands() {
+        return commands;
+    }
 
-	public NodeList getCommandNodes() {
-		return commandNodes;
-	}
+    public NodeList getCommandNodes() {
+        return commandNodes;
+    }
 
 }

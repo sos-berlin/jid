@@ -24,89 +24,92 @@ import com.sos.scheduler.history.SchedulerOrderStepHistoryDataProvider;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 
 public class SOSDialogOrderStepHistory {
-	private Logger logger = Logger.getLogger(SOSDialogOrderStepHistory.class);
-	private Button btnOk;
-	private String protocolValue;
-	private SOSDashboardOptions objOptions;
-	private SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem;
-	private CTabFolder logTabFolder = null;
-	private Messages messages;
-	private String timeZone;
 
-	public SOSDialogOrderStepHistory(Shell parentShell, SOSDashboardOptions objOptions_, SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem_,
-			CTabFolder logTabFolder_, Messages messages_, String timeZone_) {
-		objOptions = objOptions_;
-		messages = messages_;
-		timeZone = timeZone_;
-		schedulerOrderHistoryDBItem = schedulerOrderHistoryDBItem_;
-		logTabFolder = logTabFolder_;
-		execute(parentShell);
-	}
+    private Logger logger = Logger.getLogger(SOSDialogOrderStepHistory.class);
+    private Button btnOk;
+    private String protocolValue;
+    private SOSDashboardOptions objOptions;
+    private SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem;
+    private CTabFolder logTabFolder = null;
+    private Messages messages;
+    private String timeZone;
 
-	private void execute(Shell parentShell) {
-		Display display = Display.getDefault();
-		Shell shell = showForm(display, parentShell);
-		while (!shell.isDisposed()) {
-			if (!display.readAndDispatch()) {
-				display.sleep();
-			}
-		}
-	}
+    public SOSDialogOrderStepHistory(Shell parentShell, SOSDashboardOptions objOptions_, SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem_,
+            CTabFolder logTabFolder_, Messages messages_, String timeZone_) {
+        objOptions = objOptions_;
+        messages = messages_;
+        timeZone = timeZone_;
+        schedulerOrderHistoryDBItem = schedulerOrderHistoryDBItem_;
+        logTabFolder = logTabFolder_;
+        execute(parentShell);
+    }
 
-	private Shell showForm(final Display display, Shell parentShell) {
-		final Shell dialogShell = new Shell(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.PRIMARY_MODAL);
-		dialogShell.setMinimumSize(new Point(340, 29));
-		dialogShell.setLayout(new GridLayout(6, false));
+    private void execute(Shell parentShell) {
+        Display display = Display.getDefault();
+        Shell shell = showForm(display, parentShell);
+        while (!shell.isDisposed()) {
+            if (!display.readAndDispatch()) {
+                display.sleep();
+            }
+        }
+    }
 
-		SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(objOptions.getConfigurationFile().Value());
-		historyDataProvider.setTimeZone(timeZone);
+    private Shell showForm(final Display display, Shell parentShell) {
+        final Shell dialogShell = new Shell(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.PRIMARY_MODAL);
+        dialogShell.setMinimumSize(new Point(340, 29));
+        dialogShell.setLayout(new GridLayout(6, false));
 
-		SosSchedulerOrderStepHistoryTable tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(dialogShell, SWT.BORDER | SWT.FULL_SELECTION
-				| SWT.MULTI, messages);
-		tableStepHistoryDetail.setLogTabFolder(logTabFolder);
-		tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
-		SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(new File(objOptions
-				.getConfigurationFile().Value()), schedulerOrderHistoryDBItem.getHistoryId());
-		schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
-		schedulerOrderStepHistoryDataProvider.getData(0);
-		schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
+        SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(objOptions.getConfigurationFile().Value());
+        historyDataProvider.setTimeZone(timeZone);
 
-		dialogShell.setSize(295, 170);
+        SosSchedulerOrderStepHistoryTable tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(dialogShell, SWT.BORDER | SWT.FULL_SELECTION
+                | SWT.MULTI, messages);
+        tableStepHistoryDetail.setLogTabFolder(logTabFolder);
+        tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
+        SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()), schedulerOrderHistoryDBItem.getHistoryId());
+        schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
+        schedulerOrderStepHistoryDataProvider.getData(0);
+        schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
 
-		btnOk = new Button(dialogShell, SWT.NONE);
-		GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnOk.widthHint = 64;
-		btnOk.setLayoutData(gd_btnOk);
-		btnOk.setText("Ok");
-		btnOk.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				dialogShell.dispose();
-			}
-		});
-		dialogShell.setDefaultButton(btnOk);
-		dialogShell.addDisposeListener(new DisposeListener() {
-			@Override
-			public void widgetDisposed(DisposeEvent e) {
-			}
-		});
-		dialogShell.pack();
+        dialogShell.setSize(295, 170);
 
-		Button btnCancel = new Button(dialogShell, SWT.NONE);
-		btnCancel.setText("Cancel");
-		new Label(dialogShell, SWT.NONE);
-		btnCancel.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				dialogShell.dispose();
-			}
-		});
+        btnOk = new Button(dialogShell, SWT.NONE);
+        GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+        gd_btnOk.widthHint = 64;
+        btnOk.setLayoutData(gd_btnOk);
+        btnOk.setText("Ok");
+        btnOk.addSelectionListener(new SelectionAdapter() {
 
-		dialogShell.open();
-		return dialogShell;
-	}
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                dialogShell.dispose();
+            }
+        });
+        dialogShell.setDefaultButton(btnOk);
+        dialogShell.addDisposeListener(new DisposeListener() {
 
-	public boolean cancel() {
-		return (protocolValue == null);
-	}
+            @Override
+            public void widgetDisposed(DisposeEvent e) {
+            }
+        });
+        dialogShell.pack();
+
+        Button btnCancel = new Button(dialogShell, SWT.NONE);
+        btnCancel.setText("Cancel");
+        new Label(dialogShell, SWT.NONE);
+        btnCancel.addSelectionListener(new SelectionAdapter() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                dialogShell.dispose();
+            }
+        });
+
+        dialogShell.open();
+        return dialogShell;
+    }
+
+    public boolean cancel() {
+        return (protocolValue == null);
+    }
 }

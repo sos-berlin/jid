@@ -32,8 +32,7 @@ public class CheckDailyScheduleMain extends JSToolBox {
             logger.error(String.format("JSJ-E-105: %1$s - terminated with exit-code %2$d", conMethodName, intExitCode), e);
         }
 
-
         logger.info(String.format("JSJ-I-106: %1$s - ended without errors", conMethodName));
     }
- 
+
 }  // class CheckDailyScheduleMain
