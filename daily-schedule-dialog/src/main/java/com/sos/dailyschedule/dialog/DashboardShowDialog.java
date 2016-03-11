@@ -58,8 +58,8 @@ import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 import com.sos.scheduler.history.SchedulerHistoryDataProvider;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
-// uncomment to reactive JobNet import
-// com.sos.jobnet.dialog.classes.SOSTabJOBNET;
+// uncomment to reactive JobNet
+// import com.sos.jobnet.dialog.classes.SOSTabJOBNET;
 
 public class DashboardShowDialog extends FormBase {
 
@@ -75,8 +75,8 @@ public class DashboardShowDialog extends FormBase {
     // uncomment to reactive JobNet private static final String
     // TABNAME_SCHEDULER_JOBNET = "Jobnet";
     private static final String TABNAME_SCHEDULER_JADE = "Jade";
-    private static final String conJOB_SCHEDULER_DASHBOARD = "JobScheduler Information Dashboard";
-    private static final String conTabLOG = "Log";
+    private static final String JOB_SCHEDULER_DASHBOARD = "JobScheduler Information Dashboard";
+    private static final String TAB_LOG = "Log";
     private SashForm logSashForm;
     private SashForm tablesSashForm;
     protected Composite composite = null;
@@ -147,10 +147,10 @@ public class DashboardShowDialog extends FormBase {
         if (objOptions != null && objOptions.getEnableJOC().isTrue()) {
             sosJocTabFolder = new SOSBrowserTabFolder(mainTabFolder, TABNAME_SCHEDULER_OPERATIONS_CENTER, Messages);
             String listOfScheduler = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(LIST_OF_SCHEDULERS, "");
-            if (haveDb && listOfScheduler.equals("")) { // Den ersten aus den
+            if (haveDb && "".equals(listOfScheduler)) {
                 schedulerInstancesDBLayer.initFilter();
                 List<SchedulerInstancesDBItem> instances = schedulerInstancesDBLayer.getSchedulerInstancesList();
-                if (instances.size() > 0) {
+                if (!instances.isEmpty()) {
                     SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
                     defaultUrl = new SOSUrl(schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort());
                 }
@@ -168,7 +168,6 @@ public class DashboardShowDialog extends FormBase {
             String webServicAddress = objOptions.securityServer.Value();
             webServicAddress = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(DashBoardConstants.conSOSDashB_Report_Server, webServicAddress);
             sosReportsTabFolder = new SOSBrowserTabFolder(mainTabFolder, TABNAME_REPORTS, Messages);
-
             sosReportsTabFolder.setPrefKey(LIST_OF_REPORTS);
             sosReportsTabFolder.setPrefs(prefs);
             sosReportsTabFolder.addUrl(new SOSUrl("Report Overview:", webServicAddress
@@ -180,8 +179,8 @@ public class DashboardShowDialog extends FormBase {
     }
 
     private void createMainWindow() {
-        if (objOptions != null
-                && (objOptions.getEnableJOC().isTrue() || objOptions.getEnableJOE().isTrue() || objOptions.getEnableEvents().isTrue() || objOptions.getEnableJobnet().isTrue())) {
+        if (objOptions != null && (objOptions.getEnableJOC().isTrue() || objOptions.getEnableJOE().isTrue() || objOptions.getEnableEvents().isTrue() 
+                || objOptions.getEnableJobnet().isTrue())) {
             mainTabFolder = new CTabFolder(dashboardShell, SWT.NONE);
             mainTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             mainTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
@@ -210,15 +209,11 @@ public class DashboardShowDialog extends FormBase {
                 tbtmEvents.disableRefresh();
             }
             if (mainTabFolder != null) {
-                if (mainTabFolder.getSelection() == null || mainTabFolder.getSelection().getText().equals(TABNAME_DASHBOARD)) {
+                if (mainTabFolder.getSelection() == null || TABNAME_DASHBOARD.equals(mainTabFolder.getSelection().getText())) {
                     tableViewPlanned.getSosDashboardHeader().resetRefreshTimer();
                     tableViewExecuted.getSosDashboardHeader().resetRefreshTimer();
-                } else {
-                    if (mainTabFolder.getSelection().getText().equals(TABNAME_SCHEDULER_EVENTS)) {
-                        if (tbtmEvents != null) {
-                            tbtmEvents.enableRefresh();
-                        }
-                    }
+                } else if (TABNAME_SCHEDULER_EVENTS.equals(mainTabFolder.getSelection().getText()) && tbtmEvents != null) {
+                    tbtmEvents.enableRefresh();
                 }
             } else {
                 tableViewPlanned.getSosDashboardHeader().getRefreshTimer().cancel();
@@ -293,7 +288,7 @@ public class DashboardShowDialog extends FormBase {
 
             public void handleEvent(Event event) {
                 if (event.keyCode == SWT.F5) {
-                    if (mainTabFolder.getSelection() == null || mainTabFolder.getSelection().getText().equals(TABNAME_DASHBOARD)) {
+                    if (mainTabFolder.getSelection() == null || TABNAME_DASHBOARD.equals(mainTabFolder.getSelection().getText())) {
                         if (leftTabFolder.getSelection() != null && leftTabFolder.getSelectionIndex() == 0) {
                             tableViewPlanned.actualizeList();
                         } else {
@@ -319,8 +314,7 @@ public class DashboardShowDialog extends FormBase {
         final GridLayout gridLayout = new GridLayout();
         gridLayout.numColumns = 9;
         parent.setLayout(gridLayout);
-
-        dashboardShell.setText(conJOB_SCHEDULER_DASHBOARD + " (" + VersionInfo.VERSION_STRING + ")");
+        dashboardShell.setText(JOB_SCHEDULER_DASHBOARD + " (" + VersionInfo.VERSION_STRING + ")");
         dashboardShell.setSize(1000, 550);
         dashboardShell.addMouseMoveListener(new MouseMoveListener() {
 
@@ -347,14 +341,10 @@ public class DashboardShowDialog extends FormBase {
 
             @Override
             public void widgetSelected(final SelectionEvent e) {
-                if (leftTabFolder.getSelectionIndex() == 0) {
-                    if (haveDb) {
-                        tableViewPlanned.buildTable();
-                    }
-                } else {
-                    if (haveDb) {
-                        tableViewExecuted.buildTable();
-                    }
+                if (leftTabFolder.getSelectionIndex() == 0 && haveDb) {
+                    tableViewPlanned.buildTable();
+                } else if (haveDb) {
+                    tableViewExecuted.buildTable();
                 }
             }
         });
@@ -379,7 +369,6 @@ public class DashboardShowDialog extends FormBase {
             tableViewPlanned.getSosDashboardHeader().setEnabled(false);
             tableViewPlanned.getTableList().setEnabled(false);
         }
-
         tableViewExecuted = new SOSDashboardTableViewExecuted(composite);
         tableViewExecuted.setObjOptions(objOptions);
         tableViewExecuted.setDBLayer(schedulerInstancesDBLayer.getConfigurationFile());
@@ -399,7 +388,6 @@ public class DashboardShowDialog extends FormBase {
             tableViewExecuted.getSosDashboardHeader().setEnabled(false);
             tableViewExecuted.getTableList().setEnabled(false);
         }
-
         tableViewSchedulerInstances = new SOSDashboardTableViewSchedulerInstances(composite);
         tableViewSchedulerInstances.setObjOptions(objOptions);
         tableViewSchedulerInstances.setDBLayer(schedulerInstancesDBLayer.getConfigurationFile());
@@ -419,14 +407,12 @@ public class DashboardShowDialog extends FormBase {
             tableViewSchedulerInstances.getSosDashboardHeader().setEnabled(false);
             tableViewSchedulerInstances.getTableList().setEnabled(false);
         }
-
         CTabItem tbtmDailyPlan = new CTabItem(leftTabFolder, SWT.NONE);
         tbtmDailyPlan.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_PLANNED));
         tbtmDailyPlan.setControl(tableViewPlanned.getTablePlannedComposite());
         CTabItem tbtmHistory = new CTabItem(leftTabFolder, SWT.NONE);
         tbtmHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         tbtmHistory.setControl(tableViewExecuted.getTableComposite());
-
         if (objOptions != null && objOptions.getEnableSchedulerInstances().isTrue()) {
             CTabItem tbtmSchedulerInstances = new CTabItem(leftTabFolder, SWT.NONE);
             tbtmSchedulerInstances.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_SCHEDULER_INSTANCES));
@@ -438,7 +424,6 @@ public class DashboardShowDialog extends FormBase {
 
     private void showDatabaseSelection() {
         File f = this.dailyScheduleDataProvider.getConfigurationFile();
-
         sosDatabaseConfigurationFileMatcher = new SOSDatabaseConfigurationFileMatcher(f);
         ArrayList<SOSDatabaseConfigurationFileMatcherEntry> hibernateConfigurationFiles = sosDatabaseConfigurationFileMatcher.scanForHibernateConfigurationFiles();
         if (hibernateConfigurationFiles.size() > 1) {
@@ -471,7 +456,7 @@ public class DashboardShowDialog extends FormBase {
     }
 
     private void switchDatabaseConnection(String dbName) {
-        if (dbName.equals("")) {
+        if ("".equals(dbName)) {
             dbName = "default";
         }
         File hibernateConfigurationFile = sosDatabaseConfigurationFileMatcher.getFile(dbName);
@@ -491,20 +476,16 @@ public class DashboardShowDialog extends FormBase {
         rightTabFolder = new CTabFolder(right, SWT.NONE);
         rightTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 9, 3));
         rightTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
-
         CTabItem detailHistory = new CTabItem(rightTabFolder, SWT.NONE);
         CTabItem stepHistory = new CTabItem(rightTabFolder, SWT.NONE);
         detailHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_HISTORY));
         stepHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_NAME_TAB_STEP_HISTORY));
-
         Composite historyViewComposite = new Composite(rightTabFolder, SWT.NONE);
         Composite stepHistoryViewComposite = new Composite(rightTabFolder, SWT.NONE);
-
         tableHistoryDetail = new SosHistoryTable(historyViewComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, Messages);
         tableHistoryDetail.setEnabled(haveDb);
         tableHistoryDetail.setLogTabFolder(logTabFolder);
         tableHistoryDetail.setDetailHistoryDataProvider(detailHistoryDataProvider);
-
         tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(stepHistoryViewComposite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI, Messages);
         tableStepHistoryDetail.setEnabled(haveDb);
         tableStepHistoryDetail.setLogTabFolder(logTabFolder);
@@ -528,8 +509,7 @@ public class DashboardShowDialog extends FormBase {
             }
         });
         logTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
-        SosTabLogItem tbtmLog = new SosTabLogItem(conTabLOG, logTabFolder, Messages);
-
+        SosTabLogItem tbtmLog = new SosTabLogItem(TAB_LOG, logTabFolder, Messages);
         lbShowTime = new Label(dashboardShell, SWT.NONE);
         lbShowTime.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lbShowTime.setText("                    ");
@@ -583,7 +563,7 @@ public class DashboardShowDialog extends FormBase {
 
             @Override
             public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-                SosTabLogItem tbtmLog = new SosTabLogItem(conTabLOG, logTabFolder, Messages);
+                SosTabLogItem tbtmLog = new SosTabLogItem(TAB_LOG, logTabFolder, Messages);
                 logTabFolder.setSelection(tbtmLog);
             }
 
@@ -591,7 +571,6 @@ public class DashboardShowDialog extends FormBase {
             public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
         MenuItem closeItem = new MenuItem(contentMenu, SWT.PUSH);
         closeItem.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_close));
         closeItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -612,7 +591,6 @@ public class DashboardShowDialog extends FormBase {
             public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
     }
 
     public void open() {
@@ -622,11 +600,11 @@ public class DashboardShowDialog extends FormBase {
         display = Display.getDefault();
         show();
         while (!dashboardShell.isDisposed()) {
-            if (!display.readAndDispatch())
+            if (!display.readAndDispatch()) {
                 display.sleep();
+            }
         }
         System.exit(0);
-
     }
 
     public void setDataProvider(final DailyScheduleDataProvider dataProvider_) {

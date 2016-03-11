@@ -1,15 +1,14 @@
 package com.sos.dailyschedule.job;
 
-import java.io.File;
 import org.apache.log4j.Logger;
+
 import com.sos.JSHelper.Basics.IJSCommands;
 import com.sos.JSHelper.Basics.JSJobUtilitiesClass;
 import com.sos.dailyschedule.db.Calendar2DB;
 
 public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailyScheduleOptions> implements IJSCommands {
 
-    private final String conClassName = "CreateDailySchedule";						//$NON-NLS-1$
-    private static Logger logger = Logger.getLogger(CreateDailySchedule.class);
+    private static final Logger LOGGER = Logger.getLogger(CreateDailySchedule.class);
 
     public CreateDailySchedule() {
         super(new CreateDailyScheduleOptions());
@@ -17,8 +16,6 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
 
     @Override
     public CreateDailyScheduleOptions getOptions() {
-        @SuppressWarnings("unused")
-        final String conMethodName = conClassName + "::Options"; //$NON-NLS-1$
         if (objOptions == null) {
             objOptions = new CreateDailyScheduleOptions();
         }
@@ -28,16 +25,15 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
     public CreateDailySchedule Execute() throws Exception {
         try {
             getOptions().CheckMandatory();
-            logger.debug(getOptions().dirtyString());
+            LOGGER.debug(getOptions().dirtyString());
             Calendar2DB calendar2Db = new Calendar2DB(objOptions.getconfiguration_file().Value());
             calendar2Db.setOptions(objOptions);
             calendar2Db.store();
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             throw new Exception(e);
         }
         return this;
     }
 
-} // class CreateDailySchedule
+}

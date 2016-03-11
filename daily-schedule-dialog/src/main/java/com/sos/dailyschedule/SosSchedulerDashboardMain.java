@@ -49,26 +49,20 @@ public class SosSchedulerDashboardMain extends I18NBase {
     }
 
     private boolean doLogin() throws Exception {
-
         boolean tryingNextServer = false;
-
         SOSLoginDialog sosLoginDialog = new SOSLoginDialog(new Shell(), 0);
         SOSRestShiroClient sosRestShiroClient = new SOSRestShiroClient();
         SOSWebserviceAuthenticationRecord sosWebserviceAuthenticationRecord = new SOSWebserviceAuthenticationRecord();
-
         do {
             try {
                 if (!tryingNextServer || (currentUser != null && !currentUser.isAuthenticated())) {
                     sosLoginDialog.open();
                 }
-
                 if (sosLoginDialog.getUser() != null) {
-
                     sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
                     sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
                     sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.Value() + COMMAND_PERMISSION);
                     sosWebserviceAuthenticationRecord.setSessionId("");
-
                     SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
                     currentUser = new SOSJaxbSubject(sosPermissionShiro);
                     if (currentUser == null) {
@@ -80,7 +74,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     sosLoginDialog.setMsg("login cancelled");
                 }
             } catch (Exception e) {
-
                 LOGGER.error(e.getMessage(), e);
                 boolean enabled = getNextSecurityServer();
                 tryingNextServer = true;
@@ -94,9 +87,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 }
             }
         } while (!(sosLoginDialog.isCancel() || ((currentUser != null && currentUser.isAuthenticated()))));
-
         return (currentUser != null && currentUser.isAuthenticated());
-
     }
 
     private boolean getNextSecurityServer() {
@@ -134,17 +125,13 @@ public class SosSchedulerDashboardMain extends I18NBase {
     private void execute(final String[] pstrArgs) {
         final String conMethodName = CLASS_NAME + "::Execute";
         try {
-
-            LOGGER.info(Messages.getMsg(SOSDASHBOARD_INTRO)); // $NON-NLS-1$
+            LOGGER.info(Messages.getMsg(SOSDASHBOARD_INTRO));
             Shell shell = new Shell();
-
             objOptions = new SOSDashboardOptions();
             objOptions.CommandLineArgs(pstrArgs);
-
             boolean securityEnabled = true;
             try {
                 securityEnabled = getSecurityEnabled();
-
                 if (securityEnabled) {
                     isAuthenticated = doLogin() && (currentUser.hasRole("jid") || currentUser.isPermitted(SOS_PRODUCTS_JID_EXECUTE));
                 } else {
@@ -155,7 +142,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                         objOptions.CommandLineArgs(pstrArgs);
                     }
                 }
-
             } catch (Exception e) {
                 LOGGER.error(e.getMessage(), e);
                 MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
@@ -164,7 +150,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 isAuthenticated = false;
                 objOptions.enableJobnet.value(false);
             }
-
             if (isAuthenticated) {
                 if (currentUser != null) {
                     objOptions.enableJOC.value(currentUser.hasRole("joc") || currentUser.isPermitted("sos:products:jid:joctab:show"));
@@ -174,16 +159,13 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     objOptions.enableSchedulerInstances.value(currentUser.isPermitted("sos:products:jid:instances:show"));
                     objOptions.enableJobStart.value(currentUser.isPermitted("sos:products:jid:jobstart"));
                 }
-
                 try {
-
                     Composite composite = new Composite(shell, SWT.NONE);
                     objOptions.CheckMandatory();
 
                     LOGGER.debug(objOptions.toString());
                     DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.JSFile());
                     DashboardShowDialog window = new DashboardShowDialog(composite);
-
                     try {
                         window.setDataProvider(dataProvider);
                         window.setCurrentUser(currentUser);
@@ -193,7 +175,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                         messageBox.setMessage(Messages.getLabel(DashBoardConstants.conSOSDashB_CouldNotConnect) + "\nMessage: " + e.getMessage());
                         messageBox.open();
                         objOptions.enableJobnet.value(false);
-
                     }
                     window.setObjOptions(objOptions);
                     window.open();
@@ -203,9 +184,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     throw e;
                 }
             }
-        }
-
-        catch (Exception e) {
+        } catch (Exception e) {
             try {
                 LOGGER.fatal("sudden death", e);
                 new ErrorLog("JID", "error in " + SOSClassUtil.getMethodName() + "cause: " + e.toString(), e);
@@ -218,7 +197,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 System.exit(intExitCode);
             }
         }
+    }
 
-    } // private void Execute
-
-} // class SosSchedulerDashboardMain
+}

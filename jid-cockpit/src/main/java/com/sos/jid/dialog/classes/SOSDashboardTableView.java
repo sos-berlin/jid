@@ -3,7 +3,23 @@ package com.sos.jid.dialog.classes;
 import java.io.File;
 import java.util.prefs.Preferences;
 
-import javax.persistence.Transient;
+import org.apache.log4j.Logger;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.joda.time.DateTimeZone;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -28,41 +44,18 @@ import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
 
-import org.apache.log4j.Logger;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.events.ControlEvent;
-import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.ScrollBar;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Listener;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
-
-    private static Logger logger = Logger.getLogger(SOSDashboardTableView.class);
-    protected SOSTable tableList = null;
-    protected ISOSDashboardDataProvider tableDataProvider = null;
-    private SortBaseComparator[][] comparables = null;
-    private String answer = "";
-    private Integer historyLimit = 0;
 
     protected SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
     protected SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer = null;
     protected SchedulerInstancesDBLayer schedulerInstancesDBLayer;
+    protected SOSTable tableList = null;
+    protected ISOSDashboardDataProvider tableDataProvider = null;
+    private static final Logger LOGGER = Logger.getLogger(SOSDashboardTableView.class);
+    private SortBaseComparator[][] comparables = null;
+    private String answer = "";
+    private Integer historyLimit = 0;
 
     public SOSDashboardTableView(Composite composite_) {
         super(composite_);
@@ -70,7 +63,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     @Override
     public void getTableData() {
-        logger.debug("...getTableData");
+        LOGGER.debug("...getTableData");
         this.showWaitCursor();
         if (tableList != null) {
             tableDataProvider.getData(getLimit());
@@ -88,7 +81,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                 String s = tableDataProvider.getFilter().getTitle();
                 if (s != null) {
                     left.setText(String.format("Timezone: %s: %s", tableDataProvider.getTimeZone(), s));
-                    ;
                 }
             }
             clearTable(tableList);
@@ -147,7 +139,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
                 }
             });
-            sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
+            sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, 
+                    DashBoardConstants.conSettingREFRESHDefault));
             sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
 
                 public void modifyText(final ModifyEvent e) {
@@ -155,7 +148,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                 }
             });
 
-            sosDashboardHeader.setTimeZone(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, DateTimeZone.getDefault().toString()));
+            sosDashboardHeader.setTimeZone(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingTIMEZONE, 
+                    DateTimeZone.getDefault().toString()));
             tableDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
             sosDashboardHeader.getRefreshButton().addSelectionListener(new SelectionAdapter() {
 
@@ -169,8 +163,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
             @Override
             public void handleEvent(final Event event) {
-                if (event.button == RIGHT_MOUSE_BUTTON) // rechte maustaste
-                {
+                if (event.button == RIGHT_MOUSE_BUTTON) {
                     setRightMausclick(true);
                 } else {
                     setRightMausclick(false);
@@ -224,7 +217,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             }
         });
         this.setColumnsListener();
-        // this.tableResize();
     }
 
     public void setColumnsListener() {
@@ -233,8 +225,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             final int _i = i;
             columns[i].addListener(SWT.Selection, new Listener() {
 
-                private int colPos = -1;
                 private boolean sortFlag;
+                private int colPos = -1;
                 {
                     colPos = _i;
                 }
@@ -259,7 +251,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         this.showWaitCursor();
         SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerInstancesDBLayer.getInstanceById(dbItem.getSchedulerId());
         if (schedulerInstanceDBItem != null) {
-            SchedulerObjectFactory objSchedulerObjectFactory = new SchedulerObjectFactory(schedulerInstanceDBItem.getHostName(), schedulerInstanceDBItem.getTcpPort());
+            SchedulerObjectFactory objSchedulerObjectFactory = new SchedulerObjectFactory(schedulerInstanceDBItem.getHostName(), 
+                    schedulerInstanceDBItem.getTcpPort());
             objSchedulerObjectFactory.initMarshaller(Spooler.class);
             if (dbItem.isOrderJob()) {
                 try {
@@ -272,7 +265,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     }
                 } catch (Exception ee) {
                     answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), ee.getMessage()) + "\n";
-                    logger.error(ee.getMessage(), ee);
+                    LOGGER.error(ee.getMessage(), ee);
                 } finally {
                     this.RestoreCursor();
                 }
@@ -287,8 +280,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                 } catch (Exception ee) {
                     answer += String.format("Command: Start Job  %s: %s --> Error: %s", dbItem.getJobName(), dbItem.getOrderId(), ee.getMessage())
                             + "\n";
-                    logger.error(ee.getMessage(), ee);
-
                 } finally {
                     this.RestoreCursor();
                 }
@@ -314,7 +305,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     @Override
     public void getList() {
-        logger.debug("...getList");
+        LOGGER.debug("...getList");
         if (tableList != null && tableDataProvider != null) {
             int i = tableList.getTopIndex();
             tableDataProvider.getData(getLimit());
@@ -327,7 +318,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     }
 
     public void getSchedulerIds() {
-        logger.debug("...getSchedulerIds");
+        LOGGER.debug("...getSchedulerIds");
         if (tableList != null && tableDataProvider != null && sosDashboardHeader != null) {
             tableDataProvider.fillSchedulerIds(sosDashboardHeader.getCbSchedulerId());
         }
@@ -335,7 +326,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     @Override
     public void actualizeList() {
-        // Just an alias for getList()
         getList();
     }
 
@@ -377,7 +367,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     @Override
     public void createMenue() {
-        logger.info("No menu is defined");
+        LOGGER.info("No menu is defined");
     }
 
     public void setRight(Group right) {
@@ -437,4 +427,5 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
     public ISOSDashboardDataProvider getTableDataProvider() {
         return this.tableDataProvider;
     }
+    
 }
