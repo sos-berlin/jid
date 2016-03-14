@@ -44,7 +44,6 @@ import com.sos.scheduler.model.commands.JSCmdModifyOrder;
 import com.sos.scheduler.model.commands.JSCmdStartJob;
 import com.sos.scheduler.model.objects.Spooler;
 
-
 public class SOSDashboardTableView extends SOSDashboardMainView implements ITableView {
 
     protected SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;

@@ -179,8 +179,8 @@ public class DashboardShowDialog extends FormBase {
     }
 
     private void createMainWindow() {
-        if (objOptions != null && (objOptions.getEnableJOC().isTrue() || objOptions.getEnableJOE().isTrue() || objOptions.getEnableEvents().isTrue() 
-                || objOptions.getEnableJobnet().isTrue())) {
+        if (objOptions != null
+                && (objOptions.getEnableJOC().isTrue() || objOptions.getEnableJOE().isTrue() || objOptions.getEnableEvents().isTrue() || objOptions.getEnableJobnet().isTrue())) {
             mainTabFolder = new CTabFolder(dashboardShell, SWT.NONE);
             mainTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
             mainTabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
