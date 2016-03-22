@@ -167,7 +167,7 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         schedulerInstancesDbItem.setHostName(host);
         schedulerInstancesDbItem.setTcpPort(port);
         schedulerInstancesDbItem.setSchedulerId(objSpooler.id());
-        schedulerInstancesDbItem.setDbName(objSpooler.db_name());
+        schedulerInstancesDbItem.setDbName("");
         schedulerInstancesDbItem.setDbHistoryTableName(objSpooler.db_history_table_name());
         schedulerInstancesDbItem.setDbOrdersTableName(objSpooler.db_orders_table_name());
         schedulerInstancesDbItem.setDbTasksTableName(objSpooler.db_tasks_table_name());
