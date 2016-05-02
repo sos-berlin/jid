@@ -18,6 +18,7 @@ import java.util.List;
 
 public class DailyScheduleAdjustment {
 
+    private static final Logger LOGGER = Logger.getLogger(DailyScheduleAdjustment.class);
     private DailyScheduleDBLayer dailyScheduleDBLayer;
     private SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer;
     private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer;
@@ -27,101 +28,79 @@ public class DailyScheduleAdjustment {
     private Date to;
     private int dayOffset;
     private CheckDailyScheduleOptions options = null;
-    private static Logger logger = Logger.getLogger(DailyScheduleAdjustment.class);
 
     public DailyScheduleAdjustment(File configurationFile) {
         dailyScheduleDBLayer = new DailyScheduleDBLayer(configurationFile);
         schedulerTaskHistoryDBLayer = new SchedulerTaskHistoryDBLayer(configurationFile);
         schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
-
-        //
     }
 
     private void adjustDaysScheduleItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerTaskHistoryDBItem> schedulerHistoryList) {
-        logger.debug(String.format("%s records in schedulerHistoryList", schedulerHistoryList.size()));
+        LOGGER.debug(String.format("%s records in schedulerHistoryList", schedulerHistoryList.size()));
         for (int i = 0; i < schedulerHistoryList.size(); i++) {
             SchedulerTaskHistoryDBItem schedulerHistoryDBItem = (SchedulerTaskHistoryDBItem) schedulerHistoryList.get(i);
-            if (!schedulerHistoryDBItem.isAssignToDaysScheduler() /*
-                                                                   * && !
-                                                                   * dailyScheduleDBLayer
-                                                                   * .contains(
-                                                                   * schedulerHistoryDBItem
-                                                                   * )
-                                                                   */) {
-                if (dailyScheduleItem.isStandalone() && dailyScheduleItem.isEqual(schedulerHistoryDBItem)) {
-                    logger.debug(String.format("... assign %s to %s", schedulerHistoryDBItem.getId(), dailyScheduleItem.getJobName()));
-                    dailyScheduleItem.setScheduleExecuted(schedulerHistoryDBItem.getStartTime());
-                    dailyScheduleItem.setSchedulerHistoryId(schedulerHistoryDBItem.getId());
-                    dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
-                    dailyScheduleItem.setResult(schedulerHistoryDBItem.getExitCode());
-                    try {
-                        dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-                    } catch (Exception e) {
-                        logger.error("Error occurred updating item: ", e);
-                    }
-                    schedulerHistoryDBItem.setAssignToDaysScheduler(true);
-                    break;
+            if (!schedulerHistoryDBItem.isAssignToDaysScheduler() && dailyScheduleItem.isStandalone()
+                    && dailyScheduleItem.isEqual(schedulerHistoryDBItem)) {
+                LOGGER.debug(String.format("... assign %s to %s", schedulerHistoryDBItem.getId(), dailyScheduleItem.getJobName()));
+                dailyScheduleItem.setScheduleExecuted(schedulerHistoryDBItem.getStartTime());
+                dailyScheduleItem.setSchedulerHistoryId(schedulerHistoryDBItem.getId());
+                dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
+                dailyScheduleItem.setResult(schedulerHistoryDBItem.getExitCode());
+                try {
+                    dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
+                } catch (Exception e) {
+                    LOGGER.error("Error occurred updating item: ", e);
                 }
+                schedulerHistoryDBItem.setAssignToDaysScheduler(true);
+                break;
             }
         }
-        logger.debug(String.format("... could not assign %s planned at:%s", dailyScheduleItem.getJobName(), dailyScheduleItem.getSchedulePlannedFormated()));
+        LOGGER.debug(String.format("... could not assign %s planned at:%s", dailyScheduleItem.getJobName(), 
+                dailyScheduleItem.getSchedulePlannedFormated()));
     }
 
     private void adjustDaysScheduleOrderItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList) {
         if (dailyScheduleDBLayer.getConnection() == null) {
             dailyScheduleDBLayer.initConnection(dailyScheduleDBLayer.getConfigurationFileName());
         }
-        logger.debug(String.format("%s records in schedulerOrderHistoryList", schedulerOrderHistoryList.size()));
+        LOGGER.debug(String.format("%s records in schedulerOrderHistoryList", schedulerOrderHistoryList.size()));
         for (int i = 0; i < schedulerOrderHistoryList.size(); i++) {
             SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryList.get(i);
-            if (!schedulerOrderHistoryDBItem.isAssignToDaysScheduler() /*
-                                                                        * && !
-                                                                        * dailyScheduleDBLayer
-                                                                        * .
-                                                                        * contains
-                                                                        * (
-                                                                        * schedulerOrderHistoryDBItem
-                                                                        * )
-                                                                        */) {
-                if (dailyScheduleItem.isOrderJob() && dailyScheduleItem.isEqual(schedulerOrderHistoryDBItem)) {
-                    logger.debug(String.format("... assign %s to %s/%s", schedulerOrderHistoryDBItem.getHistoryId(), dailyScheduleItem.getJobChainNotNull(), dailyScheduleItem.getOrderId()));
-                    dailyScheduleItem.setScheduleExecuted(schedulerOrderHistoryDBItem.getStartTime());
-                    dailyScheduleItem.setSchedulerOrderHistoryId(schedulerOrderHistoryDBItem.getHistoryId());
-                    dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
-                    if (schedulerOrderHistoryDBItem.haveError()) {
-                        dailyScheduleItem.setResult(1);
-                    } else {
-                        dailyScheduleItem.setResult(0);
-                    }
-                    try {
-                        dailyScheduleDBLayer.getConnection().beginTransaction();
-                        dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-                        dailyScheduleDBLayer.getConnection().commit();
-                    } catch (Exception e) {
-                        logger.error("Error occurred trying to update Item: ", e);
-                    }
-                    schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
-                    break;
+            if (!schedulerOrderHistoryDBItem.isAssignToDaysScheduler() && dailyScheduleItem.isOrderJob()
+                    && dailyScheduleItem.isEqual(schedulerOrderHistoryDBItem)) {
+                LOGGER.debug(String.format("... assign %s to %s/%s", schedulerOrderHistoryDBItem.getHistoryId(), 
+                        dailyScheduleItem.getJobChainNotNull(), dailyScheduleItem.getOrderId()));
+                dailyScheduleItem.setScheduleExecuted(schedulerOrderHistoryDBItem.getStartTime());
+                dailyScheduleItem.setSchedulerOrderHistoryId(schedulerOrderHistoryDBItem.getHistoryId());
+                dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
+                if (schedulerOrderHistoryDBItem.haveError()) {
+                    dailyScheduleItem.setResult(1);
+                } else {
+                    dailyScheduleItem.setResult(0);
                 }
+                try {
+                    dailyScheduleDBLayer.getConnection().beginTransaction();
+                    dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
+                    dailyScheduleDBLayer.getConnection().commit();
+                } catch (Exception e) {
+                    LOGGER.error("Error occurred trying to update Item: ", e);
+                }
+                schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
+                break;
             }
         }
-
     }
 
     public void adjustWithHistory() {
         String lastSchedulerId = "***";
-        // Read daysScheduler
         dailyScheduleDBLayer.setWhereSchedulerId(this.schedulerId);
         dailyScheduleDBLayer.getFilter().setOrderCriteria("schedulerId");
         dailyScheduleDBLayer.setWhereFrom(from);
         dailyScheduleDBLayer.setWhereTo(to);
-        // System.out.println("Optimized version....");
         List<DailyScheduleDBItem> dailyScheduleList = dailyScheduleDBLayer.getWaitingDailyScheduleList(-1);
-        // read scheduler history
         schedulerTaskHistoryDBLayer.getFilter().setLimit(-1);
         schedulerTaskHistoryDBLayer.getFilter().setExecutedFrom(from);
         schedulerTaskHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
-        // read scheduler Order history
         schedulerOrderHistoryDBLayer.getFilter().setLimit(-1);
         schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom(from);
         schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
@@ -133,9 +112,7 @@ public class DailyScheduleAdjustment {
             for (int i = 0; i < dailyScheduleList.size(); i++) {
                 DailyScheduleDBItem daysScheduleItem = (DailyScheduleDBItem) dailyScheduleList.get(i);
                 String schedulerId = daysScheduleItem.getSchedulerId();
-
                 if (daysScheduleItem.isStandalone()) {
-                    // Für jede SchedulerId neue Listen holen.
                     if (schedulerHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
                         dailyScheduleDBLayer.getConnection().commit();
                         dailyScheduleDBLayer.getConnection().connect();
@@ -143,18 +120,17 @@ public class DailyScheduleAdjustment {
                         schedulerTaskHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
                         schedulerHistoryList = schedulerTaskHistoryDBLayer.getUnassignedSchedulerHistoryListFromTo();
                         lastSchedulerId = schedulerId;
-                        logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
+                    LOGGER.debug(String.format("... Reading scheduler_id: %s", schedulerId));
                     }
                     adjustDaysScheduleItem(daysScheduleItem, schedulerHistoryList);
                 } else {
-                    // Für jede SchedulerId neue Listen holen.
                     if (schedulerOrderHistoryList == null || !schedulerId.equals(lastSchedulerId)) {
                         dailyScheduleDBLayer.getConnection().commit();
                         dailyScheduleDBLayer.getConnection().connect();
                         dailyScheduleDBLayer.getConnection().beginTransaction();
                         schedulerOrderHistoryDBLayer.getFilter().setSchedulerId(schedulerId);
                         schedulerOrderHistoryList = schedulerOrderHistoryDBLayer.getUnassignedSchedulerOrderHistoryListFromTo();
-                        logger.debug(String.format("... Reading scheduler_id: %s", schedulerId));
+                        LOGGER.debug(String.format("... Reading scheduler_id: %s", schedulerId));
                         lastSchedulerId = schedulerId;
                     }
                     adjustDaysScheduleOrderItem(daysScheduleItem, schedulerOrderHistoryList);
@@ -162,7 +138,7 @@ public class DailyScheduleAdjustment {
             }
             dailyScheduleDBLayer.getConnection().commit();
         } catch (Exception e) {
-            logger.error("Error occurred adjusting the history: ", e);
+            LOGGER.error("Error occurred adjusting the history: ", e);
         }
     }
 

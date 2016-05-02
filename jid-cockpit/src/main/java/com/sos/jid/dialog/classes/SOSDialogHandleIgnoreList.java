@@ -37,16 +37,14 @@ public class SOSDialogHandleIgnoreList {
     private static final String LIST_DEFAULT_IGNORE_ORDERS = "listDefaultIgnoreOrders";
     private static final String LIST_DEFAULT_IGNORE_JOBS = "listDefaultIgnoreJobs";
     private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
-
-    final int conDefaultPort = 4444;
-    private Logger logger = Logger.getLogger(SOSDialogHandleIgnoreList.class);
+    private static final Logger LOGGER = Logger.getLogger(SOSDialogHandleIgnoreList.class);
     private Text edSearchField;
     private Button btnOk;
-
     private Table ignoreTable = null;
     private Shell dialogShell;
-    public Timer inputTimer;
     private Display display = null;
+    public Timer inputTimer;
+    final int conDefaultPort = 4444;
     Preferences prefs;
     String context;
     Composite parent;
@@ -59,7 +57,6 @@ public class SOSDialogHandleIgnoreList {
 
     private void execute(Shell parentShell) {
         inputTimer = new Timer();
-
         Display display = Display.getDefault();
         Shell shell = showForm(display, parentShell);
         new Label(dialogShell, SWT.NONE);
@@ -75,7 +72,6 @@ public class SOSDialogHandleIgnoreList {
         dialogShell.setMinimumSize(new Point(300, 500));
         dialogShell.setSize(552, 595);
         dialogShell.setLayout(new GridLayout(2, false));
-
         parent = dialogShell;
         createContent();
         dialogShell.addDisposeListener(new DisposeListener() {
@@ -86,7 +82,6 @@ public class SOSDialogHandleIgnoreList {
         });
         dialogShell.pack();
         new Label(dialogShell, SWT.NONE);
-
         Button btSelectAll = new Button(dialogShell, SWT.NONE);
         btSelectAll.addSelectionListener(new SelectionAdapter() {
 
@@ -107,7 +102,6 @@ public class SOSDialogHandleIgnoreList {
         });
         btDeselectAll.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
         btDeselectAll.setText("Deselect all");
-
         Button btReverse = new Button(dialogShell, SWT.NONE);
         btReverse.addSelectionListener(new SelectionAdapter() {
 
@@ -119,7 +113,6 @@ public class SOSDialogHandleIgnoreList {
         btReverse.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
         btReverse.setText("Reverse");
         new Label(dialogShell, SWT.NONE);
-
         Button btnCancel = new Button(dialogShell, SWT.NONE);
         btnCancel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btnCancel.setText("Cancel");
@@ -131,7 +124,6 @@ public class SOSDialogHandleIgnoreList {
             }
         });
         new Label(dialogShell, SWT.NONE);
-
         Button btSaveDefault = new Button(dialogShell, SWT.NONE);
         btSaveDefault.addSelectionListener(new SelectionAdapter() {
 
@@ -143,7 +135,6 @@ public class SOSDialogHandleIgnoreList {
         });
         btSaveDefault.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btSaveDefault.setText("Save as Default");
-
         Button btRestore = new Button(dialogShell, SWT.NONE);
         btRestore.addSelectionListener(new SelectionAdapter() {
 
@@ -156,14 +147,12 @@ public class SOSDialogHandleIgnoreList {
                         newItemTableItem.dispose();
                     }
                 }
-
                 addStringToListWithSource(LIST_DEFAULT_IGNORE_JOBS, LIST_IGNORE_JOBS);
                 addStringToListWithSource(LIST_DEFAULT_IGNORE_ORDERS, LIST_IGNORE_ORDERS);
             }
         });
         btRestore.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
         btRestore.setText("Restore from Default");
-
         dialogShell.open();
         return dialogShell;
     }
@@ -172,7 +161,7 @@ public class SOSDialogHandleIgnoreList {
         String listOfIgnores = prefs.node(context).get(l, "");
         String[] arrayOfIgnores = listOfIgnores.split(",");
         for (int i = 0; i < arrayOfIgnores.length; i++) {
-            if (!arrayOfIgnores[i].trim().equals("")) {
+            if (!"".equals(arrayOfIgnores[i].trim())) {
                 final TableItem newItemTableItem = new TableItem(ignoreTable, SWT.BORDER);
                 String[] textBuffer = new String[] { arrayOfIgnores[i] };
                 newItemTableItem.setText(textBuffer);
@@ -180,7 +169,6 @@ public class SOSDialogHandleIgnoreList {
                 newItemTableItem.setData(source);
             }
         }
-
     }
 
     private void addStringToList(String l) {
@@ -230,7 +218,6 @@ public class SOSDialogHandleIgnoreList {
     public void selectWithRegularExpression() {
         for (int i = 0; i < ignoreTable.getItemCount(); i++) {
             final TableItem newItemTableItem = ignoreTable.getItem(i);
-
             Pattern p = Pattern.compile(edSearchField.getText());
             Matcher m = p.matcher(newItemTableItem.getText());
             boolean match = m.find();
@@ -239,7 +226,6 @@ public class SOSDialogHandleIgnoreList {
     }
 
     private void createContent() {
-
         Label lblRegularExpressionFor = new Label(dialogShell, SWT.NONE);
         lblRegularExpressionFor.setText("Regular expression for search");
         new Label(dialogShell, SWT.NONE);
@@ -247,7 +233,6 @@ public class SOSDialogHandleIgnoreList {
         GridData gd_edSearchField = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
         gd_edSearchField.widthHint = 150;
         edSearchField.setLayoutData(gd_edSearchField);
-
         edSearchField.addModifyListener(new ModifyListener() {
 
             @Override
@@ -257,7 +242,6 @@ public class SOSDialogHandleIgnoreList {
                 }
             }
         });
-
         btnOk = new Button(dialogShell, SWT.NONE);
         GridData gd_btnOk = new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1);
         gd_btnOk.widthHint = 64;
@@ -273,24 +257,19 @@ public class SOSDialogHandleIgnoreList {
             }
         });
         dialogShell.setDefaultButton(btnOk);
-
         createTable();
         fillTable();
-
     }
 
     private void createTable() {
-
         ignoreTable = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.CHECK);
         ignoreTable.setHeaderVisible(false);
         ignoreTable.setLinesVisible(true);
         ignoreTable.setLayoutData(new org.eclipse.swt.layout.GridData(SWT.FILL, GridData.FILL, true, true, 1, 10));
-
         TableColumn tblclmnIgnore = new TableColumn(ignoreTable, SWT.NONE);
         tblclmnIgnore.setWidth(300);
         tblclmnIgnore.setResizable(false);
         tableResize();
-
     }
 
     private void tableResize() {
@@ -342,11 +321,11 @@ public class SOSDialogHandleIgnoreList {
                         try {
                             selectWithRegularExpression();
                         } catch (Exception e) {
-                            logger.error(e.getMessage(), e);
+                            LOGGER.error(e.getMessage(), e);
                         }
                         inputTimer.cancel();
                     }
-                };
+                }
             });
         }
     }

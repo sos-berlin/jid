@@ -25,18 +25,18 @@ import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 @I18NResourceBundle(baseName = "SOSSchedulerDashboardMain", defaultLocale = "en")
 public class SosSchedulerDashboardMain extends I18NBase {
 
+    protected SOSDashboardOptions objOptions = null;
     private static final String COMMAND_PERMISSION = "/jobscheduler/rest/sosPermission/permissions?user=%s&pwd=%s";
     private static final String SOS_PRODUCTS_JID_EXECUTE = "sos:products:jid:execute";
     private final static String CLASS_NAME = "SosSchedulerDashboardMain";
     private static final Logger LOGGER = Logger.getLogger(SosSchedulerDashboardMain.class);
-    protected SOSDashboardOptions objOptions = null;
+    private boolean isAuthenticated;
+    private SOSJaxbSubject currentUser = null;
+    private List<SchedulerInstancesDBItem> schedulerInstances;
     public static final String SOSDASHBOARD_INTRO = "SosSchedulerDashboardMain.SOSDB-Intro";
     public static final String SOSDASHBOARD_E_0001 = "SosSchedulerDashboardMain.SOSDX_E_0001";
     public static final String SOS_EXIT_WO_ERRORS = "SosSchedulerDashboardMain.SOS_EXIT_WO_ERRORS";
     public static final String SOS_EXIT_CODE_RAISED = "SosSchedulerDashboardMain.SOS_EXIT_CODE_RAISED";
-    private boolean isAuthenticated;
-    private SOSJaxbSubject currentUser = null;
-    private List<SchedulerInstancesDBItem> schedulerInstances;
 
     public final static void main(final String[] pstrArgs) {
         SosSchedulerDashboardMain objEngine = new SosSchedulerDashboardMain();
@@ -45,7 +45,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
 
     protected SosSchedulerDashboardMain() {
         super(DashBoardConstants.conPropertiesFileName);
-
     }
 
     private boolean doLogin() throws Exception {
@@ -80,14 +79,15 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 if (!enabled) {
                     Shell shell = new Shell();
                     MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
-                    String message = String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_NoSecurityServer) + ": %s", objOptions.securityServer.Value());
+                    String message = String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_NoSecurityServer) + ": %s",
+                            objOptions.securityServer.Value());
                     messageBox.setMessage(message + "\nMessage: " + e.getMessage());
                     messageBox.open();
                     throw new Exception(message);
                 }
             }
-        } while (!(sosLoginDialog.isCancel() || ((currentUser != null && currentUser.isAuthenticated()))));
-        return (currentUser != null && currentUser.isAuthenticated());
+        } while (!(sosLoginDialog.isCancel() || currentUser != null && currentUser.isAuthenticated()));
+        return currentUser != null && currentUser.isAuthenticated();
     }
 
     private boolean getNextSecurityServer() {
@@ -98,7 +98,8 @@ public class SosSchedulerDashboardMain extends I18NBase {
             Iterator<SchedulerInstancesDBItem> schedulerInstancesIterator = schedulerInstances.iterator();
             while (!enabled && schedulerInstancesIterator.hasNext()) {
                 SchedulerInstancesDBItem schedulerInstancesDBItem = (SchedulerInstancesDBItem) schedulerInstancesIterator.next();
-                String webServicAddress = String.format("http://%s:%s", schedulerInstancesDBItem.getHostname(), schedulerInstancesDBItem.getJettyHttpPort());
+                String webServicAddress = String.format("http://%s:%s", schedulerInstancesDBItem.getHostname(), 
+                        schedulerInstancesDBItem.getJettyHttpPort());
                 try {
                     enabled = schedulerInstancesDBItem.getIsSosCommandWebservice();
                     if (enabled) {
@@ -112,7 +113,6 @@ public class SosSchedulerDashboardMain extends I18NBase {
             }
             return enabled;
         }
-
     }
 
     private boolean getSecurityEnabled() {

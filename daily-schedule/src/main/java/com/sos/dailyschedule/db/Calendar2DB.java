@@ -21,14 +21,14 @@ import java.util.GregorianCalendar;
 
 public class Calendar2DB {
 
-    private static Logger logger = Logger.getLogger(Calendar2DB.class);
+    private static final Logger LOGGER = Logger.getLogger(Calendar2DB.class);
     private static SchedulerObjectFactory objFactory = null;
     private Date from;
     private Date to;
     private int dayOffset;
     private String schedulerId = "";
     private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
-    private DailyScheduleDBLayer dailySchedulerDBLayer;;
+    private DailyScheduleDBLayer dailySchedulerDBLayer;
     private CreateDailyScheduleOptions options = null;
 
     public Calendar2DB(String configurationFilename) {
@@ -36,8 +36,8 @@ public class Calendar2DB {
     }
 
     private void initSchedulerConnection() {
-        if (schedulerId.equals("")) {
-            logger.debug("Calender2DB");
+        if ("".equals(schedulerId)) {
+            LOGGER.debug("Calender2DB");
             objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().Value(), options.getscheduler_port().value());
             objFactory.initMarshaller(Spooler.class);
             dayOffset = options.getdayOffset().value();
@@ -67,9 +67,7 @@ public class Calendar2DB {
     }
 
     private String getSchedulerId() {
-        // <show_state path="/notexisst_sos" what="folders no_subfolders"
-        // subsystems="folder"/>
-        JSCmdShowState objCmdShowState = objFactory.createShowState(new enu4What[] { enu4What.folders, enu4What.no_subfolders }); // http://localhost:4444/doc/en/xml/show_state.xml
+        JSCmdShowState objCmdShowState = objFactory.createShowState(new enu4What[] { enu4What.folders, enu4What.no_subfolders });
         objCmdShowState.setPath("notexist_sos");
         objCmdShowState.setSubsystems("folder");
         objCmdShowState.setMaxTaskHistory(BigInteger.valueOf(1));
@@ -79,7 +77,7 @@ public class Calendar2DB {
     }
 
     private boolean isSetback(Order order) {
-        return (order.getSetback() != null);
+        return order.getSetback() != null;
     }
 
     private Order getOrder(String jobChain, String orderId) {
@@ -116,15 +114,13 @@ public class Calendar2DB {
                     dailySchedulerDBItem.setOrderId(orderId);
                     if (orderId == null || !isSetback(order)) {
                         dailySchedulerDBItem.setSchedulePlanned(objAt.getAt());
-                        logger.debug("Start at :" + objAt.getAt());
-                        logger.debug("Job Name :" + job);
-                        logger.debug("Job-Chain Name :" + jobChain);
-                        logger.debug("Order Name :" + orderId);
-
+                    LOGGER.debug("Start at :" + objAt.getAt());
+                    LOGGER.debug("Job Name :" + job);
+                    LOGGER.debug("Job-Chain Name :" + jobChain);
+                    LOGGER.debug("Order Name :" + orderId);
                     } else {
-                        logger.debug("Job-Chain Name :" + jobChain + "/" + orderId + " ignored because order is in setback state");
+                    LOGGER.debug("Job-Chain Name :" + jobChain + "/" + orderId + " ignored because order is in setback state");
                     }
-
                 } else {
                     if (objCalendarObject instanceof Period) {
                         Period objPeriod = (Period) objCalendarObject;
@@ -138,28 +134,23 @@ public class Calendar2DB {
                         dailySchedulerDBItem.setPeriodBegin(objPeriod.getBegin());
                         dailySchedulerDBItem.setPeriodEnd(objPeriod.getEnd());
                         dailySchedulerDBItem.setRepeat(objPeriod.getAbsoluteRepeat(), objPeriod.getRepeat());
-                        // logger.debug(objPeriod.toXMLString());
-                        logger.debug("Absolute Repeat Interval :" + objPeriod.getAbsoluteRepeat());
-                        logger.debug("Timerange start :" + objPeriod.getBegin());
-                        logger.debug("Timerange end :" + objPeriod.getEnd());
-                        logger.debug("Job-Name :" + objPeriod.getJob());
+                        LOGGER.debug("Absolute Repeat Interval :" + objPeriod.getAbsoluteRepeat());
+                        LOGGER.debug("Timerange start :" + objPeriod.getBegin());
+                        LOGGER.debug("Timerange end :" + objPeriod.getEnd());
+                        LOGGER.debug("Job-Name :" + objPeriod.getJob());
                     }
                 }
                 dailySchedulerDBItem.setResult(0);
-
                 dailySchedulerDBItem.setStatus(DashBoardConstants.STATUS_NOT_ASSIGNED);
-
                 dailySchedulerDBItem.setModified(new Date());
                 dailySchedulerDBItem.setCreated(new Date());
-                if (dailySchedulerDBItem.getSchedulePlanned() != null) {
-                    if (dailySchedulerDBItem.getJob() == null || !dailySchedulerDBItem.getJob().equals("(Spooler)")) {
-                        dailySchedulerDBLayer.getConnection().save(dailySchedulerDBItem);
-                    }
+                if (dailySchedulerDBItem.getSchedulePlanned() != null && (dailySchedulerDBItem.getJob() == null 
+                    || !"(Spooler)".equals(dailySchedulerDBItem.getJob()))) {
+                    dailySchedulerDBLayer.getConnection().save(dailySchedulerDBItem);
                 }
-
             }
         } catch (Exception e) {
-            logger.error("Error occurred storing items: ", e);
+            LOGGER.error("Error occurred storing items: ", e);
         }
     }
 
@@ -207,4 +198,5 @@ public class Calendar2DB {
         setFrom();
         setTo();
     }
+
 }

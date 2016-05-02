@@ -13,10 +13,7 @@ import com.sos.scheduler.history.classes.SOSIgnoreList;
 
 public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implements ISOSHibernateFilter {
 
-    @SuppressWarnings("unused")
-    private static final Logger logger = Logger.getLogger(SchedulerHistoryFilter.class);
-
-    private final String conClassName = "SchedulerHistoryFilter";
+    private static final Logger LOGGER = Logger.getLogger(SchedulerHistoryFilter.class);
     private String dateFormat = "yyyy-MM-dd HH:mm:ss";
     private Date executedFrom;
     private Date executedTo;
@@ -30,7 +27,6 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
     private String executedToIso = null;
     private SOSIgnoreList orderIgnoreList = null;
     private SOSIgnoreList taskIgnoreList = null;
-
     private boolean showJobs = true;
     private boolean showJobChains = true;
     private SOSSearchFilterData sosSearchFilterData;
@@ -97,18 +93,15 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
             return null;
         } else {
             return convertFromTimeZoneToUtc(executedFrom);
-
         }
-
     }
 
     public void setExecutedFrom(final String executedFrom) throws ParseException {
-        if (executedFrom.equals("")) {
+        if ("".equals(executedFrom)) {
             this.executedFrom = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-            Date d = formatter.parse(executedFrom);
-            setExecutedFrom(d);
+            setExecutedFrom(formatter.parse(executedFrom));
         }
     }
 
@@ -118,16 +111,14 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
         } else {
             return convertFromTimeZoneToUtc(executedTo);
         }
-
     }
 
     public void setExecutedTo(final String executedTo) throws ParseException {
-        if (executedTo.equals("")) {
+        if ("".equals(executedTo)) {
             this.executedTo = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-            Date d = formatter.parse(executedTo);
-            setExecutedTo(d);
+            setExecutedTo(formatter.parse(executedTo));
         }
     }
 
@@ -146,9 +137,8 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             executedFrom = formatter.parse(d);
         } catch (ParseException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-
         formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         executedFromIso = formatter.format(from);
     }
@@ -160,9 +150,8 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             executedTo = formatter.parse(d);
         } catch (ParseException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
-
         formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         executedToIso = formatter.format(to);
     }
@@ -191,12 +180,10 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
         if (ignoreOrderCount > 0 || ignoreJobCount > 0) {
             ignoreList = String.format("%1s Jobs %2s Orders ignored", ignoreJobCount, ignoreOrderCount);
         }
-
         String s = "";
-        if (schedulerId != null && !schedulerId.equals("")) {
+        if (schedulerId != null && !"".equals(schedulerId)) {
             s += String.format("Id: %s ", schedulerId);
         }
-
         if (executedFrom != null) {
             s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM) + ": %s ", date2Iso(executedFrom));
         }
@@ -209,22 +196,18 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
         if (showJobChains) {
             s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBCHAINS));
         }
-
         if (showWithError) {
             s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_show_with_error));
         }
         if (showRunning) {
             s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_show_running));
         }
-
         if (showSuccessfull) {
             s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_show_successfull));
         }
-
         if (sosSearchFilterData != null && sosSearchFilterData.getSearchfield() != null) {
             s += sosSearchFilterData.getSearchfield();
         }
-
         String title = String.format("%1s %2s ", s, ignoreList);
         return title;
     }
@@ -285,4 +268,5 @@ public class SchedulerHistoryFilter extends SOSHibernateIntervalFilter implement
     public void setSosSearchFilterData(final SOSSearchFilterData sosSearchFilterData) {
         this.sosSearchFilterData = sosSearchFilterData;
     }
+
 }

@@ -1,35 +1,22 @@
 package com.sos.scheduler.history.db;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
-import org.apache.log4j.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 public class SchedulerOrderStepHistoryDBLayerTest {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerOrderStepHistoryDBLayerTest";
     private SchedulerOrderStepHistoryDBLayer schedulerOrderStepHistoryDBLayer;
     private final String configurationFilename = "R:/nobackup/junittests/hibernate/hibernate_oracle.cfg.xml";
-    private Logger logger = Logger.getLogger(SchedulerOrderStepHistoryDBLayerTest.class);
 
     public SchedulerOrderStepHistoryDBLayerTest() {
-    }
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
     }
 
     @Before
@@ -37,13 +24,10 @@ public class SchedulerOrderStepHistoryDBLayerTest {
         schedulerOrderStepHistoryDBLayer = new SchedulerOrderStepHistoryDBLayer(configurationFilename);
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
     public void testSchedulerOrderStepHistoryDBLayer() {
         SchedulerOrderStepHistoryDBLayer d = new SchedulerOrderStepHistoryDBLayer(configurationFilename);
+        assertNotNull(d);
     }
 
     @Test

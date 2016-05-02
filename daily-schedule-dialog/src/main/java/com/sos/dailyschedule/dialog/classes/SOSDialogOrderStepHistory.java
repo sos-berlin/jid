@@ -2,7 +2,6 @@ package com.sos.dailyschedule.dialog.classes;
 
 import java.io.File;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.DisposeEvent;
@@ -25,7 +24,6 @@ import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 
 public class SOSDialogOrderStepHistory {
 
-    private Logger logger = Logger.getLogger(SOSDialogOrderStepHistory.class);
     private Button btnOk;
     private String protocolValue;
     private SOSDashboardOptions objOptions;
@@ -58,21 +56,19 @@ public class SOSDialogOrderStepHistory {
         final Shell dialogShell = new Shell(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.PRIMARY_MODAL);
         dialogShell.setMinimumSize(new Point(340, 29));
         dialogShell.setLayout(new GridLayout(6, false));
-
         SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(objOptions.getConfigurationFile().Value());
         historyDataProvider.setTimeZone(timeZone);
-
         SosSchedulerOrderStepHistoryTable tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(dialogShell, SWT.BORDER | SWT.FULL_SELECTION
                 | SWT.MULTI, messages);
         tableStepHistoryDetail.setLogTabFolder(logTabFolder);
         tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
-        SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()), schedulerOrderHistoryDBItem.getHistoryId());
+        SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = 
+                new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()), 
+                        schedulerOrderHistoryDBItem.getHistoryId());
         schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
         schedulerOrderStepHistoryDataProvider.getData(0);
         schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
-
         dialogShell.setSize(295, 170);
-
         btnOk = new Button(dialogShell, SWT.NONE);
         GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
         gd_btnOk.widthHint = 64;
@@ -93,7 +89,6 @@ public class SOSDialogOrderStepHistory {
             }
         });
         dialogShell.pack();
-
         Button btnCancel = new Button(dialogShell, SWT.NONE);
         btnCancel.setText("Cancel");
         new Label(dialogShell, SWT.NONE);
@@ -104,12 +99,12 @@ public class SOSDialogOrderStepHistory {
                 dialogShell.dispose();
             }
         });
-
         dialogShell.open();
         return dialogShell;
     }
 
     public boolean cancel() {
-        return (protocolValue == null);
+        return protocolValue == null;
     }
+    
 }

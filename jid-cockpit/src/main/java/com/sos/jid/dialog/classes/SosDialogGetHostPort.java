@@ -1,28 +1,24 @@
 package com.sos.jid.dialog.classes;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.sos.dialog.components.IntegerField;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.graphics.Point;
 
 public class SosDialogGetHostPort {
 
-    final int conDefaultPort = 4444;
-    final String conDefaultHost = "localhost";
-    private Logger logger = Logger.getLogger(SosDialogGetHostPort.class);
     private IntegerField edPort;
     private Text edHost;
     private Text edUrl;
@@ -34,6 +30,8 @@ public class SosDialogGetHostPort {
     private int portValue;
     private String titleValue;
     private Text edTitle;
+    final int conDefaultPort = 4444;
+    final String conDefaultHost = "localhost";
 
     public SosDialogGetHostPort(Shell parentShell) {
         execute(parentShell);
@@ -55,9 +53,7 @@ public class SosDialogGetHostPort {
         dialogShell.setSize(395, 170);
         dialogShell.setLayout(new GridLayout(3, false));
         new Label(dialogShell, SWT.NONE);
-
         Label lblNewLabel = new Label(dialogShell, SWT.NONE);
-
         cbProtocol = new Combo(dialogShell, SWT.NONE);
         cbProtocol.setItems(new String[] { "HTTP", "HTTPS" });
         cbProtocol.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -77,17 +73,13 @@ public class SosDialogGetHostPort {
         gd_edPort.widthHint = 150;
         edPort.setLayoutData(gd_edPort);
         new Label(dialogShell, SWT.NONE);
-
         Label lblNewLabel_1 = new Label(dialogShell, SWT.NONE);
         lblNewLabel_1.setText("Url");
-
         edUrl = new Text(dialogShell, SWT.BORDER);
         edUrl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         new Label(dialogShell, SWT.NONE);
-
         Label lblTitle = new Label(dialogShell, SWT.NONE);
         lblTitle.setText("Title");
-
         edTitle = new Text(dialogShell, SWT.BORDER);
         edTitle.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         new Label(dialogShell, SWT.NONE);
@@ -120,7 +112,6 @@ public class SosDialogGetHostPort {
             }
         });
         dialogShell.pack();
-
         Button btnCancel = new Button(dialogShell, SWT.NONE);
         btnCancel.setText("Cancel");
         btnCancel.addSelectionListener(new SelectionAdapter() {
@@ -133,7 +124,6 @@ public class SosDialogGetHostPort {
                 dialogShell.dispose();
             }
         });
-
         dialogShell.open();
         return dialogShell;
     }
@@ -172,7 +162,7 @@ public class SosDialogGetHostPort {
     }
 
     public String getUrl() {
-        if (urlValue != null && urlValue.length() > 0) {
+        if (urlValue != null && !urlValue.isEmpty()) {
             return urlValue;
         } else {
             return String.format("%s://%s:%s", protocolValue, getHost(), getPort());
@@ -184,6 +174,7 @@ public class SosDialogGetHostPort {
     }
 
     public boolean cancel() {
-        return (protocolValue == null);
+        return protocolValue == null;
     }
+    
 }

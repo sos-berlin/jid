@@ -27,7 +27,6 @@ public class SchedulerTaskHistoryDBItem extends SchedulerHistoryLogDBItem {
 
     public SchedulerTaskHistoryDBItem() {
         this.assignToDaysScheduler = false;
-
     }
 
     @Id
@@ -186,8 +185,7 @@ public class SchedulerTaskHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String startTimeIso = formatter.format(this.getStartTime());
-            return startTimeIso;
+            return formatter.format(this.getStartTime());
         }
     }
 
@@ -197,8 +195,7 @@ public class SchedulerTaskHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String endTimeIso = formatter.format(this.getEndTime());
-            return endTimeIso;
+            return formatter.format(this.getEndTime());
         }
     }
 
@@ -269,13 +266,13 @@ public class SchedulerTaskHistoryDBItem extends SchedulerHistoryLogDBItem {
 
     @Transient
     public boolean haveError() {
-        return (this.getExitCode() != 0);
+        return this.getExitCode() != 0;
     }
 
     @Override
     @Transient
     public boolean equals(Object h) {
-        return (((SchedulerTaskHistoryDBItem) h).getJobName().equals(this.getJobName()));
+        return ((SchedulerTaskHistoryDBItem) h).getJobName().equals(this.getJobName());
     }
 
     @Override

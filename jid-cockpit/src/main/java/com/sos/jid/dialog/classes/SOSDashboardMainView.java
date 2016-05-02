@@ -6,7 +6,6 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
-import org.apache.log4j.Logger;
 
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dashboard.globals.SOSDashboardOptions;
@@ -21,14 +20,13 @@ public class SOSDashboardMainView extends FormBase {
     protected Composite leftTabFolder = null;
     protected CTabFolder logTabFolder = null;
     protected Preferences prefs;
-    private static Logger logger = Logger.getLogger(SOSDashboardMainView.class);
     protected SchedulerHistoryDataProvider detailHistoryDataProvider = null;
     protected SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = null;
     protected SosDashboardHeader sosDashboardHeader = null;
-    public Composite mainViewComposite = null;
     protected Table tableHistoryDetail = null;
     protected Table tableStepHistory = null;
     protected SOSDashboardOptions objOptions = null;
+    public Composite mainViewComposite = null;
 
     public SOSDashboardMainView(Composite composite_) {
         super(composite_, DashBoardConstants.conPropertiesFileName);

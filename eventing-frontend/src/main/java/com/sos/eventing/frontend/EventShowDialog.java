@@ -203,7 +203,7 @@ public class EventShowDialog extends JSToolBox {
                 @Override
                 public void run() {
                     refresh();
-                };
+                }
             });
         }
     }

@@ -8,9 +8,7 @@ import org.apache.log4j.Logger;
 
 public class DailyScheduleDate {
 
-    @SuppressWarnings("unused")
-    private static Logger logger = Logger.getLogger(DailyScheduleDate.class);
-
+    private static final Logger LOGGER = Logger.getLogger(DailyScheduleDate.class);
     private final String conClassName = "DailyScheduleDate";
     private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
     private Date schedule;
@@ -18,7 +16,6 @@ public class DailyScheduleDate {
 
     public DailyScheduleDate(String dateFormat_) {
         this.dateFormat = dateFormat_;
-        //
     }
 
     private void setIsoDate() throws ParseException {
@@ -29,7 +26,7 @@ public class DailyScheduleDate {
 
     public void setSchedule(String schedule) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
-        if (schedule.equals("now")) {
+        if ("now".equals(schedule)) {
             this.schedule = new Date();
         } else {
             this.schedule = formatter.parse(schedule);
@@ -50,7 +47,7 @@ public class DailyScheduleDate {
         try {
             this.setIsoDate();
         } catch (ParseException e) {
-            logger.info(conClassName + ".setScheduler: Could not set Iso-Date");
+            LOGGER.info(conClassName + ".setScheduler: Could not set Iso-Date");
         }
     }
 

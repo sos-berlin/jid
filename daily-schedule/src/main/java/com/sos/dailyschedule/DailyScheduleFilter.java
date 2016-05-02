@@ -16,9 +16,7 @@ import com.sos.scheduler.history.classes.SOSIgnoreList;
 
 public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements ISOSHibernateFilter {
 
-    @SuppressWarnings("unused")
-    private static Logger logger = Logger.getLogger(DailyScheduleFilter.class);
-    private final String conClassName = "DailyScheduleFilter";
+    private static final Logger LOGGER = Logger.getLogger(DailyScheduleFilter.class);
     private Date plannedFrom;
     private Date executedFrom;
     private Date plannedTo;
@@ -29,7 +27,6 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
     private String status = "";
     private String schedulerId = "";
     private SOSIgnoreList ignoreList = null;
-
     private SOSSearchFilterData sosSearchFilterData;
     private String plannedToIso;
     private String plannedFromIso;
@@ -38,7 +35,6 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
         super(DashBoardConstants.conPropertiesFileName);
         sosSearchFilterData = new SOSSearchFilterData();
         ignoreList = new SOSIgnoreList();
-
     }
 
     public SOSIgnoreList getIgnoreList() {
@@ -68,12 +64,12 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             this.plannedFrom = formatter.parse(d);
         } catch (ParseException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
     public void setPlannedFrom(String plannedFrom) throws ParseException {
-        if (plannedFrom.equals("")) {
+        if ("".equals(plannedFrom)) {
             this.plannedFrom = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -113,7 +109,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
     }
 
     public void setExecutedFrom(String executedFrom) throws ParseException {
-        if (executedFrom.equals("")) {
+        if ("".equals(executedFrom)) {
             this.executedFrom = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -145,12 +141,12 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
             formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             this.plannedTo = formatter.parse(d);
         } catch (ParseException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
     public void setPlannedTo(String plannedTo) throws ParseException {
-        if (plannedTo.equals("")) {
+        if ("".equals(plannedTo)) {
             this.plannedTo = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -168,7 +164,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
     }
 
     public void setExecutedTo(String executedTo) throws ParseException {
-        if (executedTo.equals("")) {
+        if ("".equals(executedTo)) {
             this.executedTo = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -179,14 +175,16 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 
     public boolean isFiltered(DbItem dbitem) {
         DailyScheduleDBItem h = (DailyScheduleDBItem) dbitem;
-        boolean show = this.isShowJobChains() && this.isShowJobs() || this.isShowJobChains() && h.getJobChain() != null || this.isShowJobs()
-                && h.getJob() != null;
-        return (!show || this.getIgnoreList().contains(h) || this.isLate() && !h.getExecutionState().isLate() || !this.getStatus().equals("")
+        boolean show =
+                this.isShowJobChains() && this.isShowJobs() || this.isShowJobChains() && h.getJobChain() != null || this.isShowJobs()
+                        && h.getJob() != null;
+        return !show || this.getIgnoreList().contains(h) || this.isLate() && !h.getExecutionState().isLate() || !"".equals(this.getStatus())
                 && !this.getStatus().equalsIgnoreCase(h.getExecutionState().getExecutionState()) || this.getSosSearchFilterData() != null
                 && this.getSosSearchFilterData().getSearchfield() != null
-                && !this.getSosSearchFilterData().getSearchfield().equals("")
-                && ((h.getJobName() != null && !h.getJobName().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase())) || (h.getJobChain() != null
-                        && h.getOrderId() != null && !(h.getJobChain().toLowerCase() + "~*~" + h.getOrderId()).toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase()))));
+                && !"".equals(this.getSosSearchFilterData().getSearchfield())
+                && (h.getJobName() != null && !h.getJobName().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase()) || (h.getJobChain() != null
+                        && h.getOrderId() != null && !(h.getJobChain().toLowerCase() + "~*~" + h.getOrderId()).toLowerCase().contains(
+                        this.getSosSearchFilterData().getSearchfield().toLowerCase())));
     }
 
     public boolean isShowJobs() {
@@ -231,25 +229,21 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
 
     @Override
     public String getTitle() {
-
         String ignoreCount = "";
         int ignoreJobCount = getIgnoreList().size();
         if (ignoreJobCount > 0 || ignoreJobCount > 0) {
             ignoreCount = String.format("%1s Entries ignored", ignoreJobCount);
         }
-
         String s = "";
-        if (schedulerId != null && !schedulerId.equals("")) {
+        if (schedulerId != null && !"".equals(schedulerId)) {
             s += String.format("Id: %s ", schedulerId);
         }
-
         if (plannedFrom != null) {
             s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM) + ": %s ", date2Iso(plannedFrom));
         }
         if (plannedTo != null) {
             s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_TO) + ": %s ", date2Iso(plannedTo));
         }
-
         if (showJobs) {
             s += String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_JOBS));
         }
@@ -259,10 +253,7 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
         if (late) {
             s += " " + String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_LATE));
         }
-
-        String title = String.format("%1s %2s %3s %3s", s, status, getSosSearchFilterData().getSearchfield(), ignoreCount);
-        return title;
-
+        return String.format("%1s %2s %3s %3s", s, status, getSosSearchFilterData().getSearchfield(), ignoreCount);
     }
 
     @Override
@@ -295,4 +286,5 @@ public class DailyScheduleFilter extends SOSHibernateIntervalFilter implements I
     public void setSosSearchFilterData(SOSSearchFilterData sosSearchFilterData) {
         this.sosSearchFilterData = sosSearchFilterData;
     }
+
 }

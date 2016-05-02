@@ -17,24 +17,12 @@ import com.sos.dailyschedule.db.DailyScheduleDBLayer;
 
 public class CreateDailyScheduleJUnitTest extends JSToolBox {
 
-    @SuppressWarnings("unused")
-    private final static String conClassName = "CreateDaysScheduleJUnitTest";						//$NON-NLS-1$
-    @SuppressWarnings("unused")
-    private static Logger logger = Logger.getLogger(CreateDailyScheduleJUnitTest.class);
-
     protected CreateDailyScheduleOptions objOptions = null;
+    private static final Logger LOGGER = Logger.getLogger(CreateDailyScheduleJUnitTest.class);
     private CreateDailySchedule objE = null;
 
     public CreateDailyScheduleJUnitTest() {
         //
-    }
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
     }
 
     @Before
@@ -42,15 +30,8 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
         objE = new CreateDailySchedule();
         objE.registerMessageListener(this);
         objOptions = objE.getOptions();
-        // objOptions.registerMessageListener(this);
-
         JSListenerClass.bolLogDebugInformation = true;
         JSListenerClass.intMaxDebugLevel = 9;
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
@@ -61,7 +42,6 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
             pobjHM.put("CreateDailyScheduleOptionsSuperClass.schedulerHostName", "galadriel.sos");
             pobjHM.put("CreateDailyScheduleOptionsSuperClass.dayOffset", 0);
             pobjHM.put("configurationFile", "R:/nobackup/junittests/hibernate/hibernate.cfg.xml");
-
             objE.getOptions().setAllOptions(pobjHM);
             assertEquals("", objOptions.scheduler_port.value(), 4410);
             objE.Execute();
@@ -80,8 +60,8 @@ public class CreateDailyScheduleJUnitTest extends JSToolBox {
             }
             d.getConnection().commit();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
-} // class CreateDaysScheduleJUnitTest
+}

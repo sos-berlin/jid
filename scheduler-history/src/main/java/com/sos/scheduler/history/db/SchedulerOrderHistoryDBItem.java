@@ -13,14 +13,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
-import org.apache.log4j.Logger;
-
 @Entity
 @Table(name = "SCHEDULER_ORDER_HISTORY")
 public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
-
-    @SuppressWarnings("unused")
-    private static Logger logger = Logger.getLogger(SchedulerOrderHistoryDBItem.class);
 
     private Long historyId;
     private String spoolerId;
@@ -134,8 +129,7 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String startTimeIso = formatter.format(this.getStartTime());
-            return startTimeIso;
+            return formatter.format(this.getStartTime());
         }
     }
 
@@ -145,8 +139,7 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String endTimeIso = formatter.format(this.getEndTime());
-            return endTimeIso;
+            return formatter.format(this.getEndTime());
         }
     }
 
@@ -167,8 +160,7 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String startTimeIso = formatter.format(this.getStartTime());
-            return startTimeIso;
+            return formatter.format(this.getStartTime());
         }
     }
 
@@ -179,8 +171,7 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String endTimeIso = formatter.format(this.getEndTime());
-            return endTimeIso;
+            return formatter.format(this.getEndTime());
         }
     }
 
@@ -256,7 +247,6 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
     @Override
     @Transient
     public boolean haveError() {
-
         if (this.getState() == null) {
             return false;
         } else {

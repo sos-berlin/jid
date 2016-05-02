@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
@@ -17,7 +16,7 @@ import com.sos.scheduler.history.SchedulerOrderStepHistoryFilter;
 public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
 
     protected SchedulerOrderStepHistoryFilter filter = null;
-    private Logger logger = Logger.getLogger(SchedulerOrderStepHistoryDBLayer.class);
+    private static final Logger LOGGER = Logger.getLogger(SchedulerOrderStepHistoryDBLayer.class);
 
     public SchedulerOrderStepHistoryDBLayer(final String configurationFilename) {
         super();
@@ -31,7 +30,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
         try {
             this.setConfigurationFileName(configurationFile.getCanonicalPath());
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
             this.setConfigurationFileName("");
         }
         this.initConnection(this.getConfigurationFileName());
@@ -47,7 +46,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             connection.beginTransaction();
             return (SchedulerOrderStepHistoryDBItem) ((Session) connection.getCurrentSession()).get(SchedulerOrderStepHistoryDBItem.class, id);
         } catch (Exception e) {
-            logger.error("Error occurred receiving item: ", e);
+            LOGGER.error("Error occurred receiving item: ", e);
         }
         return null;
     }
@@ -70,7 +69,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             where += and + " startTime <= :startTimeTo ";
             and = " and ";
         }
-        if (!where.trim().equals("")) {
+        if (!"".equals(where.trim())) {
             where = "where " + where;
         }
         return where;
@@ -83,19 +82,19 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             where += and + " id.historyId = :historyId";
             and = " and ";
         }
-        if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
+        if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
             where += and + " startTime>= :startTime";
             and = " and ";
         }
-        if (filter.getEndTime() != null && !filter.getEndTime().equals("")) {
+        if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
             where += and + " endTime <= :endTime ";
             and = " and ";
         }
-        if (filter.getStatus() != null && !filter.getStatus().equals("")) {
+        if (filter.getStatus() != null && !"".equals(filter.getStatus())) {
             where += and + " state = :state";
             and = " and ";
         }
-        if (!where.trim().equals("")) {
+        if (!"".equals(where.trim())) {
             where = "where " + where;
         }
         return where;
@@ -115,7 +114,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
             row = query.executeUpdate();
         } catch (Exception e) {
-            logger.error("Error occurred trying to delete Items for the given interval: ", e);
+            LOGGER.error("Error occurred trying to delete Items for the given interval: ", e);
         }
         return row;
     }
@@ -138,10 +137,10 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             connection.beginTransaction();
             Query query = connection.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
                     + filter.getSortMode());
-            if (filter.getExecutedFromUtc() != null && !filter.getExecutedFromUtc().equals("")) {
+            if (filter.getExecutedFromUtc() != null && !"".equals(filter.getExecutedFromUtc())) {
                 query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
             }
-            if (filter.getExecutedToUtc() != null && !filter.getExecutedToUtc().equals("")) {
+            if (filter.getExecutedToUtc() != null && !"".equals(filter.getExecutedToUtc())) {
                 query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
             }
             if (limit > 0) {
@@ -149,7 +148,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             }
             schedulerHistoryList = query.list();
         } catch (Exception e) {
-            logger.error("Error occurred receiving Items for the given interval: ", e);
+            LOGGER.error("Error occurred receiving Items for the given interval: ", e);
         }
         return schedulerHistoryList;
     }
@@ -167,16 +166,16 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             if (filter.getHistoryId() != null) {
                 query.setLong("historyId", filter.getHistoryId());
             }
-            if (filter.getStatus() != null && !filter.getStatus().equals("")) {
+            if (filter.getStatus() != null && !"".equals(filter.getStatus())) {
                 query.setParameter("state", filter.getStatus());
             }
-            if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
+            if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
                 query.setTimestamp("startTime", filter.getStartTime());
             }
-            if (filter.getStartTime() != null && !filter.getStartTime().equals("")) {
+            if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
                 query.setTimestamp("startTime", filter.getStartTime());
             }
-            if (filter.getEndTime() != null && !filter.getEndTime().equals("")) {
+            if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
                 query.setTimestamp("endTime", filter.getEndTime());
             }
             if (limit != 0) {
@@ -184,7 +183,7 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
             }
             historyList = query.list();
         } catch (Exception e) {
-            logger.error("Error occurred receiving Items: ", e);
+            LOGGER.error("Error occurred receiving Items: ", e);
         }
         return historyList;
     }

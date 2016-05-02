@@ -93,7 +93,7 @@ public class ActionShowDialog extends JSToolBox {
                     } catch (Exception e) {
                         LOGGER.error(e.getMessage(), e);
                     }
-                };
+                }
             });
         }
     }

@@ -30,7 +30,7 @@ public class SOSActions {
 
     public boolean isActive(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
         String tmp = condition;
-        if (condition.length() == 0 || condition.equalsIgnoreCase("or")) {
+        if (condition.isEmpty() || "or".equalsIgnoreCase(condition)) {
             condition = "";
             Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
             while (i.hasNext()) {
@@ -39,8 +39,7 @@ public class SOSActions {
             }
             condition += " false";
         }
-
-        if (condition.equalsIgnoreCase("and")) {
+        if ("and".equalsIgnoreCase(condition)) {
             condition = "";
             Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
             while (i.hasNext()) {
@@ -49,7 +48,6 @@ public class SOSActions {
             }
             condition += " true";
         }
-
         BooleanExp exp = new BooleanExp(condition);
         Iterator<SOSEventGroups> i = listOfEventGroups.iterator();
         while (i.hasNext()) {
@@ -58,7 +56,6 @@ public class SOSActions {
         }
         condition = tmp;
         return exp.evaluateExpression();
-
     }
 
     public LinkedHashSet<SOSEventCommand> getListOfCommands() {

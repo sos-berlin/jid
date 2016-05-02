@@ -11,50 +11,34 @@ import com.sos.scheduler.db.SchedulerInstancesDBLayer;
 
 public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
 
-    private final String conClassName = "CreateDailyScheduleJSAdapterClass";							//$NON-NLS-1$
-    private static Logger logger = Logger.getLogger(CreateDailyScheduleJSAdapterClass.class);
-
-    public void init() {
-        final String conMethodName = conClassName + "::init"; //$NON-NLS-1$
-        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
-        doInitialize();
-    }
-
-    private void doInitialize() {
-    } // doInitialize
+    private static final String CLASSNAME = "CreateDailyScheduleJSAdapterClass";
+    private static final Logger LOGGER = Logger.getLogger(CreateDailyScheduleJSAdapterClass.class);
 
     @Override
     public boolean spooler_init() {
-        final String conMethodName = conClassName + "::spooler_init"; //$NON-NLS-1$
-        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        final String conMethodName = CLASSNAME + "::spooler_init";
+        LOGGER.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
         return super.spooler_init();
     }
 
     @Override
     public boolean spooler_process() throws Exception {
-        final String conMethodName = conClassName + "::spooler_process"; //$NON-NLS-1$
-        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        final String conMethodName = CLASSNAME + "::spooler_process";
+        LOGGER.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
         try {
             super.spooler_process();
             doProcessing();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            logger.debug("Exception:" + e.getMessage());
-
+            LOGGER.error(e.getMessage(), e);
+            LOGGER.debug("Exception:" + e.getMessage());
             return false;
         }
-
         return spooler_task.job().order_queue() != null;
-    } // spooler_process
-
-    @Override
-    public void spooler_exit() {
-        super.spooler_exit();
     }
 
     private void doProcessing() throws Exception {
-        final String conMethodName = conClassName + "::doProcessing";
-        logger.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
+        final String conMethodName = CLASSNAME + "::doProcessing";
+        LOGGER.debug(String.format(Messages.getMsg("JSJ-I-110"), conMethodName));
         CreateDailySchedule objR = new CreateDailySchedule();
         CreateDailyScheduleOptions objO = objR.getOptions();
         objO.setAllOptions(getSchedulerParameterAsProperties(getJobOrOrderParameters()));
@@ -65,10 +49,10 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         int port = 4444;
         String host = "localhost";
         if (objO.getItem("SchedulerTcpPortNumber") != null) {
-            logger.debug("port from param");
+            LOGGER.debug("port from param");
             port = objO.SchedulerTcpPortNumber.value();
         } else {
-            logger.debug("port from scheduler");
+            LOGGER.debug("port from scheduler");
             port = objSpooler.tcp_port();
         }
         if (objO.getItem("SchedulerHostName") != null) {
@@ -78,10 +62,10 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         }
         String configuration_file = "";
         if (objO.getItem("configuration_file") != null) {
-            logger.debug("configuration_file from param");
+            LOGGER.debug("configuration_file from param");
             configuration_file = objO.configuration_file.Value();
         } else {
-            logger.debug("configuration_file from scheduler");
+            LOGGER.debug("configuration_file from scheduler");
             File f = new File(new File(objSpooler.configuration_directory()).getParent(), "hibernate.cfg.xml");
             if (!f.exists()) {
                 f = new File(new File(objSpooler.directory()), "config/hibernate.cfg.xml");
@@ -99,6 +83,6 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         schedulerInstancesDBLayer.insertScheduler(schedulerInstancesDBLayer.setInstancesDbItemValues(host, port, objSpooler));
         schedulerInstancesDBLayer.getConnection().commit();
         objR.Execute();
-    } // doProcessing
+    }
 
 }

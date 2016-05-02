@@ -138,8 +138,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String startTimeIso = formatter.format(this.getStartTime());
-            return startTimeIso;
+            return formatter.format(this.getStartTime());
         }
     }
 
@@ -149,8 +148,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-            String endTimeIso = formatter.format(this.getEndTime());
-            return endTimeIso;
+            return formatter.format(this.getEndTime());
         }
     }
 
@@ -183,7 +181,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
         if (schedulerTaskHistoryDBItem == null) {
             return false;
         } else {
-            return (schedulerTaskHistoryDBItem.haveError());
+            return schedulerTaskHistoryDBItem.haveError();
         }
     }
 

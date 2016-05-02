@@ -37,13 +37,10 @@ public class DailyScheduleDBItem extends DbItem {
     private Integer result;
     private Date created;
     private Date modified;
-
     private Long schedulerOrderHistoryId;
     private Long schedulerHistoryId;
-
     private SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem;
     private SchedulerTaskHistoryDBItem schedulerTaskHistoryDBItem;
-
     private String dateFormat = "yyyy-MM-dd hh:mm";
     private ExecutionState executionState = new ExecutionState();
 
@@ -225,8 +222,7 @@ public class DailyScheduleDBItem extends DbItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String schedulePlannedIso = formatter.format(this.getSchedulePlanned());
-            return schedulePlannedIso;
+            return formatter.format(this.getSchedulePlanned());
         }
     }
 
@@ -279,8 +275,7 @@ public class DailyScheduleDBItem extends DbItem {
             return "";
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String scheduleExecutedIso = formatter.format(this.getScheduleExecuted());
-            return scheduleExecutedIso;
+            return formatter.format(this.getScheduleExecuted());
         }
     }
 
@@ -316,8 +311,7 @@ public class DailyScheduleDBItem extends DbItem {
     public void setRepeat(BigInteger absolutRepeat_, BigInteger repeat_) {
         BigInteger r = BigInteger.ZERO;
         Long l = Long.valueOf(0);
-
-        if (absolutRepeat_ != null && absolutRepeat_ != BigInteger.ZERO) {
+        if (absolutRepeat_ != null && !absolutRepeat_.equals(BigInteger.ZERO)) {
             r = absolutRepeat_;
             this.startStart = true;
             if (r != null) {
@@ -417,25 +411,27 @@ public class DailyScheduleDBItem extends DbItem {
     public boolean isEqual(SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem) {
         String job_chain = this.getJobChain().replaceAll("^/", "");
         String job_chain2 = schedulerOrderHistoryDBItem.getJobChain().replaceAll("^/", "");
-        return ((this.getSchedulePlanned().equals(schedulerOrderHistoryDBItem.getStartTime()) || this.getSchedulePlanned().before(schedulerOrderHistoryDBItem.getStartTime()))
-                && job_chain.equalsIgnoreCase(job_chain2) && this.getOrderId().equalsIgnoreCase(schedulerOrderHistoryDBItem.getOrderId()));
+        return (this.getSchedulePlanned().equals(schedulerOrderHistoryDBItem.getStartTime()) 
+                || this.getSchedulePlanned().before(schedulerOrderHistoryDBItem.getStartTime()))
+                && job_chain.equalsIgnoreCase(job_chain2) && this.getOrderId().equalsIgnoreCase(schedulerOrderHistoryDBItem.getOrderId());
     }
 
     @Transient
     public boolean isEqual(SchedulerTaskHistoryDBItem schedulerHistoryDBItem) {
         String job = this.getJob().replaceAll("^/", "");
         String job2 = schedulerHistoryDBItem.getJobName().replaceAll("^/", "");
-        return ((this.getSchedulePlanned().equals(schedulerHistoryDBItem.getStartTime()) || this.getSchedulePlanned().before(schedulerHistoryDBItem.getStartTime())) && job.equalsIgnoreCase(job2));
+        return (this.getSchedulePlanned().equals(schedulerHistoryDBItem.getStartTime()) 
+                || this.getSchedulePlanned().before(schedulerHistoryDBItem.getStartTime())) && job.equalsIgnoreCase(job2);
     }
 
     @Transient
     public boolean isOrderJob() {
-        return (!this.isStandalone());
+        return !this.isStandalone();
     }
 
     @Transient
     public boolean isStandalone() {
-        return (this.job != null && !this.job.equals("") && ((this.jobChain == null) || this.jobChain.equals("")));
+        return this.job != null && !"".equals(this.job) && (this.jobChain == null || "".equals(this.jobChain));
     }
 
     @Transient
@@ -449,25 +445,20 @@ public class DailyScheduleDBItem extends DbItem {
 
     @Transient
     public ExecutionState getExecutionState() {
-
         String fromTimeZoneString = "UTC";
         DateTime dateTimePlannedInUtc = new DateTime(schedulePlanned);
         DateTime dateTimeExecutedInUtc = null;
         DateTime dateTimePeriodBeginInUtc = null;
-
         if (scheduleExecuted != null) {
             dateTimeExecutedInUtc = new DateTime(scheduleExecuted);
         }
         if (periodBegin != null) {
             dateTimePeriodBeginInUtc = new DateTime(periodBegin);
         }
-
         String toTimeZoneString = TimeZone.getDefault().getID();
-
         Date plannedLocal = UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePlannedInUtc);
         Date executedLocal = UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimeExecutedInUtc);
         Date periodBeginLocal = UtcTimeHelper.convertTimeZonesToDate(fromTimeZoneString, toTimeZoneString, dateTimePeriodBeginInUtc);
-
         this.executionState.setSchedulePlanned(plannedLocal);
         this.executionState.setScheduleExecuted(executedLocal);
         this.executionState.setPeriodBegin(periodBeginLocal);
@@ -485,7 +476,6 @@ public class DailyScheduleDBItem extends DbItem {
 
     @Transient
     public String getTitle() {
-
         if (isOrderJob()) {
             return this.getJobChain() + "/" + this.getOrderId();
         } else {
@@ -505,15 +495,14 @@ public class DailyScheduleDBItem extends DbItem {
     @Transient
     public String getJobName() {
         return getJob();
-
     }
 
     @Transient
     public boolean haveError() {
         if (this.isOrderJob()) {
-            return ((this.schedulerOrderHistoryDBItem != null) && (this.schedulerOrderHistoryDBItem.haveError()));
+            return this.schedulerOrderHistoryDBItem != null && this.schedulerOrderHistoryDBItem.haveError();
         } else {
-            return ((this.schedulerTaskHistoryDBItem != null) && (this.schedulerTaskHistoryDBItem.haveError()));
+            return this.schedulerTaskHistoryDBItem != null && this.schedulerTaskHistoryDBItem.haveError();
         }
     }
 

@@ -6,12 +6,9 @@ import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 
 public class SchedulerTaskHistoryFilter extends SchedulerHistoryFilter implements com.sos.hibernate.interfaces.ISOSHibernateFilter {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerHistoryFilter";
-    private String status = "";
     protected String jobname = null;
-
     protected HistorySeverity severity = null;
+    private String status = "";
 
     public HistorySeverity getSeverity() {
         return severity;
@@ -25,7 +22,6 @@ public class SchedulerTaskHistoryFilter extends SchedulerHistoryFilter implement
         if (jobname == null) {
             return jobname;
         }
-
         if (jobname.startsWith("/")) {
             return jobname.substring(1);
         } else {
@@ -42,21 +38,22 @@ public class SchedulerTaskHistoryFilter extends SchedulerHistoryFilter implement
             return !h.haveError();
         }
         if (!this.isShowWithError() && this.isShowRunning()) {
-            return (h.getEndTime() != null || h.haveError());
+            return h.getEndTime() != null || h.haveError();
         }
         if (this.isShowWithError() && this.isShowRunning()) {
-            return !((h.getEndTime() == null) || h.haveError());
+            return !(h.getEndTime() == null || h.haveError());
         }
         return false;
     }
 
     public boolean isFiltered(DbItem dbitem) {
         SchedulerTaskHistoryDBItem h = (SchedulerTaskHistoryDBItem) dbitem;
-        return (this.getTaskIgnoreList().contains(h) || (this.getJobname() != null && this.getJobname().equalsIgnoreCase("(Spooler)"))
-                || (filterRunningOrError(h)) || this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield() != null
-                && !this.getSosSearchFilterData().getSearchfield().equals("")
-                && ((h.getJob() != null && !h.getJob().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase()))));
-
+        return (this.getTaskIgnoreList().contains(h) 
+                || (this.getJobname() != null && "(Spooler)".equalsIgnoreCase(this.getJobname()))
+                || filterRunningOrError(h) 
+                || this.getSosSearchFilterData() != null && this.getSosSearchFilterData().getSearchfield() != null
+                && !"".equals(this.getSosSearchFilterData().getSearchfield())
+                && h.getJob() != null && !h.getJob().toLowerCase().contains(this.getSosSearchFilterData().getSearchfield().toLowerCase()));
     }
 
     public String getStatus() {

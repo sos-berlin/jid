@@ -17,7 +17,7 @@ public class SchedulerOrderStepHistoryDataProvider {
 
     private List<SchedulerOrderStepHistoryDBItem> listOfSchedulerOrderStepHistoryDBItems = null;
     private SchedulerOrderStepHistoryDBLayer schedulerOrderStepHistoryDBLayer = null;
-    private static Logger logger = Logger.getLogger(SchedulerOrderStepHistoryDataProvider.class);
+    private static final Logger LOGGER = Logger.getLogger(SchedulerOrderStepHistoryDataProvider.class);
     private long historyId;
     private String timeZone = "";
 
@@ -56,13 +56,13 @@ public class SchedulerOrderStepHistoryDataProvider {
     public String getLogAsString(SchedulerOrderStepHistoryCompoundKey schedulerOrderStepHistoryCompoundKey) {
         String log = "";
         try {
-            SchedulerOrderStepHistoryDBItem schedulerOrderStepHistoryDBItem = schedulerOrderStepHistoryDBLayer.get(schedulerOrderStepHistoryCompoundKey);
+            SchedulerOrderStepHistoryDBItem schedulerOrderStepHistoryDBItem =
+                    schedulerOrderStepHistoryDBLayer.get(schedulerOrderStepHistoryCompoundKey);
             if (schedulerOrderStepHistoryDBItem != null && schedulerOrderStepHistoryDBItem.getSchedulerOrderHistoryDBItem().getLog() != null) {
                 log = schedulerOrderStepHistoryDBItem.getSchedulerOrderHistoryDBItem().getLogAsString();
             }
         } catch (IOException e1) {
-            logger.error(e1.getMessage(), e1);
-
+            LOGGER.error(e1.getMessage(), e1);
         }
         return log;
     }
@@ -77,7 +77,7 @@ public class SchedulerOrderStepHistoryDataProvider {
                     final SchedulerOrderStepHistoryTableItem newItemTableItem = new SchedulerOrderStepHistoryTableItem(table, SWT.BORDER);
                     h.setDateTimeZone4Getters(timeZone);
                     newItemTableItem.setDBItem(h);
-                    logger.debug("...creating tableItem: " + h.getTitle() + ":" + table.getItemCount());
+                    LOGGER.debug("...creating tableItem: " + h.getTitle() + ":" + table.getItemCount());
                     newItemTableItem.setData(h);
                     newItemTableItem.setColor();
                     newItemTableItem.setColumns();

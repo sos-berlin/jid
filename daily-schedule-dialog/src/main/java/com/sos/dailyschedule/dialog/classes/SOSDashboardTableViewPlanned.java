@@ -58,8 +58,8 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
             }
         });
         new MenuItem(contentMenu, SWT.SEPARATOR);
-        final SOSMenuItem standAlone = new SOSMenuItem(contentMenu, SWT.CHECK, CLASSNAME, Messages.getLabel(DashBoardConstants.conSOSDashB_show_stand_alone_jobs), 
-                true);
+        final SOSMenuItem standAlone = new SOSMenuItem(contentMenu, SWT.CHECK, CLASSNAME, 
+                Messages.getLabel(DashBoardConstants.conSOSDashB_show_stand_alone_jobs), true);
         standAlone.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -70,7 +70,8 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        final SOSMenuItem orderJobs = new SOSMenuItem(contentMenu, SWT.CHECK, CLASSNAME, Messages.getLabel(DashBoardConstants.conSOSDashB_show_job_chains), true);
+        final SOSMenuItem orderJobs = new SOSMenuItem(contentMenu, SWT.CHECK, CLASSNAME, 
+                Messages.getLabel(DashBoardConstants.conSOSDashB_show_job_chains), true);
         orderJobs.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -171,14 +172,13 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
                 SOSSearchFilter sosSearchFilter = new SOSSearchFilter(getParentShell());
                 sosSearchFilter.setEnableFilterCheckbox(false);
                 sosSearchFilter.execute(EMPTY_STRING);
-                if (sosSearchFilter.getSosSearchFilterData() != null) {
-                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-                        try {
-                            tableDataProvider.setSearchField(sosSearchFilter.getSosSearchFilterData());
-                            actualizeList();
-                        } catch (Exception ee) {
-                            LOGGER.error(ee.getMessage(), ee);
-                        }
+                if (sosSearchFilter.getSosSearchFilterData() != null
+                        && !sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                    try {
+                        tableDataProvider.setSearchField(sosSearchFilter.getSosSearchFilterData());
+                        actualizeList();
+                    } catch (Exception ee) {
+                        LOGGER.error(ee.getMessage(), ee);
                     }
                 }
             }
@@ -192,12 +192,10 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 TableItem[] t = tableList.getSelection();
-                if (t.length > 0) {
-                    if (t[0].getData().getClass() == SchedulerOrderHistoryDBItem.class) {
-                        SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t[0].getData();
-                        SOSDialogOrderStepHistory s = new SOSDialogOrderStepHistory(getParentShell(), objOptions, h, logTabFolder, Messages, 
-                                tableDataProvider.getTimeZone());
-                    }
+                if (t.length > 0 && t[0].getData().getClass() == SchedulerOrderHistoryDBItem.class) {
+                    SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t[0].getData();
+                    SOSDialogOrderStepHistory s = new SOSDialogOrderStepHistory(getParentShell(), objOptions, h, logTabFolder, Messages, 
+                            tableDataProvider.getTimeZone());
                 }
             }
 
@@ -249,7 +247,8 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
         setLimitItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                Integer limit = Integer.parseInt(prefs.node(prefNode).get(DashBoardConstants.conSettingLIMIT, String.valueOf(DashBoardConstants.conSettingLIMITDefault)));
+                Integer limit = Integer.parseInt(prefs.node(prefNode).get(DashBoardConstants.conSettingLIMIT, 
+                        String.valueOf(DashBoardConstants.conSettingLIMITDefault)));
                 sosDashboardHeader.setLimit(limit);
                 actualizeList();
             }
@@ -295,8 +294,8 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
                         schedulerOrderHistoryDBLayer.getFilter().setSortMode(DashBoardConstants.SORT_MODE);
                         SchedulerOrderHistoryDBItem orderHistory = schedulerOrderHistoryDBLayer.getOrderHistoryItem();
                         tableDataProvider.beginTransaction();
-                        DailyScheduleDBItem dailyScheduleDBItem2 = (DailyScheduleDBItem) tableDataProvider.getSession().load(DailyScheduleDBItem.class, 
-                                dailyScheduleDBItem.getId());
+                        DailyScheduleDBItem dailyScheduleDBItem2 =
+                                (DailyScheduleDBItem) tableDataProvider.getSession().load(DailyScheduleDBItem.class, dailyScheduleDBItem.getId());
                         dailyScheduleDBItem2.setScheduleExecuted(utcNow);
                         if (orderHistory != null) {
                             dailyScheduleDBItem2.setSchedulerOrderHistoryId(orderHistory.getHistoryId());
@@ -317,8 +316,8 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
                         schedulerTaskHistoryDBLayer.getFilter().setSortMode(DashBoardConstants.SORT_MODE);
                         SchedulerTaskHistoryDBItem taskHistory = schedulerTaskHistoryDBLayer.getHistoryItem();
                         tableDataProvider.beginTransaction();
-                        DailyScheduleDBItem dailyScheduleDBItem2 = (DailyScheduleDBItem) tableDataProvider.getSession().load(DailyScheduleDBItem.class, 
-                                dailyScheduleDBItem.getId());
+                        DailyScheduleDBItem dailyScheduleDBItem2 = 
+                                (DailyScheduleDBItem) tableDataProvider.getSession().load(DailyScheduleDBItem.class, dailyScheduleDBItem.getId());
                         dailyScheduleDBItem2.setScheduleExecuted(utcNow);
                         if (taskHistory != null) {
                             dailyScheduleDBItem2.setSchedulerHistoryId(taskHistory.getLogId());
