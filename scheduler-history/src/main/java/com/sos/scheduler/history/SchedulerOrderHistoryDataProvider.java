@@ -16,18 +16,13 @@ import com.sos.scheduler.history.db.SchedulerOrderHistoryDBLayer;
 
 public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvider {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerOrderHistoryDataProvider";
-
+    private static final Logger LOGGER = Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
     private List<SchedulerOrderHistoryDBItem> listOfSchedulerOrderHistoryDBItems = null;
-
     private SchedulerOrderHistoryDBLayer schedulerOrderHistoryDBLayer = null;
-    private static Logger logger = Logger.getLogger(SchedulerOrderHistoryDataProvider.class);
     private String timeZone;
 
     public SchedulerOrderHistoryDataProvider(final File configurationFile) {
         schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
-
     }
 
     @Override
@@ -48,14 +43,11 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 
     public void fillSchedulerIds(final CCombo cbSchedulerId) {
         if (listOfSchedulerOrderHistoryDBItems != null) {
-            // Es ist schneller, die vorhandenen Sätze zu verwenden.
-            // listOfSchedulerOrderHistoryDBSchedulersItems =
-            // schedulerOrderHistoryDBLayer.getSchedulerOrderHistoryListSchedulersFromTo();
             Iterator<SchedulerOrderHistoryDBItem> schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
             while (schedulerOrderHistoryEntries.hasNext()) {
                 SchedulerOrderHistoryDBItem h = schedulerOrderHistoryEntries.next();
                 if (cbSchedulerId.indexOf(h.getSpoolerId()) < 0) {
-                    logger.debug("... cbSchedulerId --> : " + h.getSpoolerId());
+                    LOGGER.debug("... cbSchedulerId --> : " + h.getSpoolerId());
                     cbSchedulerId.add(h.getSpoolerId());
                 }
             }
@@ -82,28 +74,24 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
                 log = schedulerOrderHistoryDBItem.getLogAsString();
             }
         } catch (IOException e1) {
-            logger.error(e1.getMessage(), e1);
+            LOGGER.error(e1.getMessage(), e1);
         }
         return log;
     }
 
     public void fillTableShort(final Table table) {
         if (listOfSchedulerOrderHistoryDBItems != null) {
-
             Iterator schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
             while (schedulerOrderHistoryEntries.hasNext()) {
                 SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryEntries.next();
-                if (schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
-                } else {
+                if (!schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
                     final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
                     h.setDateTimeZone4Getters(timeZone);
                     newItemTableItem.setDBItem(h);
-
-                    logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
+                    LOGGER.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
                     newItemTableItem.setData(h);
                     newItemTableItem.setColor();
                     newItemTableItem.setColumnsShort();
-
                 }
             }
         }
@@ -111,23 +99,18 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
 
     @Override
     public void fillTable(final Table table) {
-
         if (listOfSchedulerOrderHistoryDBItems != null) {
             Iterator schedulerOrderHistoryEntries = listOfSchedulerOrderHistoryDBItems.iterator();
             while (schedulerOrderHistoryEntries.hasNext()) {
                 SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) schedulerOrderHistoryEntries.next();
-                if (schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
-                } else {
+                if (!schedulerOrderHistoryDBLayer.getFilter().isFiltered(h)) {
                     final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
                     h.setDateTimeZone4Getters(timeZone);
-
                     newItemTableItem.setDBItem(h);
-
-                    logger.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
+                    LOGGER.debug("...creating tableItem: " + h.getJobChain() + "/" + h.getOrderId() + ":" + table.getItemCount());
                     newItemTableItem.setData(h);
                     newItemTableItem.setColor();
                     newItemTableItem.setColumns();
-
                 }
             }
         }

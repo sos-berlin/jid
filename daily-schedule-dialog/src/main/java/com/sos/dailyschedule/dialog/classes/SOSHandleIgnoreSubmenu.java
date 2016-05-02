@@ -17,7 +17,6 @@ import org.eclipse.swt.widgets.TableItem;
 
 public abstract class SOSHandleIgnoreSubmenu extends Menu {
 
-    private final String className = "SOSHandleIgnoreSubmenu";
     protected Messages messages = null;
     protected Preferences prefs;
     protected SOSDashboardTableView sosDashboardTableView;
@@ -25,7 +24,6 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
     private MenuItem disableIgnore;
 
     abstract String getContext();
-
     abstract void addSpecialContextMenu();
 
     public SOSHandleIgnoreSubmenu(Menu parent, SOSDashboardTableView sosDashboardTableView_, Messages messages_, Preferences prefs_) {
@@ -45,34 +43,26 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
     }
 
     public void createMenue(final Menu parent) {
-
         Menu ignoreSubmenu = new Menu(parent);
         MenuItem ignoreSubmenuItem = new MenuItem(parent, SWT.CASCADE);
         ignoreSubmenuItem.setText("Ignore");
         ignoreSubmenuItem.setMenu(ignoreSubmenu);
-
         // this is an option to add different sub menu items. Not used in JID
         addSpecialContextMenu();
-
         MenuItem handleIgnore = new MenuItem(ignoreSubmenu, SWT.PUSH);
         handleIgnore.setText(messages.getLabel(DashBoardConstants.conSOSDashB_handleIgnore));
         handleIgnore.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-
                 SOSDialogHandleIgnoreList s = new SOSDialogHandleIgnoreList(getParentShell(), prefs, getContext());
                 sosDashboardTableView.getTableDataProvider().disableIgnoreList(prefs);
                 sosDashboardTableView.getTableDataProvider().setIgnoreList(prefs);
                 sosDashboardTableView.getList();
-
             }
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
-
         MenuItem addIgnore = new MenuItem(ignoreSubmenu, SWT.PUSH);
         addIgnore.setText(messages.getLabel(DashBoardConstants.conSOSDashB_addIgnore));
         addIgnore.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -92,9 +82,6 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
-
         MenuItem addIgnoreJobChainOrder = new MenuItem(ignoreSubmenu, SWT.PUSH);
         addIgnoreJobChainOrder.setText(messages.getLabel(DashBoardConstants.conSOSDashB_addIgnoreJobChainOrder));
         addIgnoreJobChainOrder.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -102,8 +89,6 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 TableItem[] t = sosDashboardTableView.getTableList().getSelection();
                 if (t.length > 0) {
-                    // if (t[0].getData().getClass() ==
-                    // SchedulerOrderHistoryDBItem.class){
                     DbItem dbItem = (DbItem) t[0].getData();
                     if (dbItem.isOrderJob()) {
                         dbItem.setOrderId(null);
@@ -116,7 +101,6 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
         disableIgnore = new MenuItem(ignoreSubmenu, SWT.PUSH);
         disableIgnore.setText(messages.getLabel(DashBoardConstants.conSOSDashB_disableIgnore));
         disableIgnore.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -136,14 +120,11 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
         MenuItem resetIgnore = new MenuItem(ignoreSubmenu, SWT.PUSH);
         resetIgnore.setText(messages.getLabel(DashBoardConstants.conSOSDashB_resetIgnore));
         resetIgnore.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-
                 sosDashboardTableView.getTableDataProvider().resetIgnoreList(prefs);
                 sosDashboardTableView.getList();
             }
@@ -151,7 +132,6 @@ public abstract class SOSHandleIgnoreSubmenu extends Menu {
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
     }
 
 }

@@ -1,7 +1,3 @@
-/*
- * Created on 30.09.2008 To change the template for this generated file go to
- * Window - Preferences - Java - Code Generation - Code and Comments
- */
 package com.sos.eventing.eventhandler;
 
 import java.util.HashMap;
@@ -95,7 +91,6 @@ public class SchedulerEvent {
 
     public void setProperties(NamedNodeMap attr) {
         event_class = getTextDefault("", attr.getNamedItem("event_class"));
-
         event_id = getText(attr.getNamedItem("event_id"));
         job_name = getText(attr.getNamedItem("job_name"));
         job_chain = getText(attr.getNamedItem("job_chain"));
@@ -110,11 +105,9 @@ public class SchedulerEvent {
     }
 
     public void setEventClassIfBlank(String eClass) {
-
-        if (event_class.equals("")) {
+        if ("".equals(event_class)) {
             event_class = eClass;
         }
-
     }
 
     public String getCondition() {
@@ -123,7 +116,6 @@ public class SchedulerEvent {
 
     private HashMap<String, String> properties() {
         HashMap<String, String> attr = new HashMap<String, String>();
-
         attr.put("event_title", event_title);
         attr.put("event_class", event_class);
         attr.put("event_id", event_id);
@@ -142,23 +134,17 @@ public class SchedulerEvent {
         Iterator<String> iProperties = properties().keySet().iterator();
         while (iProperties.hasNext()) {
             String trigger = iProperties.next().toString();
-            if (!properties().get(trigger).equals("")) {
-                if (eActive.properties().get(trigger) != null) {
-                    if (!trigger.equalsIgnoreCase("expires") && !trigger.equalsIgnoreCase("created")
-                            && !(eActive.properties().get(trigger).equals(properties().get(trigger)))) {
-                        erg = false;
-                    }
-                }
+            if (!"".equals(properties().get(trigger)) && eActive.properties().get(trigger) != null && !"expires".equalsIgnoreCase(trigger) 
+                    && !"created".equalsIgnoreCase(trigger) && !eActive.properties().get(trigger).equals(properties().get(trigger))) {
+                erg = false;
             }
         }
         return erg;
     }
 
-    // True if this is in list of active events
     public boolean isIn(LinkedHashSet listOfActiveEvents) {
         boolean erg = false;
         Iterator i = listOfActiveEvents.iterator();
-
         while (i.hasNext() && !erg) {
             if (this.isEqual((SchedulerEvent) i.next())) {
                 erg = true;
@@ -180,8 +166,8 @@ public class SchedulerEvent {
     }
 
     public String getEvent_name() {
-        if (this.event_name.equals("")) {
-            if (this.event_class.equals("")) {
+        if ("".equals(this.event_name)) {
+            if ("".equals(this.event_class)) {
                 return this.event_id;
             } else {
                 return this.event_class + "." + this.event_id;
@@ -202,4 +188,5 @@ public class SchedulerEvent {
     public void setExpires(String expires) {
         this.expires = expires;
     }
+
 }

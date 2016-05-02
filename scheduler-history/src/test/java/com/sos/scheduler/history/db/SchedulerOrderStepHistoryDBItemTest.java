@@ -1,58 +1,30 @@
 package com.sos.scheduler.history.db;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import org.junit.After;
-import org.junit.AfterClass;
+
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
 
 public class SchedulerOrderStepHistoryDBItemTest {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerOrderStepHistoryDBItemTest";
     private SchedulerOrderStepHistoryDBItem schedulerOrderStepHistoryDBItem;
 
     public SchedulerOrderStepHistoryDBItemTest() {
         //
     }
 
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
-    }
-
     @Before
     public void setUp() throws Exception {
         schedulerOrderStepHistoryDBItem = new SchedulerOrderStepHistoryDBItem();
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
     }
 
     @Test
     public void testSchedulerOrderStepHistoryDBItem() {
         schedulerOrderStepHistoryDBItem = new SchedulerOrderStepHistoryDBItem();
     }
-
-    /*
-     * @Test public void testSetIdId() { Long myHistoryId = new Long(12); Long
-     * myStep = new Long(13); SchedulerOrderStepHistoryCompoundKey key = new
-     * SchedulerOrderStepHistoryCompoundKey(myHistoryId,myStep);
-     * schedulerOrderStepHistoryDBItem.setId(key); Long historyId =
-     * schedulerOrderStepHistoryDBItem.getId().getHistoryId(); Long step =
-     * schedulerOrderStepHistoryDBItem.getId().getStep();
-     * assertEquals("testSethistoryId failed: ",myHistoryId,historyId);
-     * assertEquals("testSethistoryId failed: ",myStep,step); }
-     */
 
     @Test
     public void testSetTaskId() {
@@ -115,7 +87,6 @@ public class SchedulerOrderStepHistoryDBItemTest {
         Date myStartTime = new Date();
         schedulerOrderStepHistoryDBItem.setStartTime(null);
         assertEquals("testSetStartTime failed: ", "", schedulerOrderStepHistoryDBItem.getStartTimeIso());
-
         schedulerOrderStepHistoryDBItem.setStartTime(myStartTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String startTimeIso = formatter.format(schedulerOrderStepHistoryDBItem.getStartTime());
@@ -127,10 +98,10 @@ public class SchedulerOrderStepHistoryDBItemTest {
         Date myEndTime = new Date();
         schedulerOrderStepHistoryDBItem.setEndTime(null);
         assertEquals("testSetEndTime failed: ", "", schedulerOrderStepHistoryDBItem.getEndTimeIso());
-
         schedulerOrderStepHistoryDBItem.setEndTime(myEndTime);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String endTimeIso = formatter.format(schedulerOrderStepHistoryDBItem.getEndTime());
         assertEquals("testReadEndTimeIso failed: ", endTimeIso, schedulerOrderStepHistoryDBItem.getEndTimeIso());
     }
+
 }

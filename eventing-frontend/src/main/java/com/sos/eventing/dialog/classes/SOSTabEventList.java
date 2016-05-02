@@ -14,10 +14,9 @@ import sos.util.SOSStandardLogger;
 import com.sos.eventing.frontend.EventShowDialog;
 import com.sos.eventing.frontend.Scheduler;
 
-@SuppressWarnings("deprecation")
 public class SOSTabEventList extends CTabItem {
 
-    private static Logger logger = Logger.getLogger(SOSTabEventList.class);
+    private static final Logger LOGGER = Logger.getLogger(SOSTabEventList.class);
     private final Composite parentComposite;
     private final GridLayout layout;
     private Table table;
@@ -27,31 +26,26 @@ public class SOSTabEventList extends CTabItem {
     public SOSTabEventList(final String caption, final CTabFolder parentTabfolder, final String host, final int port) {
         super(parentTabfolder, SWT.NONE);
         setText(caption);
-
         scheduler = new Scheduler();
         scheduler.setHostName(host);
         scheduler.setTcpPort(String.valueOf(port));
-
         parentComposite = new Composite(parentTabfolder, SWT.NONE);
         layout = new GridLayout(1, false);
         parentComposite.setLayout(layout);
         parentComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
         createContent();
-
         parentComposite.layout();
         this.setControl(parentComposite);
     }
 
     private void createContent() {
-
         try {
-
             SOSStandardLogger sosLogger = new SOSStandardLogger(9);
             eventList = new EventShowDialog(parentComposite, scheduler, sosLogger);
             eventList.showComposite();
             table = eventList.getTable();
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

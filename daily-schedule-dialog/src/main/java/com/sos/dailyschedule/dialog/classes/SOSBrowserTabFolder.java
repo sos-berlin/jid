@@ -1,6 +1,5 @@
 package com.sos.dailyschedule.dialog.classes;
 
-import java.util.List;
 import java.util.prefs.Preferences;
 
 import org.eclipse.swt.SWT;
@@ -41,44 +40,33 @@ public class SOSBrowserTabFolder {
 
     public void openUrls() {
         SOSUrl url = null;
-
         listOfUrls = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(prefKey, "");
         listOfUrlTitels = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(prefKeyTitles, "");
-
         url = defaultUrl;
-
         Composite urlComposite = new Composite(parent, SWT.NONE);
         urlComposite.setLayout(new GridLayout());
-
         if (tbTmUrls == null) {
             tbTmUrls = new CTabItem(parent, SWT.NONE);
             tbTmUrls.setText(tabName);
-
         }
-
         tbTmUrls.setControl(urlComposite);
-
         tabFolder = new CTabFolder(urlComposite, SWT.NONE);
-
         if (openMenueItem != null) {
             createContextMenuBrowserTabfolder(tabFolder);
             createContextMenuBrowserTabfolder(parent);
         }
-
         tabFolder.setTabPosition(SWT.BOTTOM);
         tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-
         int startIndex = 0;
         if (defaultUrl != null) {
             startIndex = 1;
             new SosTabJOC(tabFolder, url);
         }
-
-        if (!listOfUrls.equals("")) { // Die weiteren öffnen
+        if (!"".equals(listOfUrls)) {
             String[] urlList = listOfUrls.split(",");
             String[] urlListTitle = listOfUrlTitels.split(",");
             for (int i = startIndex; i < urlList.length; i++) {
-                if (listOfUrlTitels.length() == 0 || urlListTitle.length < urlList.length) {
+                if (listOfUrlTitels.isEmpty() || urlListTitle.length < urlList.length) {
                     this.openUrl(new SOSUrl(urlList[i]));
                 } else {
                     this.openUrl(new SOSUrl(urlListTitle[i], urlList[i]));
@@ -89,27 +77,24 @@ public class SOSBrowserTabFolder {
     }
 
     private void openUrl(SOSUrl url) {
-
         SosTabJOC tbtmJoc = new SosTabJOC(tabFolder, url);
         tabFolder.setSelection(tbtmJoc);
         saveBrowserTabs();
     }
 
     public void addUrl(SOSUrl url) {
-        if (listOfUrls.equals("")) {
+        if ("".equals(listOfUrls)) {
             listOfUrls = url.getUrlValue();
         } else {
             listOfUrls = listOfUrls + "," + url.getUrlValue();
         }
         prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKey, listOfUrls);
-
-        if (listOfUrlTitels.equals("")) {
+        if ("".equals(listOfUrlTitels)) {
             listOfUrlTitels = url.getTitle();
         } else {
             listOfUrlTitels = listOfUrlTitels + "," + url.getTitle();
         }
         prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKeyTitles, listOfUrlTitels);
-
     }
 
     private void saveBrowserTabs() {
@@ -119,12 +104,12 @@ public class SOSBrowserTabFolder {
         for (CTabItem tab : tabs) {
             SOSUrl url = (SOSUrl) tab.getData();
             if (url != null) {
-                if (listOfUrls.equals("")) {
+                if ("".equals(listOfUrls)) {
                     listOfUrls = url.getUrlValue();
                 } else {
                     listOfUrls = listOfUrls + "," + url.getUrlValue();
                 }
-                if (listOfUrlTitels.equals("")) {
+                if ("".equals(listOfUrlTitels)) {
                     listOfUrlTitels = url.getTitle();
                 } else {
                     listOfUrlTitels = listOfUrlTitels + "," + url.getTitle();
@@ -133,7 +118,6 @@ public class SOSBrowserTabFolder {
         }
         prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKey, listOfUrls);
         prefs.node(DashBoardConstants.SOS_DASHBOARD).put(prefKeyTitles, listOfUrlTitels);
-
     }
 
     public void closeAllBrowserTabs() {
@@ -157,7 +141,6 @@ public class SOSBrowserTabFolder {
 
             @Override
             public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-
                 SosDialogGetHostPort s = new SosDialogGetHostPort(cParent.getShell());
                 if (!s.cancel()) {
                     openUrl(new SOSUrl(s.getTitle(), s.getUrl()));
@@ -166,7 +149,6 @@ public class SOSBrowserTabFolder {
                             if (parent.getItem(i).getText().equals(tabName)) {
                                 parent.setSelection(i);
                             }
-
                         } catch (Exception ee) {
                         }
                     }
@@ -177,7 +159,6 @@ public class SOSBrowserTabFolder {
             public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
         MenuItem closeItem = new MenuItem(contentMenu, SWT.PUSH);
         closeItem.setText(messages.getLabel(DashBoardConstants.conSOSDashB_close));
         closeItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -185,11 +166,9 @@ public class SOSBrowserTabFolder {
             @Override
             public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
                 SosTabJOC tbtmJoc = (SosTabJOC) tabFolder.getSelection();
-                if (tbtmJoc != null) {
-                    if (tabFolder.getItemCount() > 1) {
-                        tbtmJoc.dispose();
-                        saveBrowserTabs();
-                    }
+                if (tbtmJoc != null && tabFolder.getItemCount() > 1) {
+                    tbtmJoc.dispose();
+                    saveBrowserTabs();
                 }
             }
 
@@ -197,7 +176,6 @@ public class SOSBrowserTabFolder {
             public void widgetDefaultSelected(final org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
     }
 
     public void setPrefKey(String prefKey) {

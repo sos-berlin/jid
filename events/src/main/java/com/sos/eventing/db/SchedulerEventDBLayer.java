@@ -100,8 +100,7 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
         }
         String hql = "delete from SchedulerEventDBItem " + getWhere();
         Query query = setQueryParams(hql);
-        int row = query.executeUpdate();
-        return row;
+        return query.executeUpdate();
     }
 
     private String getWhere() {
@@ -160,28 +159,24 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
         if (limit > 0) {
             query.setMaxResults(limit);
         }
-        List<SchedulerEventDBItem> scheduleEventList = query.list();
-        return scheduleEventList;
+        return query.list();
     }
 
     public boolean checkEventExists() {
-        List<SchedulerEventDBItem> events = getScheduleEventList(1);
-        return events.size() > 0;
+        return !getScheduleEventList(1).isEmpty();
     }
 
     public boolean checkEventExists(SchedulerEventDBItem event) {
         resetFilter();
         filter.setEventClass(event.getEventClass());
         filter.setEventId(event.getEventId());
-        List<SchedulerEventDBItem> eventList = getScheduleEventList(1);
-        return eventList.size() > 0;
+        return !getScheduleEventList(1).isEmpty();
     }
 
     public boolean checkEventExists(SchedulerEventFilter filter) {
         resetFilter();
         this.filter = filter;
-        List<SchedulerEventDBItem> eventList = getScheduleEventList(1);
-        return eventList.size() > 0;
+        return !getScheduleEventList(1).isEmpty();
     }
 
     public boolean checkEventExists(String condition) {
@@ -209,8 +204,7 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
             LOGGER.debug(exp.getBoolExp());
         }
         LOGGER.debug("--------->" + exp.getBoolExp());
-        result = exp.evaluateExpression();
-        return result;
+        return exp.evaluateExpression();
     }
 
     public boolean checkEventExists(String condition, String eventClass) {
@@ -230,8 +224,7 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
             SchedulerEventDBItem e = iEventId.next();
             exp.replace(e.getEventId(), "true");
         }
-        result = exp.evaluateExpression();
-        return result;
+        return exp.evaluateExpression();
     }
 
     public List<SchedulerEventDBItem> getEventsFromDb() {
@@ -241,8 +234,7 @@ public class SchedulerEventDBLayer extends SOSHibernateDBLayer {
         String getWhere = getWhere();
         Query query = setQueryParams("from SchedulerEventDBItem  " + getWhere);
         LOGGER.debug("where:" + getWhere);
-        List<SchedulerEventDBItem> resultList = query.list();
-        return resultList;
+        return query.list();
     }
 
     public SchedulerEventsCollection getMissingEvents(List<SchedulerEventDBItem> eventList) {

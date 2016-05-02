@@ -19,12 +19,9 @@ import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
 
 public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvider {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerHistoryDataProvider";
-
+    private static final Logger LOGGER = Logger.getLogger(SchedulerTaskHistoryDataProvider.class);
     private List<SchedulerTaskHistoryDBItem> listOfSchedulerTaskHistoryDBItems = null;
     private SchedulerTaskHistoryDBLayer schedulerTaskHistoryDBLayer = null;
-    private static Logger logger = Logger.getLogger(SchedulerTaskHistoryDataProvider.class);
     private String timeZone;
 
     public SchedulerTaskHistoryDataProvider(File configurationFile) {
@@ -46,15 +43,11 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
 
     public void fillSchedulerIds(CCombo cbSchedulerId) {
         if (listOfSchedulerTaskHistoryDBItems != null) {
-            // Es ist schneller, einfach die gefundenen Sätze nochmal zu
-            // verwenden
-            // listOfSchedulerTaskHistoryDBSchedulersItems =
-            // schedulerTaskHistoryDBLayer.getSchedulerHistoryListSchedulersFromTo();
             Iterator schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
             while (schedulerHistoryEntries.hasNext()) {
                 SchedulerTaskHistoryDBItem h = (SchedulerTaskHistoryDBItem) schedulerHistoryEntries.next();
                 if (cbSchedulerId.indexOf(h.getSpoolerId()) < 0) {
-                    logger.debug("... cbSchedulerId --> : " + h.getSpoolerId());
+                    LOGGER.debug("... cbSchedulerId --> : " + h.getSpoolerId());
                     cbSchedulerId.add(h.getSpoolerId());
                 }
             }
@@ -81,26 +74,22 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
                 log = schedulerHistoryDBItem.getLogAsString();
             }
         } catch (IOException e1) {
-            logger.error(e1.getMessage(), e1);
+            LOGGER.error(e1.getMessage(), e1);
         }
         return log;
     }
 
     public void fillTableShort(Table table) {
-
         if (listOfSchedulerTaskHistoryDBItems != null) {
             table.setRedraw(false);
-
             Iterator<SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
             while (schedulerHistoryEntries.hasNext()) {
                 SchedulerTaskHistoryDBItem h = schedulerHistoryEntries.next();
-                if (schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
-                } else {
+                if (!schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
                     final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
                     h.setDateTimeZone4Getters(timeZone);
                     newItemTableItem.setDBItem(h);
-
-                    logger.debug("...creating tableItem: " + h.getJobName() + ":" + table.getItemCount());
+                    LOGGER.debug("...creating tableItem: " + h.getJobName() + ":" + table.getItemCount());
                     newItemTableItem.setData(h);
                     newItemTableItem.setColor();
                     newItemTableItem.setColumnsShort();
@@ -111,26 +100,22 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
     }
 
     public void fillTable(Table table) {
-
         if (listOfSchedulerTaskHistoryDBItems != null) {
             table.setRedraw(false);
             Iterator<SchedulerTaskHistoryDBItem> schedulerHistoryEntries = listOfSchedulerTaskHistoryDBItems.iterator();
             while (schedulerHistoryEntries.hasNext()) {
                 SchedulerTaskHistoryDBItem h = schedulerHistoryEntries.next();
-                if (schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
-                } else {
+                if (!schedulerTaskHistoryDBLayer.getFilter().isFiltered(h)) {
                     final SchedulerHistoryTableItem newItemTableItem = new SchedulerHistoryTableItem(table, SWT.BORDER);
                     h.setDateTimeZone4Getters(timeZone);
                     newItemTableItem.setDBItem(h);
-
-                    logger.debug("...creating tableItem: " + h.getJobName() + ":" + table.getItemCount());
+                    LOGGER.debug("...creating tableItem: " + h.getJobName() + ":" + table.getItemCount());
                     newItemTableItem.setData(h);
                     newItemTableItem.setColor();
                     newItemTableItem.setColumns();
                 }
             }
             table.setRedraw(true);
-
         }
     }
 

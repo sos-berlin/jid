@@ -1,33 +1,22 @@
 package com.sos.dailyschedule.job;
 
-import com.sos.JSHelper.Basics.JSToolBox;
-import com.sos.JSHelper.Listener.JSListenerClass;
-import org.apache.log4j.Logger;
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
 
 import java.util.HashMap;
 
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.sos.JSHelper.Basics.JSToolBox;
+import com.sos.JSHelper.Listener.JSListenerClass;
 
 public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
 
-    private final String conClassName = "CreateDaysScheduleOptionsJUnitTest";						//$NON-NLS-1$
-    @SuppressWarnings("unused")//$NON-NLS-1$
-    private static Logger logger = Logger.getLogger(CreateDailyScheduleOptionsJUnitTest.class);
-    private CreateDailySchedule objE = null;
-
     protected CreateDailyScheduleOptions objOptions = null;
+    private CreateDailySchedule objE = null;
 
     public CreateDailyScheduleOptionsJUnitTest() {
         //
-    }
-
-    @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() throws Exception {
     }
 
     @Before
@@ -41,36 +30,28 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
         JSListenerClass.intMaxDebugLevel = 9;
     }
 
-    @After
-    public void tearDown() throws Exception {
-    }
-
     @Test
-    public void testSchedulerHost() { // SOSOptionString
+    public void testSchedulerHost() {
         objOptions.SchedulerHostName.Value("++----++");
         assertEquals("", objOptions.SchedulerHostName.Value(), "++----++");
-
     }
 
     @Test
-    public void testSchedulerPort() { // SOSOptionString
+    public void testSchedulerPort() {
         objOptions.scheduler_port.value(4139);
         assertEquals("", objOptions.scheduler_port.value(), 4139);
-
     }
 
     @Test
-    public void testdayOffset() { // SOSOptionString
+    public void testdayOffset() {
         objOptions.dayOffset.value(7);
         assertEquals("", objOptions.dayOffset.value(), 7);
-
     }
 
     @Test
-    public void testconfiguration_file() {  // SOSOptionString
+    public void testconfiguration_file() {
         objOptions.configuration_file.Value("++----++");
         assertEquals("", objOptions.configuration_file.Value(), "++----++");
-
     }
 
     @Test
@@ -83,4 +64,4 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
         return pobjHM;
     }
 
-} // public class CreateDaysScheduleOptionsJUnitTest
+}

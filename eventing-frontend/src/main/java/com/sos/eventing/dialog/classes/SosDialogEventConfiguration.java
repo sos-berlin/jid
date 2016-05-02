@@ -1,6 +1,5 @@
 package com.sos.eventing.dialog.classes;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -18,9 +17,6 @@ import com.sos.dialog.components.IntegerField;
 
 public class SosDialogEventConfiguration {
 
-    final int conDefaultPort = 4444;
-    private GridLayout gridLayout;
-    private final Logger logger = Logger.getLogger(SosDialogEventConfiguration.class);
     private IntegerField edPort;
     private Text edHost;
     private Text edEventhandlerDirectory;
@@ -28,6 +24,7 @@ public class SosDialogEventConfiguration {
     private String eventhandlerDirectoryValue;
     private String hostValue;
     private int portValue;
+    final int conDefaultPort = 4444;
 
     public SosDialogEventConfiguration(final Shell parentShell, final String host, final int port, final String eventhandlerDirectoryValue_) {
         hostValue = host;
@@ -61,7 +58,6 @@ public class SosDialogEventConfiguration {
         gd_edHost.widthHint = 150;
         edHost.setLayoutData(gd_edHost);
         edHost.setText(hostValue);
-
         new Label(dialogShell, SWT.NONE);
         Label lbPort = new Label(dialogShell, SWT.NONE);
         lbPort.setText("Port");
@@ -70,7 +66,6 @@ public class SosDialogEventConfiguration {
         gd_edPort.widthHint = 150;
         edPort.setLayoutData(gd_edPort);
         edPort.setText(String.valueOf(portValue));
-
         new Label(dialogShell, SWT.NONE);
         Label lbEventhandlerDirecors = new Label(dialogShell, SWT.NONE);
         lbEventhandlerDirecors.setText("Directory with event handler");
@@ -79,7 +74,6 @@ public class SosDialogEventConfiguration {
         gd_edEventhandlerDirectory.widthHint = 250;
         edEventhandlerDirectory.setLayoutData(gd_edPort);
         edEventhandlerDirectory.setText(eventhandlerDirectoryValue);
-
         new Label(dialogShell, SWT.NONE);
         btnOk = new Button(dialogShell, SWT.NONE);
         GridData gd_btnOk = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 1);
@@ -148,4 +142,5 @@ public class SosDialogEventConfiguration {
             }
         }
     }
+
 }

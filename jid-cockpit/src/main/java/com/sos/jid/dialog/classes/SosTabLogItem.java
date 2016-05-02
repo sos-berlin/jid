@@ -25,7 +25,7 @@ import com.sos.localization.Messages;
 
 public class SosTabLogItem extends CTabItem {
 
-    private static final Logger logger = Logger.getLogger(SosTabLogItem.class);
+    private static final Logger LOGGER = Logger.getLogger(SosTabLogItem.class);
     private final Display parentDisplay;
     private final Composite composite;
     private final GridLayout layout;
@@ -50,7 +50,6 @@ public class SosTabLogItem extends CTabItem {
         composite.setLayout(layout);
         data = new GridData(GridData.FILL_BOTH);
         data.horizontalSpan = 2;
-
         Button btnFilterButton = new Button(composite, SWT.NONE);
         btnFilterButton.addSelectionListener(new SelectionAdapter() {
 
@@ -64,7 +63,6 @@ public class SosTabLogItem extends CTabItem {
             }
         });
         btnFilterButton.setText("Filter");
-
         edSearchfield = new Text(composite, SWT.BORDER);
         edSearchfield.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         edSearchfield.addModifyListener(new ModifyListener() {
@@ -81,7 +79,6 @@ public class SosTabLogItem extends CTabItem {
                 }
             }
         });
-
         log = new SOSDashboardLogArea(composite, SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI, messages);
         log.setEditable(false);
         log.setBackground(new Color(parentDisplay, 255, 255, 255));
@@ -138,11 +135,11 @@ public class SosTabLogItem extends CTabItem {
                         try {
                             log.setSOSSearchFilterData(sosSearchFilterData);
                         } catch (Exception e) {
-                            logger.error(e.getMessage(), e);
+                            LOGGER.error(e.getMessage(), e);
                         }
                         inputTimer.cancel();
                     }
-                };
+                }
             });
         }
     }
@@ -152,4 +149,5 @@ public class SosTabLogItem extends CTabItem {
         inputTimer = new Timer();
         inputTimer.schedule(new InputTask(), 1 * 1000, 1 * 1000);
     }
+
 }

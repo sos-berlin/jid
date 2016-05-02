@@ -118,7 +118,7 @@ public class DashboardShowDialog extends FormBase {
                 public void run() {
                     final DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
                     lbShowTime.setText(dateFormat.format(new Date()));
-                };
+                }
             });
         }
     }
@@ -521,10 +521,6 @@ public class DashboardShowDialog extends FormBase {
         tableViewExecuted.setTableHistoryDetail(tableHistoryDetail);
         tableViewPlanned.setLogTabFolder(logTabFolder);
         tableViewPlanned.setTableHistoryDetail(tableHistoryDetail);
-        /*
-         * tableViewEventList.setLogTabFolder(logTabFolder);
-         * tableViewEventList.setTableHistoryDetail(tableHistoryDetail);
-         */
         this.RestoreCursor();
         parent = left;
         logSashForm.setWeights(new int[] { 309, 170 });

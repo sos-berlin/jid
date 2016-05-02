@@ -6,12 +6,6 @@ import java.util.GregorianCalendar;
 
 public class ExecutionState {
 
-    public void setPeriodBegin(Date periodBegin) {
-        this.periodBegin = periodBegin;
-    }
-
-    @SuppressWarnings("unused")
-    private final String conClassName = "ExecutionStatus";
     private Date schedulePlanned = null;
     private Date scheduleExecuted = null;
     private Date periodBegin = null;
@@ -22,9 +16,13 @@ public class ExecutionState {
         //
     }
 
+    public void setPeriodBegin(Date periodBegin) {
+        this.periodBegin = periodBegin;
+    }
+
     public boolean isLate() {
         if (scheduleExecuted == null) {
-            return (schedulePlanned.before(new Date()));
+            return schedulePlanned.before(new Date());
         } else {
             if (periodStart()) {
                 return false;
@@ -34,18 +32,17 @@ public class ExecutionState {
                 calendar.setTime(now);
                 calendar.add(toleranceUnit, tolerance);
                 Date scheduleToleranz = calendar.getTime();
-
-                return (scheduleExecuted.after(scheduleToleranz));
+                return scheduleExecuted.after(scheduleToleranz);
             }
         }
     }
 
     public boolean singleStart() {
-        return (periodBegin == null);
+        return periodBegin == null;
     }
 
     public boolean periodStart() {
-        return (periodBegin != null);
+        return periodBegin != null;
     }
 
     public String getLate() {
@@ -57,24 +54,20 @@ public class ExecutionState {
     }
 
     public String getExecutionLateState() {
-
         String status = getExecutionState();
         if (isLate()) {
             status = status + ":late";
         }
-
         return status;
     }
 
     public String getExecutionState() {
         String status = "*";
-
         if (scheduleExecuted == null) {
             status = "waiting";
         } else {
             status = "executed";
         }
-
         return status;
     }
 

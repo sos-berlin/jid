@@ -3,12 +3,14 @@ package com.sos.schedulerinstances.classes;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -21,14 +23,8 @@ import com.sos.hibernate.classes.DbItem;
 import com.sos.localization.Messages;
 import com.sos.scheduler.db.SchedulerInstancesDBItem;
 
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-
 public class SelectSchedulerInstance {
 
-    private Logger logger = Logger.getLogger(SelectSchedulerInstance.class);
     private List<SchedulerInstancesDBItem> listOfSchedulerInstancesDBItems = null;
     private Table tableList;
     private SchedulerInstancesDBItem selectedSchedulerInstancesDBItem = null;
@@ -53,22 +49,17 @@ public class SelectSchedulerInstance {
         Iterator<SchedulerInstancesDBItem> schedulerInstancesEntry = listOfSchedulerInstancesDBItems.iterator();
         while (schedulerInstancesEntry.hasNext()) {
             DbItem h = schedulerInstancesEntry.next();
-
             final SosSchedulerInstancesTableItem newItemTableItem = new SosSchedulerInstancesTableItem(table, SWT.BORDER);
             newItemTableItem.setDBItem(h);
             newItemTableItem.setData(h);
             newItemTableItem.setColor();
             newItemTableItem.setColumnsShort();
-
         }
     }
 
     private void buildTable(Shell shell) {
-
         Messages messages = new Messages(DashBoardConstants.conPropertiesFileName);
-
         mainViewComposite.setLayout(new GridLayout(2, false));
-
         tableList = new Table(mainViewComposite, SWT.FULL_SELECTION);
         GridData gd_tableList_1 = new GridData(SWT.FILL, SWT.TOP, true, false, 2, 1);
         gd_tableList_1.widthHint = 421;
@@ -78,9 +69,7 @@ public class SelectSchedulerInstance {
         new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_HOSTNAME), 100);
         new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_TCP_PORT), 100);
         new SOSTableColumn(tableList, SWT.NONE, messages.getLabel(DashBoardConstants.conSOSDashB_UDP_PORT), 100);
-
         fillTable(tableList);
-
         tableList.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(final SelectionEvent e) {
@@ -90,22 +79,16 @@ public class SelectSchedulerInstance {
                         selectedSchedulerInstancesDBItem = (SchedulerInstancesDBItem) t.getData();
                     }
                 }
-
             }
         });
-
     }
 
     private Shell showForm(final Display display, Shell parentShell) {
         final Shell dialogShell = new Shell(parentShell, SWT.PRIMARY_MODAL | SWT.SHEET);
         dialogShell.setSize(247, 187);
-
         mainViewComposite = new Composite(dialogShell, SWT.NONE);
-
         dialogShell.setLayout(new GridLayout(2, false));
-
         buildTable(dialogShell);
-
         Button btnOkButton = new Button(mainViewComposite, SWT.NONE);
         btnOkButton.addSelectionListener(new SelectionAdapter() {
 
@@ -120,7 +103,6 @@ public class SelectSchedulerInstance {
         gd_btnOkButton.widthHint = 54;
         btnOkButton.setLayoutData(gd_btnOkButton);
         btnOkButton.setText("Ok");
-
         Button btnCancelButton = new Button(mainViewComposite, SWT.NONE);
         btnCancelButton.addSelectionListener(new SelectionAdapter() {
 
@@ -133,7 +115,6 @@ public class SelectSchedulerInstance {
         gd_btnCancelButton.widthHint = 54;
         btnCancelButton.setLayoutData(gd_btnCancelButton);
         btnCancelButton.setText("Cancel");
-
         dialogShell.addDisposeListener(new DisposeListener() {
 
             @Override
@@ -141,7 +122,6 @@ public class SelectSchedulerInstance {
             }
         });
         dialogShell.pack();
-
         dialogShell.open();
         return dialogShell;
     }
@@ -149,4 +129,5 @@ public class SelectSchedulerInstance {
     public SchedulerInstancesDBItem getSelectedSchedulerInstancesDBItem() {
         return selectedSchedulerInstancesDBItem;
     }
+
 }

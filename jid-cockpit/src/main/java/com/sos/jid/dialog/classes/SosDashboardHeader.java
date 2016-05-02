@@ -32,16 +32,11 @@ import com.sos.hibernate.classes.UtcTimeHelper;
 
 public class SosDashboardHeader extends JSToolBox {
 
-    @SuppressWarnings("unused")
-    private Logger logger = Logger.getLogger(SosDashboardHeader.class);
-
     protected Preferences prefs;
-    private String prefNode = "SosDashboardHeader";
-    private final String conClassName = "SosDashboardHeader";
+    private static final Logger LOGGER = Logger.getLogger(SosDashboardHeader.class);
     private static final String EMPTY_STRING = "";
+    private String prefNode = "SosDashboardHeader";
     private Display display;
-    public Timer refreshTimer;
-    public Timer inputTimer;
     private DateTime fromDate = null;
     private DateTime toDate = null;
     private CCombo cbSchedulerId = null;
@@ -57,6 +52,8 @@ public class SosDashboardHeader extends JSToolBox {
     private Label lblVon;
     private Integer limit = -1;
     private SOSSearchFilterData sosSearchFilterData;
+    public Timer refreshTimer;
+    public Timer inputTimer;
 
     public Text getRefreshInterval() {
         return refreshInterval;
@@ -72,7 +69,7 @@ public class SosDashboardHeader extends JSToolBox {
 
                 public void run() {
                     main.getList();
-                };
+                }
             });
         }
     }
@@ -89,23 +86,19 @@ public class SosDashboardHeader extends JSToolBox {
                     if (sosSearchFilterData == null) {
                         sosSearchFilterData = new SOSSearchFilterData();
                     }
-
                     sosSearchFilterData.setRegularExpression(false);
                     sosSearchFilterData.setSearchfield(getSearchField().getText());
                     sosSearchFilterData.setFiltered(true);
-
                     main.actualizeList();
                     sosSearchFilterData = null;
                     inputTimer.cancel();
-
-                };
+                }
             });
         }
     }
 
     public SosDashboardHeader(Composite parent_, ITableView main_) {
         super(DashBoardConstants.conPropertiesFileName);
-
         refreshTimer = new Timer();
         inputTimer = new Timer();
         refreshTimer.schedule(new RefreshTask(), 1000, 60000);
@@ -134,7 +127,6 @@ public class SosDashboardHeader extends JSToolBox {
     }
 
     public void resetRefreshTimer() {
-
         refreshTimer.cancel();
         refreshTimer = new Timer();
         refreshTimer.schedule(new RefreshTask(), refresh * 1000, refresh * 1000);
@@ -157,13 +149,11 @@ public class SosDashboardHeader extends JSToolBox {
         refreshInterval.setLayoutData(gdRefreshInterval);
         lbSchedulerID = new Label(parent, SWT.NONE);
         lbSchedulerID.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_SchedulerID));
-
         cbSchedulerId = new CCombo(parent, SWT.BORDER);
         GridData gdCombo = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
         gdCombo.widthHint = 120;
         gdCombo.minimumWidth = 120;
         cbSchedulerId.setLayoutData(gdCombo);
-
         lblVon = new Label(parent, SWT.NONE);
         lblVon.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblVon.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_FROM));
@@ -172,37 +162,32 @@ public class SosDashboardHeader extends JSToolBox {
         lblBis.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
         lblBis.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TO));
         toDate = new DateTime(parent, SWT.BORDER | SWT.DATE | SWT.DROP_DOWN);
-
         searchField = new Text(parent, SWT.BORDER);
         searchField.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
         searchField.setVisible(true);
-
     }
 
     public String getTimeZone() {
         String t = this.timeZone;
-        if (t == null || t.trim().length() == 0) {
+        if (t == null || t.trim().isEmpty()) {
             t = UtcTimeHelper.localTimeZoneString();
         }
         return t;
     }
 
     private Listener getSearchListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
                 SOSSearchFilter sosSearchFilter = new SOSSearchFilter(parent.getShell());
                 sosSearchFilter.setEnableFilterCheckbox(false);
                 sosSearchFilterData = sosSearchFilter.execute(EMPTY_STRING);
-                if (sosSearchFilter.getSosSearchFilterData() != null) {
-                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-                        try {
-                            searchField.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
-                        } catch (Exception ee) {
-                            logger.error(ee.getMessage(), ee);
-                        }
-
+                if (sosSearchFilter.getSosSearchFilterData() != null
+                        && !sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                    try {
+                        searchField.setText(sosSearchFilter.getSosSearchFilterData().getSearchfield());
+                    } catch (Exception ee) {
+                        LOGGER.error(ee.getMessage(), ee);
                     }
                 }
             }
@@ -210,7 +195,6 @@ public class SosDashboardHeader extends JSToolBox {
     }
 
     private Listener getTimeZoneListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
@@ -232,19 +216,12 @@ public class SosDashboardHeader extends JSToolBox {
         lblVon.setMenu(contentMenu);
         toDate.setMenu(contentMenu);
         fromDate.setMenu(contentMenu);
-
-        // =============================================================================================
-
         MenuItem itemSearch = new MenuItem(contentMenu, SWT.PUSH);
         itemSearch.addListener(SWT.Selection, getSearchListener());
         itemSearch.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
-
-        // =============================================================================================
         MenuItem itemTimeZone = new MenuItem(contentMenu, SWT.PUSH);
         itemTimeZone.addListener(SWT.Selection, getTimeZoneListener());
         itemTimeZone.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_TimeZone));
-
-        // =============================================================================================
         SOSMenuLimitItem setLimitItem = new SOSMenuLimitItem(contentMenu, SWT.PUSH, prefs, prefNode);
         setLimitItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
@@ -261,7 +238,6 @@ public class SosDashboardHeader extends JSToolBox {
     public void initLimit(String prefNode_) {
         prefNode = prefNode_;
         createMenue();
-
     }
 
     public DateTime getFromDate() {
@@ -311,8 +287,7 @@ public class SosDashboardHeader extends JSToolBox {
 
     public void reset() {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date()); // heute
-
+        cal.setTime(new Date());
         fromDate.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         toDate.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
         cbSchedulerId.setText("");
@@ -358,4 +333,5 @@ public class SosDashboardHeader extends JSToolBox {
     public void setTimeZone(String timeZone) {
         this.timeZone = timeZone;
     }
+
 }

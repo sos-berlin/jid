@@ -25,8 +25,8 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class SOSDashboardTableViewExecuted extends SOSDashboardTableView implements ITableView {
 
+    private static final Logger LOGGER = Logger.getLogger(SOSDashboardTableViewExecuted.class);
     private final String className = "SOSDashboardTableViewExecuted";
-    private static Logger logger = Logger.getLogger(SOSDashboardTableViewExecuted.class);
 
     public SOSDashboardTableViewExecuted(Composite composite_) {
         super(composite_);
@@ -45,7 +45,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
     public void createMenue() {
         Menu contentMenu = new Menu(tableList);
         tableList.setMenu(contentMenu);
-        // =============================================================================================
         MenuItem showLogs = new MenuItem(contentMenu, SWT.PUSH);
         showLogs.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_show_log_in_new_tab));
         showLogs.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
@@ -59,10 +58,9 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
-
         new MenuItem(contentMenu, SWT.SEPARATOR);
-        final SOSMenuItem standAlone = new SOSMenuItem(contentMenu, SWT.CHECK, className, Messages.getLabel(DashBoardConstants.conSOSDashB_show_stand_alone_jobs), true);
+        final SOSMenuItem standAlone = new SOSMenuItem(contentMenu, SWT.CHECK, className, 
+                Messages.getLabel(DashBoardConstants.conSOSDashB_show_stand_alone_jobs), true);
         standAlone.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -73,9 +71,8 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
-        final SOSMenuItem orderJobs = new SOSMenuItem(contentMenu, SWT.CHECK, className, Messages.getLabel(DashBoardConstants.conSOSDashB_show_job_chains));
+        final SOSMenuItem orderJobs = new SOSMenuItem(contentMenu, SWT.CHECK, className, 
+                Messages.getLabel(DashBoardConstants.conSOSDashB_show_job_chains));
         orderJobs.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
@@ -86,7 +83,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
         final SOSMenuItem showRunning = new SOSMenuItem(contentMenu, SWT.CHECK, Messages.getLabel(DashBoardConstants.conSOSDashB_show_running));
         showRunning.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
@@ -98,7 +94,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
         final SOSMenuItem showWithError = new SOSMenuItem(contentMenu, SWT.CHECK, Messages.getLabel(DashBoardConstants.conSOSDashB_show_with_error));
         showWithError.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
@@ -110,7 +105,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-        // =============================================================================================
         final SOSMenuItem today = new SOSMenuItem(contentMenu, SWT.CHECK, Messages.getLabel(DashBoardConstants.conSOSDashB_Today));
         today.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
@@ -126,90 +120,71 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             }
         });
         new MenuItem(contentMenu, SWT.SEPARATOR);
-
-        // =============================================================================================
         MenuItem reset = new MenuItem(contentMenu, SWT.PUSH);
         reset.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Reset_Filter));
         reset.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 tableDataProvider.resetFilter();
-
                 standAlone.setSelection(true);
                 orderJobs.setSelection(true);
                 showRunning.setSelection(false);
                 showWithError.setSelection(false);
                 today.setSelection(false);
-
                 tableDataProvider.setIgnoreList(prefs);
                 tableDataProvider.setFrom(new Date());
                 tableDataProvider.setTo(new Date());
                 sosDashboardHeader.reset();
-                // sosDashboardHeaderPlanned.reset();
                 getList();
             }
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
         new MenuItem(contentMenu, SWT.SEPARATOR);
         Menu ignoreSubmenu = new SOSHandleIgnoreSubmenuExecuted(contentMenu, this, Messages, prefs);
         new MenuItem(contentMenu, SWT.SEPARATOR);
-        // =============================================================================================
         MenuItem search = new MenuItem(contentMenu, SWT.PUSH);
         search.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_Search));
         search.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-
                 SOSSearchFilter sosSearchFilter = new SOSSearchFilter(getParentShell());
                 sosSearchFilter.setEnableFilterCheckbox(false);
                 sosSearchFilter.execute(EMPTY_STRING);
-                if (sosSearchFilter.getSosSearchFilterData() != null) {
-                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-                        try {
-                            tableDataProvider.setSearchField(sosSearchFilter.getSosSearchFilterData());
-                            actualizeList();
-                        } catch (Exception ee) {
-                            logger.error(ee.getMessage(), ee);
-                        }
+                if (sosSearchFilter.getSosSearchFilterData() != null
+                        && !sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                    try {
+                        tableDataProvider.setSearchField(sosSearchFilter.getSosSearchFilterData());
+                        actualizeList();
+                    } catch (Exception ee) {
+                        LOGGER.error(ee.getMessage(), ee);
                     }
                 }
-
             }
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
         MenuItem stepHistory = new MenuItem(contentMenu, SWT.PUSH);
         stepHistory.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_stepHistory));
         stepHistory.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
                 TableItem[] t = tableList.getSelection();
-                if (t.length > 0) {
-                    if (t[0].getData().getClass() == SchedulerOrderHistoryDBItem.class) {
-                        SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t[0].getData();
-                        SOSDialogOrderStepHistory s = new SOSDialogOrderStepHistory(getParentShell(), objOptions, h, logTabFolder, Messages, tableDataProvider.getTimeZone());
-
-                    }
+                if (t.length > 0 && t[0].getData().getClass() == SchedulerOrderHistoryDBItem.class) {
+                    SchedulerOrderHistoryDBItem h = (SchedulerOrderHistoryDBItem) t[0].getData();
+                    SOSDialogOrderStepHistory s = 
+                            new SOSDialogOrderStepHistory(getParentShell(), objOptions, h, logTabFolder, Messages, tableDataProvider.getTimeZone());
                 }
             }
 
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
-        // =============================================================================================
-
         if (objOptions != null && objOptions.getEnableJobStart().isTrue()) {
             new MenuItem(contentMenu, SWT.SEPARATOR);
             MenuItem startJob = new MenuItem(contentMenu, SWT.PUSH);
-
             startJob.setText(Messages.getLabel(DashBoardConstants.conSOSDashB_start_now));
             startJob.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
@@ -217,9 +192,7 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
                     TableItem[] t = tableList.getSelection();
                     setAnswer("");
                     showWaitCursor();
-
                     if (t.length > 0) {
-                        // Nicht schön....
                         for (int i = 0; i < t.length; i++) {
                             DbItem h = null;
                             if (t[i].getData().getClass() == SchedulerOrderHistoryDBItem.class) {
@@ -229,14 +202,11 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
                             }
                             start(h);
                         }
-
                         MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
                         messageBox.setMessage(getAnswer());
                         messageBox.open();
-
                         RestoreCursor();
                         getList();
-
                     }
                 }
 
@@ -256,7 +226,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
         if (tableDataProvider != null) {
             tableDataProvider.setShowJobs(standAlone.getSelection());
             tableDataProvider.setShowJobChains(orderJobs.getSelection());
@@ -267,14 +236,13 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
                 tableDataProvider.setTo(new Date());
             }
         }
-
-        // =============================================================================================
         final String prefNode = DashBoardConstants.SOS_DASHBOARD_HEADER + "_" + className;
         SOSMenuLimitItem setLimitItem = new SOSMenuLimitItem(contentMenu, SWT.PUSH, prefs, prefNode);
         setLimitItem.addSelectionListener(new org.eclipse.swt.events.SelectionListener() {
 
             public void widgetSelected(org.eclipse.swt.events.SelectionEvent e) {
-                Integer limit = Integer.parseInt(prefs.node(prefNode).get(DashBoardConstants.conSettingLIMIT, String.valueOf(DashBoardConstants.conSettingLIMITDefault)));
+                Integer limit = Integer.parseInt(prefs.node(prefNode).get(DashBoardConstants.conSettingLIMIT, 
+                        String.valueOf(DashBoardConstants.conSettingLIMITDefault)));
                 sosDashboardHeader.setLimit(limit);
                 actualizeList();
             }
@@ -282,7 +250,6 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
             public void widgetDefaultSelected(org.eclipse.swt.events.SelectionEvent e) {
             }
         });
-
     }
 
     public void createTable() {
@@ -292,10 +259,8 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
         sosDashboardHeader = new SosDashboardHeader(mainViewComposite, this);
         sosDashboardHeader.setPrefs(prefs);
         sosDashboardHeader.initLimit(DashBoardConstants.SOS_DASHBOARD_HEADER + "_" + className);
-
         tableList = new SosExecutedTable(mainViewComposite, SWT.FULL_SELECTION | SWT.MULTI);
         super.createTable();
-
     }
 
 }

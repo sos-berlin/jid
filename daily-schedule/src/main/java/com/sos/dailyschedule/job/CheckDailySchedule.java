@@ -10,8 +10,7 @@ import com.sos.dailyschedule.db.DailyScheduleAdjustment;
 
 public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOptions> {
 
-    private final String conClassName = "CheckDailySchedule";  //$NON-NLS-1$
-    private static Logger logger = Logger.getLogger(CheckDailySchedule.class);
+    private static final Logger logger = Logger.getLogger(CheckDailySchedule.class);
 
     public CheckDailySchedule() {
         super(new CheckDailyScheduleOptions());
@@ -19,10 +18,6 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
 
     @Override
     public CheckDailyScheduleOptions getOptions() {
-
-        @SuppressWarnings("unused")
-        final String conMethodName = conClassName + "::Options";  //$NON-NLS-1$
-
         if (objOptions == null) {
             objOptions = new CheckDailyScheduleOptions();
         }
@@ -30,8 +25,6 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
     }
 
     public CheckDailySchedule Execute() throws Exception {
-        final String conMethodName = conClassName + "::Execute";  //$NON-NLS-1$
-
         try {
             getOptions().CheckMandatory();
             logger.debug(getOptions().dirtyString());
@@ -43,20 +36,8 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new Exception(e);
-        } finally {
-
         }
-
         return this;
     }
 
-    public void init() {
-        @SuppressWarnings("unused")
-        final String conMethodName = conClassName + "::init";  //$NON-NLS-1$
-        doInitialize();
-    }
-
-    private void doInitialize() {
-    } // doInitialize
-
-}  // class CheckDailySchedule
+}

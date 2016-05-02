@@ -16,9 +16,7 @@ import com.sos.eventing.frontend.Scheduler;
 
 public class SOSTabEventHandlerList extends CTabItem {
 
-    private static final String conSectionPLUGIN_ACTION_SHOW_DIALOG = "plugin_action_show_dialog";
-    private static Logger logger = Logger.getLogger(SOSTabEventHandlerList.class);
-
+    private static final Logger LOGGER = Logger.getLogger(SOSTabEventHandlerList.class);
     private final Composite parentComposite;
     private final GridLayout layout;
     private Table table;
@@ -39,23 +37,20 @@ public class SOSTabEventHandlerList extends CTabItem {
         layout = new GridLayout(1, false);
         parentComposite.setLayout(layout);
         createContent();
-
         parentComposite.layout();
         this.setControl(parentComposite);
     }
 
     private void createContent() {
         try {
-
             SOSStandardLogger sosLogger = new SOSStandardLogger(9);
             eventHandlerView = new ActionShowDialog(parentComposite, scheduler, eventhandlerDirectory, sosLogger);
             eventHandlerView.showComposite();
             table = eventHandlerView.getTableEvents();
         } catch (Exception e) {
-            logger.error(String.format("could not create event handler view: %s", e.getMessage()));
-            logger.error(e.getMessage(), e);
+            LOGGER.error(String.format("could not create event handler view: %s", e.getMessage()));
+            LOGGER.error(e.getMessage(), e);
         }
-
     }
 
     public Composite getParentComposite() {
@@ -92,4 +87,5 @@ public class SOSTabEventHandlerList extends CTabItem {
     public void enableRefresh() {
         eventHandlerView.resetRefreshTimer();
     }
+
 }

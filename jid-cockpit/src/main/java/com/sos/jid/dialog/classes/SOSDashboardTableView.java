@@ -134,12 +134,13 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                 public void modifyText(final ModifyEvent arg0) {
                     sosDashboardHeader.setRefresh(getIntValue(sosDashboardHeader.getRefreshInterval().getText(), 10));
                     sosDashboardHeader.resetRefreshTimer();
-                    prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingREFRESH, sosDashboardHeader.getRefreshInterval().getText());
+                    prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).put(DashBoardConstants.conSettingREFRESH, 
+                            sosDashboardHeader.getRefreshInterval().getText());
 
                 }
             });
-            sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER).get(DashBoardConstants.conSettingREFRESH, 
-                    DashBoardConstants.conSettingREFRESHDefault));
+            sosDashboardHeader.getRefreshInterval().setText(prefs.node(DashBoardConstants.SOS_DASHBOARD_HEADER)
+                    .get(DashBoardConstants.conSettingREFRESH, DashBoardConstants.conSettingREFRESHDefault));
             sosDashboardHeader.getSearchField().addModifyListener(new ModifyListener() {
 
                 public void modifyText(final ModifyEvent e) {
@@ -185,32 +186,30 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
         tableList.addSelectionListener(new SelectionAdapter() {
 
             public void widgetSelected(final SelectionEvent e) {
-                if (!isRightMouseclick()) {
-                    if (tableList.getSelectionIndex() >= 0) {
-                        TableItem t = tableList.getItem(tableList.getSelectionIndex());
-                        if (t != null) {
-                            showLog(tableList);
-                            DbItem d = (DbItem) t.getData();
-                            if (right != null) {
-                                right.setText(d.getTitle());
-                                detailHistoryDataProvider.setFrom(sosDashboardHeader.getFrom());
-                                detailHistoryDataProvider.setTo(sosDashboardHeader.getTo());
-                                detailHistoryDataProvider.setSchedulerId(d.getSchedulerId());
-                                detailHistoryDataProvider.setJobname(d.getJob());
-                                detailHistoryDataProvider.setJobchain(d.getJobChain());
-                                detailHistoryDataProvider.setOrderid(d.getOrderId());
-                                detailHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
-                                detailHistoryDataProvider.getData(getHistoryLimit());
-                                clearTable(tableHistoryDetail);
-                                detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
-                                if (d.isOrderJob() && tableStepHistory != null && d.getLogId() != null) {
-                                    clearTable(tableStepHistory);
-                                    schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer
-                                            .getConfigurationFile(), d.getLogId());
-                                    schedulerOrderStepHistoryDataProvider.getData(0);
-                                    schedulerOrderStepHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
-                                    schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistory);
-                                }
+                if (!isRightMouseclick() && tableList.getSelectionIndex() >= 0) {
+                    TableItem t = tableList.getItem(tableList.getSelectionIndex());
+                    if (t != null) {
+                        showLog(tableList);
+                        DbItem d = (DbItem) t.getData();
+                        if (right != null) {
+                            right.setText(d.getTitle());
+                            detailHistoryDataProvider.setFrom(sosDashboardHeader.getFrom());
+                            detailHistoryDataProvider.setTo(sosDashboardHeader.getTo());
+                            detailHistoryDataProvider.setSchedulerId(d.getSchedulerId());
+                            detailHistoryDataProvider.setJobname(d.getJob());
+                            detailHistoryDataProvider.setJobchain(d.getJobChain());
+                            detailHistoryDataProvider.setOrderid(d.getOrderId());
+                            detailHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
+                            detailHistoryDataProvider.getData(getHistoryLimit());
+                            clearTable(tableHistoryDetail);
+                            detailHistoryDataProvider.fillTableShort(tableHistoryDetail, d.isStandalone());
+                            if (d.isOrderJob() && tableStepHistory != null && d.getLogId() != null) {
+                                clearTable(tableStepHistory);
+                                schedulerOrderStepHistoryDataProvider = new SchedulerOrderStepHistoryDataProvider(schedulerTaskHistoryDBLayer
+                                        .getConfigurationFile(), d.getLogId());
+                                schedulerOrderStepHistoryDataProvider.getData(0);
+                                schedulerOrderStepHistoryDataProvider.setTimeZone(sosDashboardHeader.getTimeZone());
+                                schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistory);
                             }
                         }
                     }
@@ -227,10 +226,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             columns[i].addListener(SWT.Selection, new Listener() {
 
                 private boolean sortFlag;
-                private int colPos = -1;
-                {
-                    colPos = _i;
-                }
+                private int colPos = _i;
 
                 public void handleEvent(Event event) {
                     sortFlag = !sortFlag;
@@ -250,7 +246,6 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
 
     protected SchedulerInstancesDBItem start(DbItem dbItem) {
         this.showWaitCursor();
-
         SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerInstancesDBLayer.getInstanceById(dbItem.getSchedulerId());
         if (schedulerInstanceDBItem != null) {
             SchedulerObjectFactory objSchedulerObjectFactory = new SchedulerObjectFactory(schedulerInstanceDBItem.getHostName(), 
@@ -262,8 +257,8 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     if (objOrder.getAnswer().getOk() != null) {
                         answer += String.format("Command: Start Order: %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), "OK") + "\n";
                     } else {
-                        answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), objOrder.getAnswer().getERROR())
-                                + "\n";
+                        answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), 
+                                objOrder.getAnswer().getERROR()) + "\n";
                     }
                 } catch (Exception ee) {
                     answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), ee.getMessage()) + "\n";

@@ -24,17 +24,17 @@ public class SOSEventGroups {
 
     public boolean isActiv(final LinkedHashSet<SchedulerEvent> listOfActiveEvents) {
         boolean erg = false;
-        if (condition.length() == 0) {
+        if (condition.isEmpty()) {
             condition = "or";
         }
         Iterator<SchedulerEvent> i = listOfEvents.iterator();
-        if (condition.equalsIgnoreCase("or")) {
+        if ("or".equalsIgnoreCase(condition)) {
             while (i.hasNext() && !erg) {
                 SchedulerEvent e = i.next();
                 erg = e.isIn(listOfActiveEvents);
             }
         } else {
-            if (condition.equalsIgnoreCase("and")) {
+            if ("and".equalsIgnoreCase(condition)) {
                 erg = true;
                 while (i.hasNext() && erg) {
                     SchedulerEvent e = (SchedulerEvent) i.next();
@@ -44,13 +44,11 @@ public class SOSEventGroups {
                 BooleanExp exp = new BooleanExp(condition);
                 while (i.hasNext()) {
                     SchedulerEvent e = (SchedulerEvent) i.next();
-
                     exp.replace(e.getEvent_name(), exp.trueFalse(e.isIn(listOfActiveEvents)));
                 }
                 erg = exp.evaluateExpression();
             }
         }
-
         return erg;
     }
 
@@ -65,4 +63,5 @@ public class SOSEventGroups {
     public String getCondition() {
         return condition;
     }
+
 }

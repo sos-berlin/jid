@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
@@ -22,14 +23,16 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+
 import sos.scheduler.editor.app.SchedulerEditorFontDialog;
+
 import com.sos.dashboard.globals.DashBoardConstants;
 import com.sos.dialog.classes.SOSPrinter;
 import com.sos.dialog.components.SOSSearchFilter;
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.localization.Messages;
 
-public class SOSDashboardLogArea extends StyledText /* Text */{
+public class SOSDashboardLogArea extends StyledText {
 
     private static final String EMPTY_STRING = "";
     private static final String JID_LOG = "jid_log";
@@ -42,45 +45,31 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     private static final String DEBUG7_MARKER = "[debug7]";
     private static final String DEBUG8_MARKER = "[debug8]";
     private static final String DEBUG9_MARKER = "[debug9]";
-
     private static final String WARN_MARKER = "[WARN]";
-
     private static final String ERROR_MARKER = "[ERROR]";
-
-    @SuppressWarnings("unused")
-    private final String conClassName = "LogArea";
-
-    @SuppressWarnings("unused")
-    private static Logger logger = Logger.getLogger(SOSDashboardLogArea.class);
-    @SuppressWarnings("unused")
-    private final String conSVNVersion = "$Id: LogAreas.java 17709 2012-07-30 10:59:42Z ur $";
+    private static final Logger LOGGER = Logger.getLogger(SOSDashboardLogArea.class);
     private Composite composite;
     boolean flgInit = false;
-    int lenghtOfLinebreak = 1;
     private String logContent;
     private boolean filtered;
-
     private MenuItem itemFilter;
     private MenuItem itemSearch;
     private Messages messages;
     private SOSSearchFilterData sosSearchFilterData;
+    int lenghtOfLinebreak = 1;
 
     public SOSDashboardLogArea(Composite composite_, int arg1, Messages messages_) {
         super(composite_, arg1);
-
         this.messages = messages_;
         composite = composite_;
         createContextMenue();
-
         final GridData gridData_1 = new GridData(GridData.FILL, GridData.FILL, true, true, 4, 1);
         gridData_1.minimumHeight = 40;
         gridData_1.widthHint = 454;
         gridData_1.heightHint = 139;
         setLayoutData(gridData_1);
-
         SchedulerEditorFontDialog objFontDialog = new SchedulerEditorFontDialog(getFont().getFontData()[0], getForeground().getRGB());
         objFontDialog.setContext(JID_LOG);
-
         objFontDialog.readFontData();
         setFont(objFontDialog.getFontData(), objFontDialog.getForeGround());
     }
@@ -90,7 +79,6 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     private void colorLine(StringBuffer line, String s, int iColor, Color color, int actPos, int actLength, int ftType) {
-        ;
         int pos = line.indexOf(s);
         if (pos > 0) {
             StyleRange styleRange = new StyleRange();
@@ -103,7 +91,6 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
             styleRange.length = actLength;
             styleRange.fontStyle = ftType;
             setStyleRange(styleRange);
-
         }
     }
 
@@ -117,7 +104,6 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         Color cDebug7 = new Color(composite.getDisplay(), 128, 128, 255);
         Color cDebug8 = new Color(composite.getDisplay(), 128, 128, 255);
         Color cDebug9 = new Color(composite.getDisplay(), 160, 160, 160);
-
         int actPos = 0;
         for (int i = 0; i < this.getLineCount() - 1; i++) {
             StringBuffer line = new StringBuffer(this.getLine(i));
@@ -133,11 +119,8 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
             colorLine(line, DEBUG7_MARKER, 0, cDebug7, actPos, actLength, SWT.NORMAL);
             colorLine(line, DEBUG8_MARKER, 0, cDebug8, actPos, actLength, SWT.NORMAL);
             colorLine(line, DEBUG9_MARKER, 0, cDebug9, actPos, actLength, SWT.NORMAL);
-
             actPos = actPos + actLength + lenghtOfLinebreak;
-
         }
-
     }
 
     private void searchInLog() {
@@ -163,29 +146,24 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     public void setText(String logContent) {
-
         this.logContent = logContent;
         super.setText(logContent);
-        StringBuffer line = new StringBuffer();
+        StringBuilder line = new StringBuilder();
         for (int i = 0; i < this.getLineCount(); i++) {
             String s = this.getLine(i);
             if (filtered && sosSearchFilterData != null && !sosSearchFilterData.getSearchfield().trim().equals(EMPTY_STRING)) {
                 Pattern p = Pattern.compile(sosSearchFilterData.getSearchfield());
                 Matcher m = p.matcher(s);
                 if (m.find()) {
-
                     line.append(s);
                     line.append("\n");
                 }
             } else {
                 line.append(s);
                 line.append("\n");
-
             }
         }
-
-        String s = line.toString();
-        super.setText(s);
+        super.setText(line.toString());
         addStyles();
         searchInLog();
     }
@@ -196,60 +174,47 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     public void mark(int start, int end) {
-
         StyleRange styleRange = new StyleRange();
         styleRange.start = start;
         styleRange.foreground = Display.getCurrent().getSystemColor(SWT.COLOR_LIST_SELECTION_TEXT);
         styleRange.background = Display.getCurrent().getSystemColor(SWT.COLOR_LIST_SELECTION);
-
         styleRange.length = end - start;
         styleRange.fontStyle = SWT.NORMAL;
         setStyleRange(styleRange);
     }
 
     private void createContextMenue() {
-        // Menu objContextMenu = new Menu(this);
         Menu objContextMenu = getMenu();
         if (objContextMenu == null) {
             objContextMenu = new Menu(this.getControl());
         }
-
         MenuItem itemCopy = new MenuItem(objContextMenu, SWT.PUSH);
         itemCopy.addListener(SWT.Selection, getCopyListener());
         itemCopy.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Copy));
-
         MenuItem itemSelectAll = new MenuItem(objContextMenu, SWT.PUSH);
         itemSelectAll.addListener(SWT.Selection, getSelectAllListener());
         itemSelectAll.setText(messages.getLabel(DashBoardConstants.conSOSDashB_SelectAll));
-
         MenuItem itemSelectFont = new MenuItem(objContextMenu, SWT.PUSH);
         itemSelectFont.addListener(SWT.Selection, getSelectFontListener());
         itemSelectFont.setText(messages.getLabel(DashBoardConstants.conSOSDashB_SelectFont));
-
         new MenuItem(objContextMenu, SWT.SEPARATOR);
         itemSearch = new MenuItem(objContextMenu, SWT.PUSH);
         itemSearch.addListener(SWT.Selection, getSearchListener());
         itemSearch.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Search));
-
         itemFilter = new MenuItem(objContextMenu, SWT.CHECK);
         itemFilter.addListener(SWT.Selection, getFilterListener());
         itemFilter.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Filter));
-
         new MenuItem(objContextMenu, SWT.SEPARATOR);
         MenuItem itemSaveAsFile = new MenuItem(objContextMenu, SWT.PUSH);
         itemSaveAsFile.addListener(SWT.Selection, getSaveAsFileListener());
         itemSaveAsFile.setText(messages.getLabel(DashBoardConstants.conSOSDashB_SaveAsFile));
-
         MenuItem itemPrint = new MenuItem(objContextMenu, SWT.PUSH);
         itemPrint.addListener(SWT.Selection, getPrintListener());
         itemPrint.setText(messages.getLabel(DashBoardConstants.conSOSDashB_Print));
-
         this.setMenu(objContextMenu);
-
     }
 
     private Listener getSelectFontListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
@@ -259,35 +224,32 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     private Listener getSaveAsFileListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
                 try {
                     saveFileAs();
                 } catch (IOException e1) {
-                    logger.error(e1.getMessage(), e1);
+                    LOGGER.error(e1.getMessage(), e1);
                 }
             }
         };
     }
 
     private Listener getPrintListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
                 try {
                     print();
                 } catch (Exception e1) {
-                    logger.error(e1.getMessage(), e1);
+                    LOGGER.error(e1.getMessage(), e1);
                 }
             }
         };
     }
 
     private Listener getFilterListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
@@ -297,21 +259,18 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     private Listener getSearchListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
                 SOSSearchFilter sosSearchFilter = new SOSSearchFilter(composite.getShell());
                 sosSearchFilter.setEnableFilterCheckbox(true);
                 sosSearchFilter.execute(EMPTY_STRING);
-                if (sosSearchFilter.getSosSearchFilterData() != null) {
-                    if (!sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
-                        try {
-                            setSOSSearchFilterData(sosSearchFilter.getSosSearchFilterData());
-                        } catch (Exception ee) {
-                            logger.error(ee.getMessage(), ee);
-                        }
-
+                if (sosSearchFilter.getSosSearchFilterData() != null
+                        && !sosSearchFilter.getSosSearchFilterData().getSearchfield().equals(EMPTY_STRING)) {
+                    try {
+                        setSOSSearchFilterData(sosSearchFilter.getSosSearchFilterData());
+                    } catch (Exception ee) {
+                        LOGGER.error(ee.getMessage(), ee);
                     }
                 }
             }
@@ -319,7 +278,6 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
     }
 
     private Listener getCopyListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
@@ -328,18 +286,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         };
     }
 
-    private Listener getCutListener() {
-
-        return new Listener() {
-
-            public void handleEvent(Event e) {
-                _cut();
-            }
-        };
-    }
-
     private Listener getSelectAllListener() {
-
         return new Listener() {
 
             public void handleEvent(Event e) {
@@ -350,10 +297,6 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
 
     private void _copy() {
         this.copy();
-    }
-
-    private void _cut() {
-        this.cut();
     }
 
     private void _selectAll() {
@@ -392,7 +335,7 @@ public class SOSDashboardLogArea extends StyledText /* Text */{
         try {
             p.print();
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

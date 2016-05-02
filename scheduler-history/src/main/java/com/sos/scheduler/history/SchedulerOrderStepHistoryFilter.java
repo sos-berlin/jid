@@ -9,8 +9,6 @@ import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
 
 public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter implements com.sos.hibernate.interfaces.ISOSHibernateFilter {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SchedulerHistoryFilter";
     private Long historyId = null;
     private String dateFormat = "yyyy-MM-dd HH:mm:ss";
     private Date executedFrom;
@@ -18,7 +16,6 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter 
     private Date startTime;
     private Date endTime;
     private String status = "";
-
     private String executedFromIso = null;
     private String executedToIso = null;
 
@@ -55,7 +52,7 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter 
     }
 
     public void setExecutedFrom(String executedFrom) throws ParseException {
-        if (executedFrom.equals("")) {
+        if ("".equals(executedFrom)) {
             this.executedFrom = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -69,7 +66,7 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter 
     }
 
     public void setExecutedTo(String executedTo) throws ParseException {
-        if (executedTo.equals("")) {
+        if ("".equals(executedTo)) {
             this.executedTo = null;
         } else {
             SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
@@ -121,13 +118,10 @@ public class SchedulerOrderStepHistoryFilter extends SOSHibernateIntervalFilter 
 
     @Override
     public String getTitle() {
-
         String s = "";
-
         if (executedFrom != null) {
             s += String.format("from: %s ", date2Iso(executedFrom));
         }
-
         if (executedTo != null) {
             s += String.format("to: %s ", date2Iso(executedTo));
         }

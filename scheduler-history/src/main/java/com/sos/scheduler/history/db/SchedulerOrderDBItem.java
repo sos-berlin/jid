@@ -1,16 +1,20 @@
 package com.sos.scheduler.history.db;
 
 import java.util.Date;
-import javax.persistence.*;
 
-import org.apache.log4j.Logger;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+
 import com.sos.hibernate.classes.DbItem;
 
 @Entity
 @Table(name = "SCHEDULER_ORDERS")
 public class SchedulerOrderDBItem extends DbItem {
-
-    private static Logger logger = Logger.getLogger(SchedulerOrderDBItem.class);
 
     private String spoolerId;
     private String jobChain;

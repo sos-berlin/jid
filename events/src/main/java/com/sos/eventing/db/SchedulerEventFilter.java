@@ -56,7 +56,7 @@ public class SchedulerEventFilter extends SOSHibernateIntervalFilter implements 
     }
 
     public boolean hasEvents() {
-        return (!eventList.isEmpty());
+        return !eventList.isEmpty();
     }
 
     @Override
@@ -83,8 +83,7 @@ public class SchedulerEventFilter extends SOSHibernateIntervalFilter implements 
         if (exitCode != null && !"".equals(exitCode)) {
             s += String.format("Exit: %s ", exitCode);
         }
-        String title = String.format("%1s", s);
-        return title;
+        return String.format("%1s", s);
     }
 
     @Override

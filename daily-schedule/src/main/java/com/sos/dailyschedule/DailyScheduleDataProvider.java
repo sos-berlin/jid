@@ -21,27 +21,20 @@ import com.sos.hibernate.classes.DbItem;
 import com.sos.hibernate.classes.SOSSearchFilterData;
 import com.sos.hibernate.interfaces.ISOSDashboardDataProvider;
 import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
-import com.sos.hibernate.interfaces.ISOSHibernateFilter;
 import com.sos.scheduler.history.SchedulerOrderHistoryDataProvider;
 import com.sos.scheduler.history.SchedulerTaskHistoryDataProvider;
-import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
-import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.schedulerinstances.SchedulerInstancesDataProvider;
 
 public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISOSDashboardDataProvider {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "DailyScheduleDataProvider";
-    private List<DailyScheduleDBItem> listOfDaysScheduleDBItems = null;
-    // private List<DailyScheduleDBItem> listOfDaysScheduleDBItemsDistinct =
-    // null;
-    private DailyScheduleDBLayer dailySchedulerDBLayer = null;
-    private static Logger logger = Logger.getLogger(DailyScheduleDataProvider.class);
-    private Table tableDailySchedule = null;
-    private String timeZone = "";
     private static final String SOS_DASHBOARD_PLANNED = "sosDashboardPlanned";
     private static final String LIST_IGNORE_JOBS = "listIgnoreJobs";
     private static final String LIST_IGNORE_ORDERS = "listIgnoreOrders";
+    private static final Logger LOGGER = Logger.getLogger(DailyScheduleDataProvider.class);
+    private List<DailyScheduleDBItem> listOfDaysScheduleDBItems = null;
+    private DailyScheduleDBLayer dailySchedulerDBLayer = null;
+    private Table tableDailySchedule = null;
+    private String timeZone = "";
 
     public DailyScheduleDataProvider(File configurationFile) {
         this.dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
@@ -60,20 +53,15 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
     }
 
     public void fillSchedulerIds(CCombo cbSchedulerId) {
-
         SchedulerInstancesDataProvider schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(this.getConfigurationFile());
         schedulerInstancesDataProvider.getData(0);
         schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
-
         if (listOfDaysScheduleDBItems != null) {
-            // Es ist schneller, die vorhandenen Sätze zu verwenden.
-            // listOfDaysScheduleDBItems =
-            // dailySchedulerDBLayer.getDailyScheduleSchedulerList(0);
             Iterator<DailyScheduleDBItem> dailyScheduleEntries = listOfDaysScheduleDBItems.iterator();
             while (dailyScheduleEntries.hasNext()) {
                 DailyScheduleDBItem h = (DailyScheduleDBItem) dailyScheduleEntries.next();
                 if (cbSchedulerId.indexOf(h.getSchedulerId()) < 0) {
-                    logger.debug("... cbSchedulerId --> : " + h.getSchedulerId());
+                    LOGGER.debug("... cbSchedulerId --> : " + h.getSchedulerId());
                     cbSchedulerId.add(h.getSchedulerId());
                 }
             }
@@ -104,8 +92,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
         Iterator<DailyScheduleDBItem> dailyScheduleEntries = listOfDaysScheduleDBItems.iterator();
         while (dailyScheduleEntries.hasNext()) {
             DbItem h = dailyScheduleEntries.next();
-            if (dailySchedulerDBLayer.getFilter().isFiltered(h)) {
-            } else {
+            if (!dailySchedulerDBLayer.getFilter().isFiltered(h)) {
                 final SosDailyScheduleTableItem newItemTableItem = new SosDailyScheduleTableItem(table, SWT.BORDER);
                 h.setDateTimeZone4Getters(this.getTimeZone());
                 newItemTableItem.setDBItem(h);
@@ -183,7 +170,6 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
 
     @Override
     public void addToIgnorelist(Preferences prefs, DbItem h) {
-
         if (h.isStandalone()) {
             String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
             if (!listOfJobs.contains(h.getJobName())) {
@@ -209,7 +195,6 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
     public void setIgnoreList(Preferences prefs) {
         String listOfJobs = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_JOBS, "");
         String listOfOrders = prefs.node(SOS_DASHBOARD_PLANNED).get(LIST_IGNORE_ORDERS, "");
-
         StringTokenizer st = new StringTokenizer(listOfJobs, ",");
         while (st.hasMoreTokens()) {
             String jobname = st.nextToken();
@@ -217,22 +202,18 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
             h.setJob(jobname);
             this.getFilter().getIgnoreList().add(h);
         }
-
         st = new StringTokenizer(listOfOrders, ",");
         while (st.hasMoreTokens()) {
             String order = st.nextToken();
-
             File f = new File(order);
             String jobChain = f.getParent();
             jobChain = jobChain.replaceAll("\\\\", "/");
             String orderId = f.getName();
-
             DailyScheduleDBItem h = new DailyScheduleDBItem();
             h.setJobChain(jobChain);
             h.setOrderId(orderId);
             this.getFilter().getIgnoreList().add(h);
         }
-
     }
 
     @Override

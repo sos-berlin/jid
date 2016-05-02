@@ -23,15 +23,12 @@ public class SOSIgnoreList {
     }
 
     public boolean contains(DbItem s) {
-
         for (DbItem oh : ignoreList) {
             if (oh.isOrderJob()) {
-
-                if ((oh.getOrderId() == null || oh.getOrderId().equals("null") || oh.getOrderId().equals(s.getOrderId()))
+                if ((oh.getOrderId() == null || "null".equals(oh.getOrderId()) || oh.getOrderId().equals(s.getOrderId()))
                         && oh.getJobChain().equals(s.getJobChain())) {
                     return true;
                 }
-
             } else {
                 if (oh.getJob() == null || oh.getJob().equals(s.getJob())) {
                     return true;
