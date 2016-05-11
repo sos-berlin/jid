@@ -80,12 +80,10 @@ public class CheckDailyScheduleOptionsSuperClass extends JSOptionsClass {
     }
 
     public void setAllOptions(HashMap<String, String> pobjJSSettings) {
-        flgSetAllOptions = true;
         objSettings = pobjJSSettings;
-        super.Settings(objSettings);
         super.setAllOptions(pobjJSSettings);
-        flgSetAllOptions = false;
-    }
+ 
+    } // public void setAllOptions (HashMap <String, String> JSSettings)
 
     @Override
     public void CheckMandatory() throws JSExceptionMandatoryOptionMissing, Exception {

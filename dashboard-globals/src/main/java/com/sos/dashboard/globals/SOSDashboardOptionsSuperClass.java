@@ -148,13 +148,18 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
     }
 
     public void setAllOptions(HashMap<String, String> pobjJSSettings) {
-        flgSetAllOptions = true;
         objSettings = pobjJSSettings;
-        super.Settings(objSettings);
         super.setAllOptions(pobjJSSettings);
-        flgSetAllOptions = false;
-    }
+    } 
 
+    /** \brief CheckMandatory - prüft alle Muss-Optionen auf Werte
+     *
+     * \details
+     * 
+     * @throws Exception
+     *
+     * @throws Exception - wird ausgelöst, wenn eine mandatory-Option keinen
+     *             Wert hat */
     @Override
     public void CheckMandatory() throws JSExceptionMandatoryOptionMissing, Exception {
         try {
