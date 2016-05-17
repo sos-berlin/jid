@@ -57,7 +57,7 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         }
         objO.configuration_file.Value(configuration_file);
         objO.scheduler_id.Value(schedulerId);
-        objO.CheckMandatory();
+        objO.checkMandatory();
         objR.setJSJobUtilites(this);
         objR.Execute();
     }

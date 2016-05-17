@@ -75,7 +75,7 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         objO.configuration_file.Value(configuration_file);
         objO.SchedulerHostName.Value(host);
         objO.scheduler_port.value(port);
-        objO.CheckMandatory();
+        objO.checkMandatory();
         objR.setJSJobUtilites(this);
         SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(new File(configuration_file));
         schedulerInstancesDBLayer.beginTransaction();

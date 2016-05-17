@@ -128,7 +128,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
             LOGGER.info(Messages.getMsg(SOSDASHBOARD_INTRO));
             Shell shell = new Shell();
             objOptions = new SOSDashboardOptions();
-            objOptions.CommandLineArgs(pstrArgs);
+            objOptions.commandLineArgs(pstrArgs);
             boolean securityEnabled = true;
             try {
                 securityEnabled = getSecurityEnabled();
@@ -139,7 +139,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     if (pstrArgs.length > 0) {
                         LOGGER.debug("pstrArgs = " + pstrArgs[0].toString());
                         LOGGER.debug("user-dir = " + System.getProperty("user.dir"));
-                        objOptions.CommandLineArgs(pstrArgs);
+                        objOptions.commandLineArgs(pstrArgs);
                     }
                 }
             } catch (Exception e) {
@@ -161,7 +161,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 }
                 try {
                     Composite composite = new Composite(shell, SWT.NONE);
-                    objOptions.CheckMandatory();
+                    objOptions.checkMandatory();
                     LOGGER.debug(objOptions.toString());
                     DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.JSFile());
                     DashboardShowDialog window = new DashboardShowDialog(composite);
