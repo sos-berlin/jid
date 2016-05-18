@@ -24,7 +24,7 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
 
     public CreateDailySchedule Execute() throws Exception {
         try {
-            getOptions().CheckMandatory();
+            getOptions().checkMandatory();
             LOGGER.debug(getOptions().dirtyString());
             Calendar2DB calendar2Db = new Calendar2DB(objOptions.getconfiguration_file().Value());
             calendar2Db.setOptions(objOptions);

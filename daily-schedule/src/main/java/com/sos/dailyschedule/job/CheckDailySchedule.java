@@ -26,7 +26,7 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
 
     public CheckDailySchedule Execute() throws Exception {
         try {
-            getOptions().CheckMandatory();
+            getOptions().checkMandatory();
             LOGGER.debug(getOptions().dirtyString());
             DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(new File(objOptions.configuration_file.Value()));
             dailyScheduleAdjustment.setOptions(objOptions);

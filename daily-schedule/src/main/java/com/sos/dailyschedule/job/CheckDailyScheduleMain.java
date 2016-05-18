@@ -13,7 +13,7 @@ public class CheckDailyScheduleMain extends JSToolBox {
         try {
             CheckDailySchedule objM = new CheckDailySchedule();
             CheckDailyScheduleOptions objO = objM.getOptions();
-            objO.CommandLineArgs(pstrArgs);
+            objO.commandLineArgs(pstrArgs);
             objM.Execute();
         } catch (Exception e) {
             System.err.println(methodName + ": " + "Error occured ..." + e.getMessage());

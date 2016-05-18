@@ -15,7 +15,7 @@ public class CreateDailyScheduleMain extends JSToolBox {
         try {
             CreateDailySchedule objM = new CreateDailySchedule();
             CreateDailyScheduleOptions objO = objM.getOptions();
-            objO.CommandLineArgs(pstrArgs);
+            objO.commandLineArgs(pstrArgs);
             objM.Execute();
         } catch (Exception e) {
             System.err.println(conMethodName + ": " + "Error occured ..." + e.getMessage());

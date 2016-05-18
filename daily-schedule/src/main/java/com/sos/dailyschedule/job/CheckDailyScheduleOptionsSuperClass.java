@@ -86,17 +86,17 @@ public class CheckDailyScheduleOptionsSuperClass extends JSOptionsClass {
     } // public void setAllOptions (HashMap <String, String> JSSettings)
 
     @Override
-    public void CheckMandatory() throws JSExceptionMandatoryOptionMissing, Exception {
+    public void checkMandatory() throws JSExceptionMandatoryOptionMissing, Exception {
         try {
-            super.CheckMandatory();
+            super.checkMandatory();
         } catch (Exception e) {
             throw new JSExceptionMandatoryOptionMissing(e.toString());
         }
     }
 
     @Override
-    public void CommandLineArgs(String[] pstrArgs) {
-        super.CommandLineArgs(pstrArgs);
+    public void commandLineArgs(String[] pstrArgs) {
+        super.commandLineArgs(pstrArgs);
         this.setAllOptions(super.objSettings);
     }
 
