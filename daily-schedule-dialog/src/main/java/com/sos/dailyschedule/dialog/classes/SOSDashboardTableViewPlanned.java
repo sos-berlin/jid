@@ -223,7 +223,7 @@ public class SOSDashboardTableViewPlanned extends SOSDashboardTableView implemen
                         messageBox.setMessage(getAnswer());
                         messageBox.open();
                         getList();
-                        RestoreCursor();
+                        restoreCursor();
                     }
                 }
 

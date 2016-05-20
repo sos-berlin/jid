@@ -256,14 +256,14 @@ public class ActionShowDialog extends JSToolBox {
                     SchedulerEvent event = iEvents.next();
                     event.setLogic(evg.getLogic());
                     newItemTableItem.setData(event);
-                    newItemTableItem.setText(1, event.getEvent_title());
-                    newItemTableItem.setText(2, event.getEvent_name());
-                    newItemTableItem.setText(3, event.getEvent_id());
-                    newItemTableItem.setText(4, event.getEvent_class());
-                    if (!"".equals(event.getJob_name())) {
-                        newItemTableItem.setText(5, event.getJob_name());
+                    newItemTableItem.setText(1, event.getEventTitle());
+                    newItemTableItem.setText(2, event.getEventName());
+                    newItemTableItem.setText(3, event.getEventId());
+                    newItemTableItem.setText(4, event.getEventClass());
+                    if (!"".equals(event.getJobName())) {
+                        newItemTableItem.setText(5, event.getJobName());
                     } else {
-                        newItemTableItem.setText(5, event.getJob_chain());
+                        newItemTableItem.setText(5, event.getJobChain());
                     }
                     newItemTableItem.setText(6, evaluateEvents.getEventStatus(event));
                     newItemTableItem.setText(7, event.getCreated());

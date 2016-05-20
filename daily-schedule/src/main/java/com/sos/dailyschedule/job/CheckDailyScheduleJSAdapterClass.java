@@ -35,14 +35,14 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
         Spooler objSpooler = (Spooler) objSp;
         if (objO.getItem("scheduler_id") != null) {
             LOGGER.debug("scheduler_id from param");
-            schedulerId = objO.scheduler_id.Value();
+            schedulerId = objO.scheduler_id.getValue();
         } else {
             LOGGER.debug("scheduler_id from scheduler");
             schedulerId = objSpooler.id();
         }
         if (objO.configuration_file.IsEmpty() == false) {
             LOGGER.debug("configuration_file from param");
-            configuration_file = objO.configuration_file.Value();
+            configuration_file = objO.configuration_file.getValue();
         } else {
             LOGGER.debug("configuration_file from scheduler");
             File f = new File(new File(objSpooler.configuration_directory()).getParent(), "hibernate.cfg.xml");
@@ -55,8 +55,8 @@ public class CheckDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
             schedulerId = "";
             spooler_log.debug3("Checking all JobScheduler instance");
         }
-        objO.configuration_file.Value(configuration_file);
-        objO.scheduler_id.Value(schedulerId);
+        objO.configuration_file.setValue(configuration_file);
+        objO.scheduler_id.setValue(schedulerId);
         objO.checkMandatory();
         objR.setJSJobUtilites(this);
         objR.Execute();

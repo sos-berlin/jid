@@ -28,7 +28,7 @@ public class CheckDailySchedule extends JSJobUtilitiesClass<CheckDailyScheduleOp
         try {
             getOptions().checkMandatory();
             LOGGER.debug(getOptions().dirtyString());
-            DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(new File(objOptions.configuration_file.Value()));
+            DailyScheduleAdjustment dailyScheduleAdjustment = new DailyScheduleAdjustment(new File(objOptions.configuration_file.getValue()));
             dailyScheduleAdjustment.setOptions(objOptions);
             dailyScheduleAdjustment.setTo(new Date());
             dailyScheduleAdjustment.adjustWithHistory();

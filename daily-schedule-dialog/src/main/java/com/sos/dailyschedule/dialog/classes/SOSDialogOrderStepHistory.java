@@ -56,14 +56,14 @@ public class SOSDialogOrderStepHistory {
         final Shell dialogShell = new Shell(parentShell, SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.OK | SWT.PRIMARY_MODAL);
         dialogShell.setMinimumSize(new Point(340, 29));
         dialogShell.setLayout(new GridLayout(6, false));
-        SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(objOptions.getConfigurationFile().Value());
+        SchedulerHistoryDataProvider historyDataProvider = new SchedulerHistoryDataProvider(objOptions.getConfigurationFile().getValue());
         historyDataProvider.setTimeZone(timeZone);
         SosSchedulerOrderStepHistoryTable tableStepHistoryDetail = new SosSchedulerOrderStepHistoryTable(dialogShell, SWT.BORDER | SWT.FULL_SELECTION
                 | SWT.MULTI, messages);
         tableStepHistoryDetail.setLogTabFolder(logTabFolder);
         tableStepHistoryDetail.setDetailHistoryDataProvider(historyDataProvider);
         SchedulerOrderStepHistoryDataProvider schedulerOrderStepHistoryDataProvider = 
-                new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().Value()), 
+                new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().getValue()), 
                         schedulerOrderHistoryDBItem.getHistoryId());
         schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
         schedulerOrderStepHistoryDataProvider.getData(0);

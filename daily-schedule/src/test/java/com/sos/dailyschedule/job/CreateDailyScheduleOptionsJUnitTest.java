@@ -32,8 +32,8 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
 
     @Test
     public void testSchedulerHost() {
-        objOptions.SchedulerHostName.Value("++----++");
-        assertEquals("", objOptions.SchedulerHostName.Value(), "++----++");
+        objOptions.SchedulerHostName.setValue("++----++");
+        assertEquals("", objOptions.SchedulerHostName.getValue(), "++----++");
     }
 
     @Test
@@ -50,8 +50,8 @@ public class CreateDailyScheduleOptionsJUnitTest extends JSToolBox {
 
     @Test
     public void testconfiguration_file() {
-        objOptions.configuration_file.Value("++----++");
-        assertEquals("", objOptions.configuration_file.Value(), "++----++");
+        objOptions.configuration_file.setValue("++----++");
+        assertEquals("", objOptions.configuration_file.getValue(), "++----++");
     }
 
     @Test

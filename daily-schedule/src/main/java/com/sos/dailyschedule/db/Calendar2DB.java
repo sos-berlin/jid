@@ -38,7 +38,7 @@ public class Calendar2DB {
     private void initSchedulerConnection() {
         if ("".equals(schedulerId)) {
             LOGGER.debug("Calender2DB");
-            objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().Value(), options.getscheduler_port().value());
+            objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().getValue(), options.getscheduler_port().value());
             objFactory.initMarshaller(Spooler.class);
             dayOffset = options.getdayOffset().value();
             schedulerId = this.getSchedulerId();

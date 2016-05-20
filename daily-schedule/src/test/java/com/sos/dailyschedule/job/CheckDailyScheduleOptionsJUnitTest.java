@@ -30,24 +30,24 @@ public class CheckDailyScheduleOptionsJUnitTest extends JSToolBox {
 
     @Test
     public void testconfiguration_file() {
-        objOptions.configuration_file.Value("++----++");
-        assertEquals("Die Datei mit den Einstellungen für Datenbank. Beispiel: <?xml v", objOptions.configuration_file.Value(), "++----++");
+        objOptions.configuration_file.setValue("++----++");
+        assertEquals("Die Datei mit den Einstellungen für Datenbank. Beispiel: <?xml v", objOptions.configuration_file.getValue(), "++----++");
     }
 
     @Test
     public void testdayOffset() {
-        objOptions.dayOffset.Value("12345");
-        assertEquals("", objOptions.dayOffset.Value(), "12345");
+        objOptions.dayOffset.setValue("12345");
+        assertEquals("", objOptions.dayOffset.getValue(), "12345");
         assertEquals("", objOptions.dayOffset.value(), 12345);
         objOptions.dayOffset.value(12345);
-        assertEquals("", objOptions.dayOffset.Value(), "12345");
+        assertEquals("", objOptions.dayOffset.getValue(), "12345");
         assertEquals("", objOptions.dayOffset.value(), 12345);
     }
 
     @Test
     public void testscheduler_id() {
-        objOptions.scheduler_id.Value("++----++");
-        assertEquals("", objOptions.scheduler_id.Value(), "++----++");
+        objOptions.scheduler_id.setValue("++----++");
+        assertEquals("", objOptions.scheduler_id.getValue(), "++----++");
     }
 
 }

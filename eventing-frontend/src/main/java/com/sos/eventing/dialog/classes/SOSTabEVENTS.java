@@ -64,7 +64,7 @@ public class SOSTabEVENTS extends CTabItem {
 
         host = prefs.node("EVENT_CONFIGURATION").get("HOST", "localhost");
         port = Integer.valueOf(prefs.node("EVENT_CONFIGURATION").get("PORT", "4444"));
-        eventhandlerDirectory = prefs.node("EVENT_CONFIGURATION").get("EVENTHANDLERDIRECTORY", objOptions.Scheduler_Data.Value() + "/config/events");
+        eventhandlerDirectory = prefs.node("EVENT_CONFIGURATION").get("EVENTHANDLERDIRECTORY", objOptions.schedulerData.getValue() + "/config/events");
 
         mainTabFolder = new CTabFolder(composite, SWT.NONE);
         mainTabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));

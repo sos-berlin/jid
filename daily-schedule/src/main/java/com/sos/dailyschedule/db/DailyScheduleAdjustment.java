@@ -182,7 +182,7 @@ public class DailyScheduleAdjustment {
 
     public void setOptions(CheckDailyScheduleOptions options) throws ParseException {
         this.options = options;
-        schedulerId = this.options.getscheduler_id().Value();
+        schedulerId = this.options.getscheduler_id().getValue();
         dayOffset = this.options.getdayOffset().value();
         setFrom();
         setTo();

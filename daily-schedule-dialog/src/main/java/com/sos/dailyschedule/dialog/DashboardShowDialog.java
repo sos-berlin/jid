@@ -165,7 +165,7 @@ public class DashboardShowDialog extends FormBase {
 
     private void showReports() {
         if (objOptions != null && objOptions.getEnableReports().isTrue()) {
-            String webServicAddress = objOptions.securityServer.Value();
+            String webServicAddress = objOptions.securityServer.getValue();
             webServicAddress = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(DashBoardConstants.conSOSDashB_Report_Server, webServicAddress);
             sosReportsTabFolder = new SOSBrowserTabFolder(mainTabFolder, TABNAME_REPORTS, Messages);
             sosReportsTabFolder.setPrefKey(LIST_OF_REPORTS);
@@ -533,7 +533,7 @@ public class DashboardShowDialog extends FormBase {
         tableViewExecuted.setTableHistoryDetail(tableHistoryDetail);
         tableViewPlanned.setLogTabFolder(logTabFolder);
         tableViewPlanned.setTableHistoryDetail(tableHistoryDetail);
-        this.RestoreCursor();
+        this.restoreCursor();
         parent = left;
         logSashForm.setWeights(new int[] { 309, 170 });
         dashboardComposite.layout();
