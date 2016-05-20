@@ -60,7 +60,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                 if (sosLoginDialog.getUser() != null) {
                     sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
                     sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
-                    sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.Value() + COMMAND_PERMISSION);
+                    sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.getValue() + COMMAND_PERMISSION);
                     sosWebserviceAuthenticationRecord.setSessionId("");
                     SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
                     currentUser = new SOSJaxbSubject(sosPermissionShiro);
@@ -80,7 +80,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     Shell shell = new Shell();
                     MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION);
                     String message = String.format(Messages.getLabel(DashBoardConstants.conSOSDashB_NoSecurityServer) + ": %s",
-                            objOptions.securityServer.Value());
+                            objOptions.securityServer.getValue());
                     messageBox.setMessage(message + "\nMessage: " + e.getMessage());
                     messageBox.open();
                     throw new Exception(message);
@@ -104,7 +104,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     enabled = schedulerInstancesDBItem.getIsSosCommandWebservice();
                     if (enabled) {
                         schedulerInstancesDBItem.setIsSosCommandWebservice(false);
-                        objOptions.securityServer.Value(webServicAddress);
+                        objOptions.securityServer.setValue(webServicAddress);
                     }
                 } catch (Exception e) {
                     LOGGER.info(e.getMessage(), e);
@@ -116,7 +116,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
     }
 
     private boolean getSecurityEnabled() {
-        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.JSFile());
+        SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.getJSFile());
         schedulerInstancesDBLayer.getFilter().setSosCommandWebservice(true);
         schedulerInstances = schedulerInstancesDBLayer.getSchedulerInstancesList();
         return getNextSecurityServer();
@@ -163,7 +163,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     Composite composite = new Composite(shell, SWT.NONE);
                     objOptions.checkMandatory();
                     LOGGER.debug(objOptions.toString());
-                    DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.JSFile());
+                    DailyScheduleDataProvider dataProvider = new DailyScheduleDataProvider(objOptions.hibernateConfigurationFile.getJSFile());
                     DashboardShowDialog window = new DashboardShowDialog(composite);
                     try {
                         window.setDataProvider(dataProvider);

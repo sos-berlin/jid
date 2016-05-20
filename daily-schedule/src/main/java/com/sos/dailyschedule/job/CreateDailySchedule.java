@@ -26,7 +26,7 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
         try {
             getOptions().checkMandatory();
             LOGGER.debug(getOptions().dirtyString());
-            Calendar2DB calendar2Db = new Calendar2DB(new File(objOptions.getconfiguration_file().Value()));
+            Calendar2DB calendar2Db = new Calendar2DB(new File(objOptions.getconfiguration_file().getValue()));
             calendar2Db.setOptions(objOptions);
             calendar2Db.store();
         } catch (Exception e) {

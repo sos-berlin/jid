@@ -205,7 +205,7 @@ public class SOSDashboardTableViewExecuted extends SOSDashboardTableView impleme
                         MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
                         messageBox.setMessage(getAnswer());
                         messageBox.open();
-                        RestoreCursor();
+                        restoreCursor();
                         getList();
                     }
                 }

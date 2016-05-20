@@ -56,14 +56,14 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
             port = objSpooler.tcp_port();
         }
         if (objO.getItem("SchedulerHostName") != null) {
-            host = objO.SchedulerHostName.Value();
+            host = objO.SchedulerHostName.getValue();
         } else {
             host = objSpooler.hostname();
         }
         String configuration_file = "";
         if (objO.getItem("configuration_file") != null) {
             LOGGER.debug("configuration_file from param");
-            configuration_file = objO.configuration_file.Value();
+            configuration_file = objO.configuration_file.getValue();
         } else {
             LOGGER.debug("configuration_file from scheduler");
             File f = new File(new File(objSpooler.configuration_directory()).getParent(), "hibernate.cfg.xml");
@@ -72,8 +72,8 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
             }
             configuration_file = f.getAbsolutePath();
         }
-        objO.configuration_file.Value(configuration_file);
-        objO.SchedulerHostName.Value(host);
+        objO.configuration_file.setValue(configuration_file);
+        objO.SchedulerHostName.setValue(host);
         objO.scheduler_port.value(port);
         objO.checkMandatory();
         objR.setJSJobUtilites(this);

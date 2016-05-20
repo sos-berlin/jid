@@ -22,7 +22,7 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
     public SOSOptionInFileName hibernateConfigurationFile = new SOSOptionInFileName(this, conClassName + ".Hibernate_Configuration_File",
             "Configuration File for Hibernate", "./hibernate_mysql.cfg.xml", " ", true);
     public SOSOptionInFileName hibernateConfigFile = hibernateConfigurationFile;
-    public SOSOptionInFileName hibernateConfig = (SOSOptionInFileName) hibernateConfigurationFile.SetAlias(conClassName + ".Config");
+    public SOSOptionInFileName hibernateConfig = (SOSOptionInFileName) hibernateConfigurationFile.setAlias(conClassName + ".Config");
 
     @JSOptionDefinition(name = "security_server", description = "", key = "security_server", type = "SOSOptionString", mandatory = false)
     public SOSOptionString securityServer = new SOSOptionString(this, conClassName + ".SecurityServer", "Security Server for security rest service",
@@ -150,7 +150,7 @@ public class SOSDashboardOptionsSuperClass extends JSOptionsClass {
     public void setAllOptions(HashMap<String, String> pobjJSSettings) {
         flgSetAllOptions = true;
         objSettings = pobjJSSettings;
-        super.Settings(objSettings);
+        super.setSettings(objSettings);
         super.setAllOptions(pobjJSSettings);
         flgSetAllOptions = false;
     }

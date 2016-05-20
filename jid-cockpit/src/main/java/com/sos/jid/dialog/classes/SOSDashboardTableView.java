@@ -253,7 +253,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             objSchedulerObjectFactory.initMarshaller(Spooler.class);
             if (dbItem.isOrderJob()) {
                 try {
-                    JSCmdModifyOrder objOrder = objSchedulerObjectFactory.StartOrder(dbItem.getJobChain(), dbItem.getOrderId(), false);
+                    JSCmdModifyOrder objOrder = objSchedulerObjectFactory.startOrder(dbItem.getJobChain(), dbItem.getOrderId(), false);
                     if (objOrder.getAnswer().getOk() != null) {
                         answer += String.format("Command: Start Order: %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), "OK") + "\n";
                     } else {
@@ -264,11 +264,11 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     answer += String.format("Command: Start Order %s %s: %s", dbItem.getJobChain(), dbItem.getOrderId(), ee.getMessage()) + "\n";
                     LOGGER.error(ee.getMessage(), ee);
                 } finally {
-                    this.RestoreCursor();
+                    this.restoreCursor();
                 }
             } else {
                 try {
-                    JSCmdStartJob objStartJob = objSchedulerObjectFactory.StartJob(dbItem.getJobName(), false);
+                    JSCmdStartJob objStartJob = objSchedulerObjectFactory.startJob(dbItem.getJobName(), false);
                     if (objStartJob.getAnswer().getOk() != null) {
                         answer += String.format("Command: Start Job: %s: %s", dbItem.getJobName(), "OK") + "\n";
                     } else {
@@ -278,7 +278,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
                     answer += String.format("Command: Start Job  %s: %s --> Error: %s", dbItem.getJobName(), dbItem.getOrderId(), ee.getMessage())
                             + "\n";
                 } finally {
-                    this.RestoreCursor();
+                    this.restoreCursor();
                 }
             }
         }
@@ -297,7 +297,7 @@ public class SOSDashboardTableView extends SOSDashboardMainView implements ITabl
             DbItem d = (DbItem) t.getData();
             logItem.addLog(table, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
         }
-        this.RestoreCursor();
+        this.restoreCursor();
     }
 
     @Override
