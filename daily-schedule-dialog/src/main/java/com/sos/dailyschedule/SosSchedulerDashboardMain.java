@@ -61,7 +61,7 @@ public class SosSchedulerDashboardMain extends I18NBase {
                     sosWebserviceAuthenticationRecord.setUser(sosLoginDialog.getUser());
                     sosWebserviceAuthenticationRecord.setPassword(sosLoginDialog.getPassword());
                     sosWebserviceAuthenticationRecord.setResource(objOptions.securityServer.getValue() + COMMAND_PERMISSION);
-                    sosWebserviceAuthenticationRecord.setSessionId("");
+                    sosWebserviceAuthenticationRecord.setAccessToken("");
                     SOSPermissionShiro sosPermissionShiro = sosRestShiroClient.getPermissions(sosWebserviceAuthenticationRecord);
                     currentUser = new SOSJaxbSubject(sosPermissionShiro);
                     if (currentUser == null) {
