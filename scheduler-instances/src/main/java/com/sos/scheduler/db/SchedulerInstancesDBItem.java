@@ -60,6 +60,7 @@ public class SchedulerInstancesDBItem extends DbItem {
     private Boolean isAgent = false;
     private Boolean isSosCommandWebservice = false;
     private String param;
+    private String url;
 
     private Integer supervisorTcpPort;
     private String supervisorHostName;
@@ -463,5 +464,15 @@ public class SchedulerInstancesDBItem extends DbItem {
     public String getParam() {
         return param;
     }
+    
+    @Column(name = "`URL`", nullable = true)
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Column(name = "`URL`", nullable = true)
+    public String getUrl() {
+        return url;
+    }    
 
 }

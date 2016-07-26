@@ -153,6 +153,18 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         }
     }
 
+    public SchedulerInstancesDBItem getFirstInstanceById(String schedulerId) {
+        initFilter();
+        filter.setSchedulerId(schedulerId);
+        List<SchedulerInstancesDBItem> schedulerList = getSchedulerInstancesList();
+        if (!schedulerList.isEmpty()) {
+            SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerList.get(0);
+            return schedulerInstanceDBItem;
+        } else {
+            return null;
+        }
+    }
+    
     public SchedulerInstancesFilter getFilter() {
         return filter;
     }
