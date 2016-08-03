@@ -10,6 +10,7 @@ import org.hibernate.Query;
 
 import sos.spooler.Spooler;
 
+import com.sos.hibernate.classes.SOSHibernateConnection;
 import com.sos.hibernate.layer.SOSHibernateDBLayer;
 import com.sos.schedulerinstances.classes.SelectSchedulerInstance;
 
@@ -22,6 +23,12 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         super();
         this.setConfigurationFileName(configurationFileName);
         this.initConnection(this.getConfigurationFileName());
+        initFilter();
+    }
+
+    public SchedulerInstancesDBLayer(SOSHibernateConnection connection) {
+        super();
+        this.initConnection(connection);
         initFilter();
     }
 
@@ -105,8 +112,8 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         initConnection(getConfigurationFileName());
         List<SchedulerInstancesDBItem> schedulerInstancesList = null;
         try {
-            connection.connect();
             connection.beginTransaction();
+
             Query query = connection.createQuery("from SchedulerInstancesDBItem " + getWhere() + this.filter.getOrderCriteria() + this.filter.getSortMode());
             if (filter.getHostname() != null && !"".equals(filter.getHostname())) {
                 query.setText("hostName", filter.getHostname());
@@ -153,9 +160,11 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         }
     }
 
-    public SchedulerInstancesDBItem getFirstInstanceById(String schedulerId) {
+    public SchedulerInstancesDBItem getInstance(String schedulerId, String host, Integer port) {
         initFilter();
         filter.setSchedulerId(schedulerId);
+        filter.setHostname(host);
+        filter.setPort(port);
         List<SchedulerInstancesDBItem> schedulerList = getSchedulerInstancesList();
         if (!schedulerList.isEmpty()) {
             SchedulerInstancesDBItem schedulerInstanceDBItem = schedulerList.get(0);
@@ -164,7 +173,7 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
             return null;
         }
     }
-    
+
     public SchedulerInstancesFilter getFilter() {
         return filter;
     }

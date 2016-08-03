@@ -35,7 +35,7 @@ public class SchedulerInstancesDBLayerTest {
  
     @Test
     public void testGetInstanceById() throws Exception {
-        SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getFirstInstanceById("scheduler_current");
+        SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getInstance("scheduler_current","",0);
         assertEquals("testGetInstanceById fails...:", "", schedulerInstancesDBItem.getUrl());
     }
 

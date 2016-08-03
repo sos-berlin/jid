@@ -61,10 +61,17 @@ public class SchedulerInstancesDBItem extends DbItem {
     private Boolean isSosCommandWebservice = false;
     private String param;
     private String url;
-
+    private Date modificationDate;
+    private Integer clusterMemberPrecedence;
+    private String clusterMemberType;
+    private String architecture;
+    private String distribution;
+    private String osName;
+    private String supervisorSchedulerId;
+    private String timeZone;
+    private String jobschedulerVersion;
     private Integer supervisorTcpPort;
     private String supervisorHostName;
-
     private String dateFormat = "yyyy-MM-dd hh:mm";
 
     public SchedulerInstancesDBItem(String dateFormat_) {
@@ -219,6 +226,7 @@ public class SchedulerInstancesDBItem extends DbItem {
         return udpPort;
     }
 
+    
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "`START_TIME`", nullable = true)
     public void setStartTime(Date startTime) {
@@ -229,6 +237,20 @@ public class SchedulerInstancesDBItem extends DbItem {
     @Column(name = "`START_TIME`", nullable = true)
     public Date getStartTime() {
         return startTime;
+    }
+    
+    
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "`MODIFICATION_DATE`", nullable = true)
+    public void setModificationDate(Date modificationDate) {
+        this.modificationDate = modificationDate;
+     }
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "`MODIFICATION_DATE`", nullable = true)
+    public Date getModificationDate() {
+        return modificationDate;
     }
 
     @Transient
@@ -475,4 +497,92 @@ public class SchedulerInstancesDBItem extends DbItem {
         return url;
     }    
 
+    @Column(name = "`CLUSTER_MEMBER_PRECEDENCE`", nullable = true)
+    public void setClusterMemberPrecedence(Integer clusterMemberPrecedence) {
+        this.clusterMemberPrecedence = clusterMemberPrecedence;
+    }
+
+    @Column(name = "`CLUSTER_MEMBER_PRECEDENCE`", nullable = true)
+    public Integer getClusterMemberPrecedence() {
+        return clusterMemberPrecedence;
+    }
+    
+    
+    @Column(name = "`CLUSTER_MEMBER_TYPE`", nullable = true)
+    public void setClusterMemberType(String clusterMemberType) {
+        this.clusterMemberType = clusterMemberType;
+    }
+
+    @Column(name = "`CLUSTER_MEMBER_TYPE`", nullable = true)
+    public String getClusterMemberType() {
+        return clusterMemberType;
+    }
+    
+    @Column(name = "`ARCHITECTURE`", nullable = true)
+    public void setArchitecture(String architecture) {
+        this.architecture = architecture;
+    }
+
+    @Column(name = "`ARCHITECTURE`", nullable = true)
+    public String getArchitecture() {
+        return architecture;
+    }
+    
+    @Column(name = "`DISTRIBUTION`", nullable = true)
+    public void setDistribution(String distribution) {
+        this.distribution = distribution;
+    }
+
+    @Column(name = "`DISTRIBUTION`", nullable = true)
+    public String getDistribution() {
+        return distribution;
+    }
+    
+    @Column(name = "`OS_NAME`", nullable = true)
+    public void setOsName(String osName) {
+        this.osName = osName;
+    }
+
+    @Column(name = "`OS_NAME`", nullable = true)
+    public String getOsName() {
+        return osName;
+    }
+    
+    @Column(name = "`SUPERVISOR_SCHEDULER_ID`", nullable = true)
+    public void setSupervisorSchedulerId(String supervisorSchedulerId) {
+        this.supervisorSchedulerId = supervisorSchedulerId;
+    }
+
+    @Column(name = "`SUPERVISOR_SCHEDULER_ID`", nullable = true)
+    public String getSupervisorSchedulerId() {
+        return supervisorSchedulerId;
+    }
+    
+    @Column(name = "`TIME_ZONE`", nullable = true)
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
+
+    @Column(name = "`TIME_ZONE`", nullable = true)
+    public String getTimeZone() {
+        return timeZone;
+    }
+    
+    @Column(name = "`JOBSCHEDULER_VERSION`", nullable = true)
+    public void setJobSchedulerVersion(String jobschedulerVersion) {
+        this.jobschedulerVersion = jobschedulerVersion;
+    }
+
+    @Column(name = "`JOBSCHEDULER_VERSION`", nullable = true)
+    public String getJobSchedulerVersion() {
+        return jobschedulerVersion;
+    }
+    
+    
+    
+    
+    
+    
+    
+    
 }
