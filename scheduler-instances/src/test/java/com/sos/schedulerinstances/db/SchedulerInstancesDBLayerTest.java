@@ -2,11 +2,7 @@ package com.sos.schedulerinstances.db;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-
-import java.text.ParseException;
-import java.util.Date;
-import java.util.List;
-
+ 
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,7 +32,7 @@ public class SchedulerInstancesDBLayerTest {
     @Test
     public void testGetInstanceById() throws Exception {
         SchedulerInstancesDBItem schedulerInstancesDBItem = schedulerInstancesDBLayer.getInstance("scheduler_current","",0);
-        assertEquals("testGetInstanceById fails...:", "", schedulerInstancesDBItem.getUrl());
+        assertEquals("testGetInstanceById fails...:", "ur", schedulerInstancesDBItem.getHostname());
     }
 
     
