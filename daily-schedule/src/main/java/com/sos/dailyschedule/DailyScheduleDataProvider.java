@@ -48,11 +48,11 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
         dailySchedulerDBLayer.resetFilter();
     }
 
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         listOfDaysScheduleDBItems = dailySchedulerDBLayer.getDailyScheduleList(limit);
     }
 
-    public void fillSchedulerIds(CCombo cbSchedulerId) {
+    public void fillSchedulerIds(CCombo cbSchedulerId) throws Exception {
         SchedulerInstancesDataProvider schedulerInstancesDataProvider = new SchedulerInstancesDataProvider(this.getConfigurationFileName());
         schedulerInstancesDataProvider.getData(0);
         schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
@@ -69,7 +69,7 @@ public class DailyScheduleDataProvider implements ISOSHibernateDataProvider, ISO
     }
 
     public String getLogAsString(Table tableDailySchedule, SchedulerTaskHistoryDataProvider schedulerTaskHistoryDataProvider,
-            SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider) {
+            SchedulerOrderHistoryDataProvider schedulerOrderHistoryDataProvider) throws Exception {
         String log = "";
         if (tableDailySchedule.getSelectionIndex() >= 0) {
             TableItem t = tableDailySchedule.getItem(tableDailySchedule.getSelectionIndex());

@@ -30,7 +30,7 @@ public class CreateDailyScheduleJSAdapterClass extends JobSchedulerJobAdapter {
             doProcessing();
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            LOGGER.debug("Exception:" + e.getMessage());
+            LOGGER.debug("Exception:" + e.getMessage(), e);
             return false;
         }
         return spooler_task.job().order_queue() != null;

@@ -49,7 +49,7 @@ public class DailyScheduleAdjustment {
                 try {
                     dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
                 } catch (Exception e) {
-                    LOGGER.error("Error occurred updating item: ", e);
+                    LOGGER.error("Error occurred updating item: " + e.getMessage(), e);
                 }
                 schedulerHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
@@ -83,7 +83,7 @@ public class DailyScheduleAdjustment {
                     dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
                     dailyScheduleDBLayer.getConnection().commit();
                 } catch (Exception e) {
-                    LOGGER.error("Error occurred trying to update Item: ", e);
+                    LOGGER.error("Error occurred trying to update Item: " + e.getMessage(), e);
                 }
                 schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
@@ -91,7 +91,7 @@ public class DailyScheduleAdjustment {
         }
     }
 
-    public void adjustWithHistory() {
+    public void adjustWithHistory() throws Exception {
         String lastSchedulerId = "***";
         dailyScheduleDBLayer.setWhereSchedulerId(this.schedulerId);
         dailyScheduleDBLayer.getFilter().setOrderCriteria("schedulerId");
@@ -138,7 +138,7 @@ public class DailyScheduleAdjustment {
             }
             dailyScheduleDBLayer.getConnection().commit();
         } catch (Exception e) {
-            LOGGER.error("Error occurred adjusting the history: ", e);
+            LOGGER.error("Error occurred adjusting the history: " + e.getMessage(), e);
         }
     }
 

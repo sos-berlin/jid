@@ -50,32 +50,27 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         this.filter.setOrderCriteria("startTime");
     }
 
-    public int delete() {
+    public int delete() throws Exception {
         int row = 0;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            String hql = "delete from SchedulerInstancesDBItem " + getWhere();
-            Query query = connection.createQuery(hql);
-            if (filter.getHostname() != null && !"".equals(filter.getHostname())) {
-                query.setText("hostName", filter.getHostname());
-            }
-            if (filter.getDbName() != null && !"".equals(filter.getDbName())) {
-                query.setText("dbName", filter.getDbName());
-            }
-            if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
-                query.setText("schedulerId", filter.getSchedulerId());
-            }
-            if (filter.getPort() != null && filter.getPort() > 0) {
-                query.setInteger("tcpPort", filter.getPort());
-            }
-            row = query.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred deleting Item: ", e);
+        connection.beginTransaction();
+        String hql = "delete from SchedulerInstancesDBItem " + getWhere();
+        Query query = connection.createQuery(hql);
+        if (filter.getHostname() != null && !"".equals(filter.getHostname())) {
+            query.setText("hostName", filter.getHostname());
         }
+        if (filter.getDbName() != null && !"".equals(filter.getDbName())) {
+            query.setText("dbName", filter.getDbName());
+        }
+        if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
+            query.setText("schedulerId", filter.getSchedulerId());
+        }
+        if (filter.getPort() != null && filter.getPort() > 0) {
+            query.setInteger("tcpPort", filter.getPort());
+        }
+        row = query.executeUpdate();
         return row;
     }
 
@@ -108,34 +103,37 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         return where;
     }
 
-    public List<SchedulerInstancesDBItem> getSchedulerInstancesList() {
-        initConnection(getConfigurationFileName());
-        List<SchedulerInstancesDBItem> schedulerInstancesList = null;
-        try {
-            connection.beginTransaction();
-
-            Query query = connection.createQuery("from SchedulerInstancesDBItem " + getWhere() + this.filter.getOrderCriteria() + this.filter.getSortMode());
-            if (filter.getHostname() != null && !"".equals(filter.getHostname())) {
-                query.setText("hostName", filter.getHostname());
-            }
-            if (filter.getDbName() != null && !"".equals(filter.getDbName())) {
-                query.setText("dbName", filter.getDbName());
-            }
-            if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
-                query.setText("schedulerId", filter.getSchedulerId());
-            }
-            if (filter.getPort() != null && filter.getPort() > 0) {
-                query.setInteger("tcpPort", filter.getPort());
-            }
-            if (this.getFilter().getLimit() > 0) {
-                query.setMaxResults(this.getFilter().getLimit());
-            }
-            schedulerInstancesList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving data: ", e);
+    public List<SchedulerInstancesDBItem> getSchedulerInstancesList() throws Exception {
+        if(connection == null) {
+            initConnection(getConfigurationFileName());
         }
+        List<SchedulerInstancesDBItem> schedulerInstancesList = null;
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerInstancesDBItem " + getWhere() + this.filter.getOrderCriteria() 
+                + this.filter.getSortMode());
+        LOGGER.debug("getWhere(): " + getWhere().toString());
+        if (filter.getHostname() != null && !"".equals(filter.getHostname())) {
+            query.setText("hostName", filter.getHostname());
+        }
+        LOGGER.debug("filter.getHostname(): " + filter.getHostname());
+        if (filter.getDbName() != null && !"".equals(filter.getDbName())) {
+            query.setText("dbName", filter.getDbName());
+        }
+        LOGGER.debug("filter.getDbName(): " + filter.getDbName());
+        if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
+            query.setText("schedulerId", filter.getSchedulerId());
+        }
+        LOGGER.debug("filter.getSchedulerId(): " + filter.getSchedulerId());
+        if (filter.getPort() != null && filter.getPort() > 0) {
+            query.setInteger("tcpPort", filter.getPort());
+        }
+        LOGGER.debug("filter.getPort(): " + filter.getPort());
+        if (this.getFilter().getLimit() > 0) {
+            query.setMaxResults(this.getFilter().getLimit());
+        }
+        LOGGER.debug("filter.getLimit(): " + filter.getLimit());
+        schedulerInstancesList = query.list();
         return schedulerInstancesList;
-
     }
 
     private SchedulerInstancesDBItem selectSchedulerInstance(List<SchedulerInstancesDBItem> l) {
@@ -148,7 +146,7 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         }
     }
 
-    public SchedulerInstancesDBItem getInstanceById(String schedulerId) {
+    public SchedulerInstancesDBItem getInstanceById(String schedulerId) throws Exception {
         initFilter();
         filter.setSchedulerId(schedulerId);
         List<SchedulerInstancesDBItem> schedulerList = getSchedulerInstancesList();
@@ -160,7 +158,7 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         }
     }
 
-    public SchedulerInstancesDBItem getInstance(String schedulerId, String host, Integer port) {
+    public SchedulerInstancesDBItem getInstance(String schedulerId, String host, Integer port) throws Exception {
         initFilter();
         filter.setSchedulerId(schedulerId);
         filter.setHostname(host);
@@ -205,7 +203,7 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         return schedulerInstancesDbItem;
     }
 
-    public void insertScheduler(SchedulerInstancesDBItem newSchedulerInstancesDbItem) {
+    public void insertScheduler(SchedulerInstancesDBItem newSchedulerInstancesDbItem) throws Exception {
         SchedulerInstancesDBItem schedulerDbItem = null;
         initFilter();
         this.getFilter().setHostname(newSchedulerInstancesDbItem.getHostname());
@@ -234,13 +232,11 @@ public class SchedulerInstancesDBLayer extends SOSHibernateDBLayer {
         schedulerDbItem.setLiveDirectory(newSchedulerInstancesDbItem.getLiveDirectory());
         schedulerDbItem.setSupervisorHostName(newSchedulerInstancesDbItem.getSupervisorHostName());
         schedulerDbItem.setSupervisorTcpPort(newSchedulerInstancesDbItem.getSupervisorTcpPort());
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            connection.saveOrUpdate(schedulerDbItem);
-        } catch (Exception e) {
-            LOGGER.error("Error occured while saving or updating Item: ", e);
+        if (connection == null) {
+            initConnection(getConfigurationFileName());
         }
+        connection.beginTransaction();
+        connection.saveOrUpdate(schedulerDbItem);
     }
 
 }

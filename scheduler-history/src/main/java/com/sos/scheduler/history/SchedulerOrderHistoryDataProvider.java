@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+
 import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
 import com.sos.scheduler.history.classes.SchedulerHistoryTableItem;
 import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
@@ -36,7 +38,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
     }
 
     @Override
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         schedulerOrderHistoryDBLayer.getFilter().setLimit(limit);
         listOfSchedulerOrderHistoryDBItems = schedulerOrderHistoryDBLayer.getSchedulerOrderHistoryListFromTo();
     }
@@ -54,7 +56,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
         }
     }
 
-    public String getLogAsString(final Table tableSchedulerOrderHistory) {
+    public String getLogAsString(final Table tableSchedulerOrderHistory) throws Exception {
         String log = "";
         if (tableSchedulerOrderHistory.getSelectionIndex() >= 0) {
             TableItem t = tableSchedulerOrderHistory.getItem(tableSchedulerOrderHistory.getSelectionIndex());
@@ -66,7 +68,7 @@ public class SchedulerOrderHistoryDataProvider implements ISOSHibernateDataProvi
         return log;
     }
 
-    public String getLogAsString(final Long id) {
+    public String getLogAsString(final Long id) throws Exception {
         String log = "";
         try {
             SchedulerOrderHistoryDBItem schedulerOrderHistoryDBItem = schedulerOrderHistoryDBLayer.get(id);

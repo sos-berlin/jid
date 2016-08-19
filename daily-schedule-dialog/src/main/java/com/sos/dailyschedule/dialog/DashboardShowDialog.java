@@ -149,10 +149,17 @@ public class DashboardShowDialog extends FormBase {
             String listOfScheduler = prefs.node(DashBoardConstants.SOS_DASHBOARD).get(LIST_OF_SCHEDULERS, "");
             if (haveDb && "".equals(listOfScheduler)) {
                 schedulerInstancesDBLayer.initFilter();
-                List<SchedulerInstancesDBItem> instances = schedulerInstancesDBLayer.getSchedulerInstancesList();
-                if (!instances.isEmpty()) {
-                    SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
-                    defaultUrl = new SOSUrl(schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort());
+                List<SchedulerInstancesDBItem> instances;
+                try {
+                    instances = schedulerInstancesDBLayer.getSchedulerInstancesList();
+                    if (!instances.isEmpty()) {
+                        SchedulerInstancesDBItem schedulerInstancesDBItem = instances.get(0);
+                        defaultUrl = new SOSUrl(schedulerInstancesDBItem.getHostName() + ":" + schedulerInstancesDBItem.getTcpPort());
+                    }
+                } catch (Exception e) {
+                    MessageBox messageBox = new MessageBox(shell, SWT.ICON_INFORMATION | SWT.OK);
+                    messageBox.setMessage(e.getMessage());
+                    messageBox.open();
                 }
             }
             sosJocTabFolder.setOpenMenueItem(Messages.getLabel(DashBoardConstants.conSOSDashB_open_scheduler));

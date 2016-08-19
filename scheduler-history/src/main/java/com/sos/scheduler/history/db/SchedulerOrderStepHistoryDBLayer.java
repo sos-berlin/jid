@@ -37,18 +37,12 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
         resetFilter();
     }
 
-    public SchedulerOrderStepHistoryDBItem get(final SchedulerOrderStepHistoryCompoundKey id) {
+    public SchedulerOrderStepHistoryDBItem get(final SchedulerOrderStepHistoryCompoundKey id) throws Exception {
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            return (SchedulerOrderStepHistoryDBItem) ((Session) connection.getCurrentSession()).get(SchedulerOrderStepHistoryDBItem.class, id);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving item: ", e);
-        }
-        return null;
+        connection.beginTransaction();
+        return (SchedulerOrderStepHistoryDBItem) ((Session) connection.getCurrentSession()).get(SchedulerOrderStepHistoryDBItem.class, id);
     }
 
     public void resetFilter() {
@@ -100,26 +94,21 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
         return where;
     }
 
-    public int deleteFromTo() {
+    public int deleteFromTo() throws Exception {
         String hql = "delete from SchedulerOrderStepHistoryDBItem " + getWhereFromTo();
         int row = 0;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery(hql);
-            query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
-            query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
-            row = query.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred trying to delete Items for the given interval: ", e);
-        }
+        connection.beginTransaction();
+        Query query = connection.createQuery(hql);
+        query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
+        query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
+        row = query.executeUpdate();
         return row;
     }
 
-    public void deleteInterval(final int interval) {
+    public void deleteInterval(final int interval) throws Exception {
         GregorianCalendar now = new GregorianCalendar();
         now.add(GregorianCalendar.DAY_OF_YEAR, -interval);
         filter.setExecutedTo(new Date());
@@ -127,64 +116,54 @@ public class SchedulerOrderStepHistoryDBLayer extends SOSHibernateDBLayer {
         this.deleteFromTo();
     }
 
-    public List<SchedulerOrderStepHistoryDBItem> getSchedulerOrderStepHistoryListFromTo(final int limit) {
+    public List<SchedulerOrderStepHistoryDBItem> getSchedulerOrderStepHistoryListFromTo(final int limit) throws Exception {
         List<SchedulerOrderStepHistoryDBItem> schedulerHistoryList = null;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
-                    + filter.getSortMode());
-            if (filter.getExecutedFromUtc() != null && !"".equals(filter.getExecutedFromUtc())) {
-                query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
-            }
-            if (filter.getExecutedToUtc() != null && !"".equals(filter.getExecutedToUtc())) {
-                query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
-            }
-            if (limit > 0) {
-                query.setMaxResults(limit);
-            }
-            schedulerHistoryList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving Items for the given interval: ", e);
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
+                + filter.getSortMode());
+        if (filter.getExecutedFromUtc() != null && !"".equals(filter.getExecutedFromUtc())) {
+            query.setTimestamp("startTimeFrom", filter.getExecutedFromUtc());
         }
+        if (filter.getExecutedToUtc() != null && !"".equals(filter.getExecutedToUtc())) {
+            query.setTimestamp("startTimeTo", filter.getExecutedToUtc());
+        }
+        if (limit > 0) {
+            query.setMaxResults(limit);
+        }
+        schedulerHistoryList = query.list();
         return schedulerHistoryList;
     }
 
-    public List<SchedulerOrderStepHistoryDBItem> getOrderStepHistoryItems(final int limit, long historyId) {
+    public List<SchedulerOrderStepHistoryDBItem> getOrderStepHistoryItems(final int limit, long historyId) throws Exception {
         filter.setHistoryId(historyId);
         List<SchedulerOrderStepHistoryDBItem> historyList = null;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhere());
-            if (filter.getHistoryId() != null) {
-                query.setLong("historyId", filter.getHistoryId());
-            }
-            if (filter.getStatus() != null && !"".equals(filter.getStatus())) {
-                query.setParameter("state", filter.getStatus());
-            }
-            if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
-                query.setTimestamp("startTime", filter.getStartTime());
-            }
-            if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
-                query.setTimestamp("startTime", filter.getStartTime());
-            }
-            if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
-                query.setTimestamp("endTime", filter.getEndTime());
-            }
-            if (limit != 0) {
-                query.setMaxResults(limit);
-            }
-            historyList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving Items: ", e);
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerOrderStepHistoryDBItem " + getWhere());
+        if (filter.getHistoryId() != null) {
+            query.setLong("historyId", filter.getHistoryId());
         }
+        if (filter.getStatus() != null && !"".equals(filter.getStatus())) {
+            query.setParameter("state", filter.getStatus());
+        }
+        if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
+            query.setTimestamp("startTime", filter.getStartTime());
+        }
+        if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
+            query.setTimestamp("startTime", filter.getStartTime());
+        }
+        if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
+            query.setTimestamp("endTime", filter.getEndTime());
+        }
+        if (limit != 0) {
+            query.setMaxResults(limit);
+        }
+        historyList = query.list();
         return historyList;
     }
 

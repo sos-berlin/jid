@@ -2,6 +2,7 @@ package com.sos.dailyschedule.dialog.classes;
 
 import java.io.File;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.DisposeEvent;
@@ -24,6 +25,7 @@ import com.sos.scheduler.history.db.SchedulerOrderHistoryDBItem;
 
 public class SOSDialogOrderStepHistory {
 
+    private static final Logger LOGGER = Logger.getLogger(SOSDialogOrderStepHistory.class);
     private Button btnOk;
     private String protocolValue;
     private SOSDashboardOptions objOptions;
@@ -66,7 +68,11 @@ public class SOSDialogOrderStepHistory {
                 new SchedulerOrderStepHistoryDataProvider(new File(objOptions.getConfigurationFile().getValue()), 
                         schedulerOrderHistoryDBItem.getHistoryId());
         schedulerOrderStepHistoryDataProvider.setTimeZone(timeZone);
-        schedulerOrderStepHistoryDataProvider.getData(0);
+        try {
+            schedulerOrderStepHistoryDataProvider.getData(0);
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
         schedulerOrderStepHistoryDataProvider.fillTable(tableStepHistoryDetail);
         dialogShell.setSize(295, 170);
         btnOk = new Button(dialogShell, SWT.NONE);

@@ -83,7 +83,7 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
         schedulerOrderHistoryDataProvider.resetFilter();
     }
 
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         schedulerTaskHistoryDataProvider.getData(limit);
         schedulerOrderHistoryDataProvider.getData(limit);
     }
@@ -119,14 +119,14 @@ public class SchedulerHistoryDataProvider implements ISOSDashboardDataProvider {
         schedulerOrderHistoryDataProvider.getFilter().setOrderid(orderId);
     }
 
-    public void fillSchedulerIds(CCombo cbSchedulerId) {
+    public void fillSchedulerIds(CCombo cbSchedulerId) throws Exception {
         schedulerInstancesDataProvider.getData(0);
         schedulerInstancesDataProvider.fillSchedulerIds(cbSchedulerId);
         schedulerTaskHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
         schedulerOrderHistoryDataProvider.fillSchedulerIds(cbSchedulerId);
     }
 
-    public String getLogAsString(DbItem dbItem) {
+    public String getLogAsString(DbItem dbItem) throws Exception {
         if (dbItem.isStandalone()) {
             return schedulerTaskHistoryDataProvider.getLogAsString(dbItem.getLogId());
         } else {

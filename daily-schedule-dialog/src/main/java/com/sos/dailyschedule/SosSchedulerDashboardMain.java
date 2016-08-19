@@ -2,13 +2,17 @@ package com.sos.dailyschedule;
 
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+
 import com.sos.joe.globals.messages.ErrorLog;
+
 import sos.util.SOSClassUtil;
+
 import com.sos.auth.SOSJaxbSubject;
 import com.sos.auth.rest.SOSWebserviceAuthenticationRecord;
 import com.sos.auth.rest.client.SOSRestShiroClient;
@@ -118,7 +122,11 @@ public class SosSchedulerDashboardMain extends I18NBase {
     private boolean getSecurityEnabled() {
         SchedulerInstancesDBLayer schedulerInstancesDBLayer = new SchedulerInstancesDBLayer(objOptions.hibernateConfigurationFile.getValue());
         schedulerInstancesDBLayer.getFilter().setSosCommandWebservice(true);
-        schedulerInstances = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        try {
+            schedulerInstances = schedulerInstancesDBLayer.getSchedulerInstancesList();
+        } catch (Exception e) {
+            LOGGER.error(e.getMessage(), e);
+        }
         return getNextSecurityServer();
     }
 

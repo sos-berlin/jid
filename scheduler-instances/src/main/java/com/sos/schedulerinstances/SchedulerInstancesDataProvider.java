@@ -41,7 +41,7 @@ public class SchedulerInstancesDataProvider implements ISOSHibernateDataProvider
         schedulerInstancesDBLayer.initFilter();
     }
 
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         listOfSchedulerInstancesDBItems = schedulerInstancesDBLayer.getSchedulerInstancesList();
     }
 

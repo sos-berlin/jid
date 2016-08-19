@@ -58,7 +58,7 @@ public class Calendar2DB {
         return objSC.getCalendar();
     }
 
-    public void delete() {
+    public void delete() throws Exception {
         initSchedulerConnection();
         dailySchedulerDBLayer.setWhereFrom(from);
         dailySchedulerDBLayer.setWhereTo(to);

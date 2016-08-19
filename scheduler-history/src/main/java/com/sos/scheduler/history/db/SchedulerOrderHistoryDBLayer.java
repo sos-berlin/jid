@@ -39,17 +39,15 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         this.initConnection(this.getConfigurationFileName());
     }
 
-    public SchedulerOrderHistoryDBItem get(Long id) {
+    public SchedulerOrderHistoryDBItem get(Long id) throws Exception {
         if (id == null) {
             return null;
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            return (SchedulerOrderHistoryDBItem) ((Session) connection.getCurrentSession()).get(SchedulerOrderHistoryDBItem.class, id);
-        } catch (Exception e) {
-            return null;
+        if (connection == null) {
+            initConnection(getConfigurationFileName());
         }
+        connection.beginTransaction();
+        return (SchedulerOrderHistoryDBItem) ((Session) connection.getCurrentSession()).get(SchedulerOrderHistoryDBItem.class, id);
     }
 
     protected String getWhere() {
@@ -145,55 +143,45 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
     }
 
     @Override
-    public void onAfterDeleting(DbItem h) {
+    public void onAfterDeleting(DbItem h) throws Exception {
         int row = 0;
         SchedulerOrderHistoryDBItem x = (SchedulerOrderHistoryDBItem) h;
         String q = "delete from SchedulerOrderStepHistoryDBItem where id.historyId=" + x.getHistoryId();
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery(q);
-            row = query.executeUpdate();
-            connection.commit();
-            LOGGER.debug(String.format("%s steps deleted", row));
-        } catch (Exception e) {
-            LOGGER.error("Error occurred while trying to delete Items: ", e);
-        }
+        connection.beginTransaction();
+        Query query = connection.createQuery(q);
+        row = query.executeUpdate();
+        connection.commit();
+        LOGGER.debug(String.format("%s steps deleted", row));
     }
 
-    public int delete() {
+    public int delete() throws Exception {
         String q = "delete from SchedulerOrderStepHistoryDBItem e where e.schedulerOrderHistoryDBItem.historyId IN "
                 + "(select historyId from SchedulerOrderHistoryDBItem " + getWhereFromTo() + ")";
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
         int row = 0;
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery(q);
-            if (filter.getExecutedUtcFrom() != null) {
-                query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-            }
-            if (filter.getExecutedUtcTo() != null) {
-                query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
-            }
-            row = query.executeUpdate();
-            String hql = "delete from SchedulerOrderHistoryDBItem " + getWhereFromTo();
-            query = connection.createQuery(hql);
-            if (filter.getExecutedUtcFrom() != null) {
-                query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-            }
-            if (filter.getExecutedUtcTo() != null) {
-                query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
-            }
-            row = query.executeUpdate();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred trying to delete Items: ", e);
+        connection.beginTransaction();
+        Query query = connection.createQuery(q);
+        if (filter.getExecutedUtcFrom() != null) {
+            query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
         }
+        if (filter.getExecutedUtcTo() != null) {
+            query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
+        }
+        row = query.executeUpdate();
+        String hql = "delete from SchedulerOrderHistoryDBItem " + getWhereFromTo();
+        query = connection.createQuery(hql);
+        if (filter.getExecutedUtcFrom() != null) {
+            query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
+        }
+        if (filter.getExecutedUtcTo() != null) {
+            query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
+        }
+        row = query.executeUpdate();
         return row;
     }
 
@@ -220,49 +208,83 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
         return query.list();
     }
 
-    public List<SchedulerOrderHistoryDBItem> getSchedulerOrderHistoryListFromTo() {
+    public List<SchedulerOrderHistoryDBItem> getSchedulerOrderHistoryListFromTo() throws Exception {
         int limit = filter.getLimit();
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
         Query query = null;
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
-        } catch (Exception e) {
-            LOGGER.error("Error occurred creating Query: ", e);
-        }
+        connection.beginTransaction();
+        query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria() + filter.getSortMode());
         return executeQuery(query, limit);
     }
 
-    public List<SchedulerOrderHistoryDBItem> getUnassignedSchedulerOrderHistoryListFromTo() {
+    public List<SchedulerOrderHistoryDBItem> getUnassignedSchedulerOrderHistoryListFromTo() throws Exception {
         int limit = filter.getLimit();
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
         Query query = null;
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + " and historyId not in (select "
-                    + "schedulerOrderHistoryId from DailyScheduleDBItem where not schedulerOrderHistoryId is null and status=1 and schedulerId=:schedulerId) "
-                    + filter.getOrderCriteria() + filter.getSortMode());
-        } catch (Exception e) {
-            LOGGER.error("Error occurred creating Query: ", e);
-        }
+        connection.beginTransaction();
+        query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + " and historyId not in (select "
+                + "schedulerOrderHistoryId from DailyScheduleDBItem where not schedulerOrderHistoryId is null and status=1"
+                + " and schedulerId=:schedulerId) " + filter.getOrderCriteria() + filter.getSortMode());
         return executeQuery(query, limit);
     }
 
-    public List<SchedulerOrderHistoryDBItem> getOrderHistoryItems() {
+    public List<SchedulerOrderHistoryDBItem> getOrderHistoryItems() throws Exception {
         List<SchedulerOrderHistoryDBItem> historyList = null;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhere());
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhere());
+        if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
+            query.setTimestamp("startTime", filter.getStartTime());
+        }
+        if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
+            query.setTimestamp("endTime", filter.getEndTime());
+        }
+        if (filter.getOrderid() != null && !"".equals(filter.getOrderid())) {
+            query.setText("orderId", filter.getOrderid());
+        }
+        if (filter.getJobchain() != null && !"".equals(filter.getJobchain())) {
+            query.setText("jobChain", filter.getJobchain());
+        }
+        if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
+            query.setText("schedulerId", filter.getSchedulerId());
+        }
+        if (filter.getLimit() > 0) {
+            query.setMaxResults(filter.getLimit());
+        }
+        historyList = query.list();
+        return historyList;
+    }
+
+    public List<SchedulerOrderHistoryDBItem> getSchedulerOrderHistoryListSchedulersFromTo() throws Exception {
+        int limit = filter.getLimit();
+        Query query = null;
+        if (connection == null) {
+            initConnection(getConfigurationFileName());
+        }
+        connection.beginTransaction();
+        String q = "from SchedulerOrderHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerOrderHistoryDBItem "
+                + getWhereFromTo() + ")";
+        query = connection.createQuery(q);
+        return executeQuery(query, limit);
+    }
+
+    public SchedulerOrderHistoryDBItem getOrderHistoryItem() throws Exception {
+        List<SchedulerOrderHistoryDBItem> historyList = null;
+        this.filter.setLimit(1);
+        if (connection == null) {
+            initConnection(getConfigurationFileName());
+        }
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhere());
+        if (filter.getSchedulerOrderHistoryId() != null) {
+            query.setLong("schedulerOrderHistoryId", filter.getSchedulerOrderHistoryId());
+        } else {
             if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
                 query.setTimestamp("startTime", filter.getStartTime());
             }
@@ -278,68 +300,9 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
             if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
                 query.setText("schedulerId", filter.getSchedulerId());
             }
-            if (filter.getLimit() > 0) {
-                query.setMaxResults(filter.getLimit());
-            }
-            historyList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving data: ", e);
         }
-        return historyList;
-    }
-
-    public List<SchedulerOrderHistoryDBItem> getSchedulerOrderHistoryListSchedulersFromTo() {
-        int limit = filter.getLimit();
-        Query query = null;
-        if (connection == null) {
-            initConnection(getConfigurationFileName());
-        }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            String q = "from SchedulerOrderHistoryDBItem e where e.spoolerId IN (select distinct e.spoolerId from SchedulerOrderHistoryDBItem "
-                    + getWhereFromTo() + ")";
-            query = connection.createQuery(q);
-        } catch (Exception e) {
-            LOGGER.error("Error occurred creating Query: ", e);
-        }
-        return executeQuery(query, limit);
-    }
-
-    public SchedulerOrderHistoryDBItem getOrderHistoryItem() {
-        List<SchedulerOrderHistoryDBItem> historyList = null;
-        this.filter.setLimit(1);
-        if (connection == null) {
-            initConnection(getConfigurationFileName());
-        }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhere());
-            if (filter.getSchedulerOrderHistoryId() != null) {
-                query.setLong("schedulerOrderHistoryId", filter.getSchedulerOrderHistoryId());
-            } else {
-                if (filter.getStartTime() != null && !"".equals(filter.getStartTime())) {
-                    query.setTimestamp("startTime", filter.getStartTime());
-                }
-                if (filter.getEndTime() != null && !"".equals(filter.getEndTime())) {
-                    query.setTimestamp("endTime", filter.getEndTime());
-                }
-                if (filter.getOrderid() != null && !"".equals(filter.getOrderid())) {
-                    query.setText("orderId", filter.getOrderid());
-                }
-                if (filter.getJobchain() != null && !"".equals(filter.getJobchain())) {
-                    query.setText("jobChain", filter.getJobchain());
-                }
-                if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
-                    query.setText("schedulerId", filter.getSchedulerId());
-                }
-            }
-            query.setMaxResults(filter.getLimit());
-            historyList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving Items: ", e);
-        }
+        query.setMaxResults(filter.getLimit());
+        historyList = query.list();
         if (historyList != null && !historyList.isEmpty()) {
             return historyList.get(0);
         } else {
@@ -363,39 +326,34 @@ public class SchedulerOrderHistoryDBLayer extends SOSHibernateIntervalDBLayer {
     }
 
     @Override
-    public List<DbItem> getListOfItemsToDelete() {
+    public List<DbItem> getListOfItemsToDelete() throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
         int limit = this.getFilter().getLimit();
         List<DbItem> schedulerHistoryList = null;
         if (connection == null) {
             initConnection(getConfigurationFileName());
         }
-        try {
-            connection.connect();
-            connection.beginTransaction();
-            Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
-                    + filter.getSortMode());
-            if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
-                query.setText("schedulerId", filter.getSchedulerId());
-            }
-            if (filter.getExecutedUtcFrom() != null) {
-                query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
-            }
-            if (filter.getExecutedUtcTo() != null) {
-                query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
-            }
-            if (limit > 0) {
-                query.setMaxResults(limit);
-            }
-            schedulerHistoryList = query.list();
-        } catch (Exception e) {
-            LOGGER.error("Error occurred receiving list of items to delete: ", e);
+        connection.beginTransaction();
+        Query query = connection.createQuery("from SchedulerOrderHistoryDBItem " + getWhereFromTo() + filter.getOrderCriteria()
+                + filter.getSortMode());
+        if (filter.getSchedulerId() != null && !"".equals(filter.getSchedulerId())) {
+            query.setText("schedulerId", filter.getSchedulerId());
         }
+        if (filter.getExecutedUtcFrom() != null) {
+            query.setTimestamp("startTimeFrom", filter.getExecutedUtcFrom());
+        }
+        if (filter.getExecutedUtcTo() != null) {
+            query.setTimestamp("startTimeTo", filter.getExecutedUtcTo());
+        }
+        if (limit > 0) {
+            query.setMaxResults(limit);
+        }
+        schedulerHistoryList = query.list();
         return schedulerHistoryList;
     }
 
     @Override
-    public long deleteInterval() {
+    public long deleteInterval() throws Exception {
         return delete();
     }
 

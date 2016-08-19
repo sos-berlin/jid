@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+
 import com.sos.scheduler.history.classes.SchedulerOrderStepHistoryTableItem;
 import com.sos.scheduler.history.db.SchedulerOrderStepHistoryCompoundKey;
 import com.sos.scheduler.history.db.SchedulerOrderStepHistoryDBItem;
@@ -34,14 +36,14 @@ public class SchedulerOrderStepHistoryDataProvider {
         schedulerOrderStepHistoryDBLayer.resetFilter();
     }
 
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         if (historyId >= 0) {
             schedulerOrderStepHistoryDBLayer.getFilter().setLimit(limit);
             listOfSchedulerOrderStepHistoryDBItems = schedulerOrderStepHistoryDBLayer.getOrderStepHistoryItems(0, historyId);
         }
     }
 
-    public String getLogAsString(Table tableSchedulerOrderSteppHistory) {
+    public String getLogAsString(Table tableSchedulerOrderSteppHistory) throws Exception {
         String log = "";
         if (tableSchedulerOrderSteppHistory.getSelectionIndex() >= 0) {
             TableItem t = tableSchedulerOrderSteppHistory.getItem(tableSchedulerOrderSteppHistory.getSelectionIndex());
@@ -53,7 +55,7 @@ public class SchedulerOrderStepHistoryDataProvider {
         return log;
     }
 
-    public String getLogAsString(SchedulerOrderStepHistoryCompoundKey schedulerOrderStepHistoryCompoundKey) {
+    public String getLogAsString(SchedulerOrderStepHistoryCompoundKey schedulerOrderStepHistoryCompoundKey) throws Exception {
         String log = "";
         try {
             SchedulerOrderStepHistoryDBItem schedulerOrderStepHistoryDBItem =

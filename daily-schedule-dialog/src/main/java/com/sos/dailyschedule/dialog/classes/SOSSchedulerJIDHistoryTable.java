@@ -1,10 +1,10 @@
 package com.sos.dailyschedule.dialog.classes;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Composite;
-
 import org.eclipse.swt.widgets.TableItem;
 
 import com.sos.dialog.classes.SOSTable;
@@ -37,12 +37,11 @@ import com.sos.scheduler.history.SchedulerHistoryDataProvider;
  * Created on 27.06.2014 09:59:28 */
 public abstract class SOSSchedulerJIDHistoryTable extends SOSTable {
 
-    @SuppressWarnings("unused")
-    private final String conClassName = "SOSSchedulerJIDHistoryTable";
     protected static final String conTabLOG = "Log";
     protected CTabFolder logTabFolder = null;
-    private SchedulerHistoryDataProvider detailHistoryDataProvider = null;
     protected Messages messages = null;
+    private static final Logger LOGGER = Logger.getLogger(SOSSchedulerJIDHistoryTable.class);
+    private SchedulerHistoryDataProvider detailHistoryDataProvider = null;
 
     public abstract void createTable();
 
@@ -77,7 +76,11 @@ public abstract class SOSSchedulerJIDHistoryTable extends SOSTable {
             }
             TableItem t = this.getItem(this.getSelectionIndex());
             DbItem d = (DbItem) t.getData();
-            logItem.addLog(this, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
+            try {
+                logItem.addLog(this, d.getTitle(), detailHistoryDataProvider.getLogAsString(d));
+            } catch (Exception e) {
+                LOGGER.error(e.getMessage(), e);
+            }
         }
     }
 

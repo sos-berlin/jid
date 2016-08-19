@@ -11,7 +11,6 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
 import com.sos.hibernate.interfaces.ISOSHibernateDataProvider;
-
 import com.sos.scheduler.history.classes.SchedulerHistoryTableItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBItem;
 import com.sos.scheduler.history.db.SchedulerTaskHistoryDBLayer;
@@ -35,7 +34,7 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
         schedulerTaskHistoryDBLayer.resetFilter();
     }
 
-    public void getData(int limit) {
+    public void getData(int limit) throws Exception {
         schedulerTaskHistoryDBLayer.getFilter().setLimit(limit);
         listOfSchedulerTaskHistoryDBItems = schedulerTaskHistoryDBLayer.getSchedulerHistoryListFromTo();
     }
@@ -53,7 +52,7 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
         }
     }
 
-    public String getLogAsString(Table tableSchedulerHistory) {
+    public String getLogAsString(Table tableSchedulerHistory) throws Exception {
         String log = "";
         if (tableSchedulerHistory.getSelectionIndex() >= 0) {
             TableItem t = tableSchedulerHistory.getItem(tableSchedulerHistory.getSelectionIndex());
@@ -65,7 +64,7 @@ public class SchedulerTaskHistoryDataProvider implements ISOSHibernateDataProvid
         return log;
     }
 
-    public String getLogAsString(Long id) {
+    public String getLogAsString(Long id) throws Exception {
         String log = "";
         try {
             SchedulerTaskHistoryDBItem schedulerHistoryDBItem = schedulerTaskHistoryDBLayer.get(id);
