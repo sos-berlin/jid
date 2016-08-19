@@ -60,7 +60,6 @@ public class SchedulerInstancesDBItem extends DbItem {
     private Boolean isAgent = false;
     private Boolean isSosCommandWebservice = false;
     private String param;
-    private Date modificationDate;
 
     private Integer supervisorTcpPort;
     private String supervisorHostName;
@@ -231,20 +230,7 @@ public class SchedulerInstancesDBItem extends DbItem {
         return startTime;
     }
     
-    
-    
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "`MODIFICATION_DATE`", nullable = true)
-    public void setModificationDate(Date modificationDate) {
-        this.modificationDate = modificationDate;
-     }
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "`MODIFICATION_DATE`", nullable = true)
-    public Date getModificationDate() {
-        return modificationDate;
-    }
-
+     
     @Transient
     public String getSchedulePlannedIso() {
         if (this.getStartTime() == null) {
