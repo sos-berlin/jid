@@ -35,7 +35,7 @@ public class DailyScheduleAdjustment {
         schedulerOrderHistoryDBLayer = new SchedulerOrderHistoryDBLayer(configurationFile);
     }
 
-    private void adjustDaysScheduleItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerTaskHistoryDBItem> schedulerHistoryList) {
+    private void adjustDaysScheduleItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerTaskHistoryDBItem> schedulerHistoryList) throws Exception {
         LOGGER.debug(String.format("%s records in schedulerHistoryList", schedulerHistoryList.size()));
         for (int i = 0; i < schedulerHistoryList.size(); i++) {
             SchedulerTaskHistoryDBItem schedulerHistoryDBItem = (SchedulerTaskHistoryDBItem) schedulerHistoryList.get(i);
@@ -46,11 +46,7 @@ public class DailyScheduleAdjustment {
                 dailyScheduleItem.setSchedulerHistoryId(schedulerHistoryDBItem.getId());
                 dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
                 dailyScheduleItem.setResult(schedulerHistoryDBItem.getExitCode());
-                try {
-                    dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-                } catch (Exception e) {
-                    LOGGER.error("Error occurred updating item: " + e.getMessage(), e);
-                }
+                dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
                 schedulerHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
             }
@@ -59,7 +55,7 @@ public class DailyScheduleAdjustment {
                 dailyScheduleItem.getSchedulePlannedFormated()));
     }
 
-    private void adjustDaysScheduleOrderItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList) {
+    private void adjustDaysScheduleOrderItem(DailyScheduleDBItem dailyScheduleItem, List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList) throws Exception {
         if (dailyScheduleDBLayer.getConnection() == null) {
             dailyScheduleDBLayer.initConnection(dailyScheduleDBLayer.getConfigurationFileName());
         }
@@ -78,13 +74,8 @@ public class DailyScheduleAdjustment {
                 } else {
                     dailyScheduleItem.setResult(0);
                 }
-                try {
-                    dailyScheduleDBLayer.getConnection().beginTransaction();
-                    dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
-                    dailyScheduleDBLayer.getConnection().commit();
-                } catch (Exception e) {
-                    LOGGER.error("Error occurred trying to update Item: " + e.getMessage(), e);
-                }
+                dailyScheduleDBLayer.getConnection().update(dailyScheduleItem);
+                dailyScheduleDBLayer.getConnection().commit();
                 schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
             }
@@ -105,7 +96,6 @@ public class DailyScheduleAdjustment {
         schedulerOrderHistoryDBLayer.getFilter().setExecutedFrom(from);
         schedulerOrderHistoryDBLayer.getFilter().setExecutedTo(dailyScheduleDBLayer.getWhereUtcTo());
         try {
-            dailyScheduleDBLayer.getConnection().connect();
             dailyScheduleDBLayer.getConnection().beginTransaction();
             List<SchedulerTaskHistoryDBItem> schedulerHistoryList = null;
             List<SchedulerOrderHistoryDBItem> schedulerOrderHistoryList = null;
