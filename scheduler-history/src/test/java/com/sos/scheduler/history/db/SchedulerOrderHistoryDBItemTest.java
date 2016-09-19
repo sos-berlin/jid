@@ -103,7 +103,7 @@ public class SchedulerOrderHistoryDBItemTest {
     public void testSetState() {
         String myState = "State";
         schedulerOrderHistoryDBItem.setState(myState);
-        String state = schedulerOrderHistoryDBItem.getState();
+        String state = schedulerOrderHistoryDBItem.getStateAsString();
         assertEquals("testSetstate failed: ", myState, state);
     }
 

@@ -510,7 +510,7 @@ public class DailyScheduleDBItem extends DbItem {
     public String getResultValue() {
         if (this.isOrderJob()) {
             if (this.schedulerOrderHistoryDBItem != null) {
-                return this.schedulerOrderHistoryDBItem.getState();
+                return this.schedulerOrderHistoryDBItem.getStateAsString();
             } else {
                 return String.valueOf(this.getResult());
             }

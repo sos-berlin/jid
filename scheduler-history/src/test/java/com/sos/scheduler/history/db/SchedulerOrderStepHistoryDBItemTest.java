@@ -38,7 +38,7 @@ public class SchedulerOrderStepHistoryDBItemTest {
     public void testSetState() {
         String myState = "State";
         schedulerOrderStepHistoryDBItem.setState(myState);
-        String state = schedulerOrderStepHistoryDBItem.getState();
+        String state = schedulerOrderStepHistoryDBItem.getStateAsString();
         assertEquals("testSetstate failed: ", myState, state);
     }
 

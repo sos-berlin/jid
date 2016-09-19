@@ -74,7 +74,7 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
     }
 
     @Column(name = "`STATE`", nullable = true)
-    public String getState() {
+    public String getStateAsString() {
         return state;
     }
 
@@ -199,9 +199,9 @@ public class SchedulerOrderStepHistoryDBItem extends DbItem implements Serializa
     @Transient
     public String getTitle() {
         if (schedulerOrderHistoryDBItem == null) {
-            return String.format("%s:%s (%s)", this.getState(), "", "");
+            return String.format("%s:%s (%s)", this.getStateAsString(), "", "");
         } else {
-            return String.format("%s:%s (%s)", this.getState(), schedulerOrderHistoryDBItem.getJobChain(), schedulerOrderHistoryDBItem.getOrderId());
+            return String.format("%s:%s (%s)", this.getStateAsString(), schedulerOrderHistoryDBItem.getJobChain(), schedulerOrderHistoryDBItem.getOrderId());
         }
     }
 
