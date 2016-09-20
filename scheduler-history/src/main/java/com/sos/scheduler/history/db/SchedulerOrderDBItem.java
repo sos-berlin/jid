@@ -101,7 +101,7 @@ public class SchedulerOrderDBItem extends DbItem {
     }
 
     @Column(name = "`STATE`", nullable = true)
-    public String getStateAsString() {
+    public String getState() {
         return state;
     }
 

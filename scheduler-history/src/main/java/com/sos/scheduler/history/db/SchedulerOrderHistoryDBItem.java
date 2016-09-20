@@ -112,9 +112,8 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
         this.title = title;
     }
 
-    @Override
     @Column(name = "`STATE`", nullable = true)
-    public String getStateAsString() {
+    public String getState() {
         return state;
     }
 
@@ -241,17 +240,17 @@ public class SchedulerOrderHistoryDBItem extends SchedulerHistoryLogDBItem {
     @Override
     @Transient
     public String getExecResult() {
-        return this.getStateAsString();
+        return this.getState();
     }
 
     @Override
     @Transient
     public boolean haveError() {
-        if (this.getStateAsString() == null) {
+        if (this.getState() == null) {
             return false;
         } else {
-            return this.getStateAsString().toLowerCase().contains("error") || this.getStateAsString().toLowerCase().contains("fehler")
-                    || this.getStateAsString().startsWith("!") || this.getStateAsString().toLowerCase().contains("fault");
+            return this.getState().toLowerCase().contains("error") || this.getState().toLowerCase().contains("fehler")
+                    || this.getState().startsWith("!") || this.getState().toLowerCase().contains("fault");
         }
     }
 
