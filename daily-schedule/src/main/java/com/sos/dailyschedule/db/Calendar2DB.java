@@ -29,6 +29,8 @@ public class Calendar2DB {
     private String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
     private DailyScheduleDBLayer dailySchedulerDBLayer;
     private CreateDailyScheduleOptions options = null;
+    private sos.spooler.Spooler spooler;
+
 
     public Calendar2DB(File configurationFile) {
         dailySchedulerDBLayer = new DailyScheduleDBLayer(configurationFile);
@@ -37,7 +39,12 @@ public class Calendar2DB {
     private void initSchedulerConnection() {
         if ("".equals(schedulerId)) {
             LOGGER.debug("Calender2DB");
-            objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().getValue(), options.getscheduler_port().value());
+            if (spooler == null){
+                objFactory = new SchedulerObjectFactory(options.getSchedulerHostName().getValue(), options.getscheduler_port().value());
+            }else{
+                objFactory = new SchedulerObjectFactory();
+            }
+
             objFactory.initMarshaller(Spooler.class);
             dayOffset = options.getdayOffset().value();
             schedulerId = this.getSchedulerId();
@@ -53,7 +60,13 @@ public class Calendar2DB {
         objSC.setFrom(sdf.format(from));
         sdf = new SimpleDateFormat("yyyy-MM-dd'T'23:59:59");
         objSC.setBefore(sdf.format(to));
-        objSC.run();
+        
+        if (spooler != null){
+            objSC.getAnswerFromSpooler(spooler);
+        }else{
+            objSC.run();
+        }
+
         return objSC.getCalendar();
     }
 
@@ -70,7 +83,13 @@ public class Calendar2DB {
         objCmdShowState.setPath("notexist_sos");
         objCmdShowState.setSubsystems("folder");
         objCmdShowState.setMaxTaskHistory(BigInteger.valueOf(1));
-        objCmdShowState.run();
+
+        if (spooler != null){
+            objCmdShowState.getAnswerFromSpooler(spooler);
+        }else{
+            objCmdShowState.run();
+        }
+
         State objState = objCmdShowState.getState();
         return objState.getSpoolerId();
     }
@@ -86,7 +105,12 @@ public class Calendar2DB {
             JSCmdShowOrder objSO = objFactory.createShowOrder();
             objSO.setJobChain(jobChain);
             objSO.setOrder(orderId);
-            objSO.run();
+            if (spooler != null){
+                objSO.getAnswerFromSpooler(spooler);
+            }else{
+                objSO.run();
+            }
+
             Order order = objSO.getAnswer().getOrder();
             return order;
         }
@@ -193,5 +217,8 @@ public class Calendar2DB {
         setFrom();
         setTo();
     }
-
+    
+    public void setSpooler(sos.spooler.Spooler spooler) {
+        this.spooler = spooler;
+    }
 }

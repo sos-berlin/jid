@@ -9,6 +9,7 @@ import com.sos.dailyschedule.db.Calendar2DB;
 public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailyScheduleOptions> implements IJSCommands {
 
     private static final Logger LOGGER = Logger.getLogger(CreateDailySchedule.class);
+    private sos.spooler.Spooler spooler;
 
     public CreateDailySchedule() {
         super(new CreateDailyScheduleOptions());
@@ -27,6 +28,7 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
             getOptions().checkMandatory();
             LOGGER.debug(getOptions().dirtyString());
             Calendar2DB calendar2Db = new Calendar2DB(new File(objOptions.getconfiguration_file().getValue()));
+            calendar2Db.setSpooler(spooler);
             calendar2Db.setOptions(objOptions);
             calendar2Db.store();
         } catch (Exception e) {
@@ -42,6 +44,11 @@ public class CreateDailySchedule extends JSJobUtilitiesClass<CreateDailySchedule
 
     private void doInitialize() {
         // doInitialize
+    }
+
+    
+    public void setSpooler(sos.spooler.Spooler spooler) {
+        this.spooler = spooler;
     }
 
 }

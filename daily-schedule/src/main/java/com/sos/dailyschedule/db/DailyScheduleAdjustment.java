@@ -46,6 +46,14 @@ public class DailyScheduleAdjustment {
                 dailyScheduleItem.setSchedulerHistoryId(schedulerHistoryDBItem.getId());
                 dailyScheduleItem.setStatus(DashBoardConstants.STATUS_ASSIGNED);
                 dailyScheduleItem.setResult(schedulerHistoryDBItem.getExitCode());
+                try {
+                    dailyScheduleDBLayer.beginTransaction();
+                    dailyScheduleDBLayer.update(dailyScheduleItem);
+                    dailyScheduleDBLayer.commit();
+                } catch (Exception e) {
+                    LOGGER.error("Error occurred updating item: " + e.getMessage(), e);
+                }
+
                 dailyScheduleDBLayer.update(dailyScheduleItem);
                 schedulerHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
@@ -71,7 +79,13 @@ public class DailyScheduleAdjustment {
                 } else {
                     dailyScheduleItem.setResult(0);
                 }
-                dailyScheduleDBLayer.update(dailyScheduleItem);
+                try {
+                    dailyScheduleDBLayer.beginTransaction();
+                    dailyScheduleDBLayer.update(dailyScheduleItem);
+                    dailyScheduleDBLayer.commit();
+                } catch (Exception e) {
+                    LOGGER.error("Error occurred updating item: " + e.getMessage(), e);
+                }
                 schedulerOrderHistoryDBItem.setAssignToDaysScheduler(true);
                 break;
             }
